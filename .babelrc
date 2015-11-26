@@ -1,0 +1,4 @@
+{
+  "sourceMap": "inline",
+  "presets": ["es2015"]
+}
