@@ -30,7 +30,7 @@ function getExtraAttribute(node, attrs, attrType) {
 export class TranslationReference {
   constructor(filename, content, charPosition) {
     this.file = filename;
-    this.line = lineCount(content, charPosition) - 1;
+    this.line = lineCount(content, charPosition);
   }
 
   toString(withLineNumbers = false) {

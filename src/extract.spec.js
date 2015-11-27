@@ -64,7 +64,7 @@ describe('Raw translation data', () => {
     expect(data.length).to.equal(1);
     expect(data[0].text).to.equal('Hello world');
     expect(data[0].reference.file).to.equal(fixtures.FILENAME_0);
-    expect(data[0].reference.line).to.equal(1);
+    expect(data[0].reference.line).to.equal(2);
     expect(data[0].context).to.equal('For charlie');
     expect(data[0].comment).to.be.a('null');
     expect(data[0].plural).to.be.a('null');
@@ -72,7 +72,7 @@ describe('Raw translation data', () => {
 
   it('should correctly render the reference', () => {
     const data = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML0_CTX0);
-    expect(data[0].reference.toString(true)).to.equal('foo.htm:1');
+    expect(data[0].reference.toString(true)).to.equal('foo.htm:2');
   });
 
   it('should extract multiple tokens correctly', () => {
@@ -80,6 +80,6 @@ describe('Raw translation data', () => {
     expect(data.length).to.equal(7);
     expect(data[1].context).to.equal(constants.MARKER_NO_CONTEXT);
     expect(data[3].comment).to.equal('foo is important');
-    expect(data[6].reference.line).to.equal(12);
+    expect(data[6].reference.line).to.equal(13);
   });
 });

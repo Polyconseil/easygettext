@@ -20,7 +20,7 @@ if (!files || files.length === 0) {
 
 
 // Extract strings
-const extractor = new Extractor();
+const extractor = new Extractor({lineNumbers: true});
 files.forEach(function(filename) {
   console.log('[gettext] extracting', filename);
   try {
