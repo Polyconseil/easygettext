@@ -30,16 +30,18 @@ describe('Extractor object', () => {
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_CONTEXTS);
   });
 
-  it('should merge multiple references between themselves', () => {
+  it('should merge multiple references correctly and not duplicate', () => {
     const extractor = new Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML0_CTX0);
+    extractor.parse(fixtures.FILENAME_1, fixtures.HTML0_CTX0);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML0_CTX0);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_MULTIREF);
   });
 
-  it('should merge multiple comments correctly', () => {
+  it('should merge multiple comments correctly and not duplicate', () => {
     const extractor = new Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML2_COMMENT0);
+    extractor.parse(fixtures.FILENAME_1, fixtures.HTML2_COMMENT1);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML2_COMMENT1);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_MULTICOMMENTS);
   });
@@ -70,7 +72,7 @@ describe('Raw translation data', () => {
 
   it('should correctly render the reference', () => {
     const data = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML0_CTX0);
-    expect(data[0].reference.toString(true)).to.equal('foo.htm: 1');
+    expect(data[0].reference.toString(true)).to.equal('foo.htm:1');
   });
 
   it('should extract multiple tokens correctly', () => {

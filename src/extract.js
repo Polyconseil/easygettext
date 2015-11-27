@@ -36,7 +36,7 @@ export class TranslationReference {
   toString(withLineNumbers = false) {
     let ref = this.file;
     if (withLineNumbers && this.line) {
-      ref = `${ref}: ${this.line}`;
+      ref = `${ref}:${this.line}`;
     }
     return ref;
   }
@@ -52,11 +52,11 @@ export class NodeTranslationInfo {
     this.plural = getExtraAttribute(node, attributes, constants.ATTRIBUTE_PLURAL);
   }
 
-  toPoItem() {
+  toPoItem(withLineNumbers = false) {
     let poItem = new Pofile.Item();
     poItem.msgid = this.text;
     poItem.msgctxt = this.context === constants.MARKER_NO_CONTEXT ? null : this.context;
-    poItem.references = [this.reference];
+    poItem.references = [this.reference.toString(withLineNumbers)];
     poItem.msgid_plural = this.plural;
     poItem.extractedComments = this.comment ? [this.comment] : [];
     return poItem;
@@ -71,7 +71,7 @@ export class Extractor {
       startDelim: '{{',
       endDelim: '}}',
       attributes: constants.DEFAULT_ATTRIBUTES,
-      lineNumbers: true,
+      lineNumbers: false,
     }, options);
 
     /* Translation items, indexed as:
@@ -94,7 +94,7 @@ export class Extractor {
         this.items[d.text] = {};
       }
       if (!this.items[d.text][d.context]) {
-        this.items[d.text][d.context] = d.toPoItem();
+        this.items[d.text][d.context] = d.toPoItem(this.options.lineNumbers);
       } else {
         let item = this.items[d.text][d.context];
         if (item.msgid_plural && d.plural && item.msgid_plural !== d.plural) {
@@ -104,8 +104,9 @@ export class Extractor {
         if (d.plural && !item.msgid_plural) {
           item.msgid_plural = d.plural;
         }
-        if (d.reference && item.references.indexOf(d.reference) === -1) {
-          item.references.push(d.reference);
+        const refString = d.reference.toString(this.options.lineNumbers);
+        if (d.reference && item.references.indexOf(refString) === -1) {
+          item.references.push(refString);
         }
         if (d.comment && item.extractedComments.indexOf(d.comment) === -1) {
           item.extractedComments.push(d.comment);
