@@ -8,7 +8,7 @@
     "url": "https://github.com/polyconseil/easygettext"
   },
   "scripts": {
-    "build": "babel --presets es2015 --source-maps true src --out-dir dist/",
+    "prepublish": "babel --presets es2015 --source-maps true src --out-dir dist/",
     "test": "mocha --compilers js:babel-core/register src/**/*.spec.js",
     "cover": "babel-node node_modules/isparta/bin/isparta cover --report text  node_modules/mocha/bin/_mocha -- src/**/*.spec.js"
   },
@@ -35,5 +35,11 @@
     "jade": "^1.11.0",
     "minimist": "^1.2.0",
     "pofile": "^1.0.2"
-  }
+  },
+    "files": [
+    "src",
+    "dist",
+    "package.json",
+    "README.md"
+  ]
 }
