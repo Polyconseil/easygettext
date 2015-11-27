@@ -1,5 +1,4 @@
 import Pofile from 'pofile';
-import * as constants from './constants.js';
 
 
 /**
@@ -25,8 +24,8 @@ export function sanitizePoData(poItems) {
   const messages = {};
 
   for (let item of poItems) {
-    const ctx = item.msgctxt || constants.MARKER_NO_CONTEXT;
-    if (item.msgstr[0].length > 0 && !item.flags.fuzzy && !item.obsolete) {
+    const ctx = item.msgctxt || '';
+    if (item.msgstr[0] && item.msgstr[0].length > 0 && !item.flags.fuzzy && !item.obsolete) {
       if (!messages[item.msgid]) {
         messages[item.msgid] = {};
       }
@@ -37,8 +36,8 @@ export function sanitizePoData(poItems) {
 
   // Strip context from messages that have no context.
   for (let key in messages) {
-    if (Object.keys(messages[key]).length === 1 && messages[key][constants.MARKER_NO_CONTEXT]) {
-      messages[key] = messages[key][constants.MARKER_NO_CONTEXT];
+    if (Object.keys(messages[key]).length === 1 && messages[key]['']) {
+      messages[key] = messages[key][''];
     }
   }
   return messages;
@@ -52,7 +51,7 @@ export function po2json(poContent) {
   }
   return {
     headers: catalog.headers,
-    messages: this.sanitizePoData(catalog.items),
+    messages: sanitizePoData(catalog.items),
   };
 }
 

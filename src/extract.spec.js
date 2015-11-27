@@ -1,6 +1,3 @@
-// https://github.com/jspm/jspm-cli/issues/535
-import 'core-js/shim';
-
 import {Extractor} from './extract.js';
 import * as constants from './constants.js';
 import * as fixtures from './test-fixtures.js';

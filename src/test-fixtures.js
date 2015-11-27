@@ -108,3 +108,59 @@ msgid "Hello"
 msgstr ""
 `;
 
+export const INPUT_PO = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Hello, you !"
+msgstr "Salut, toi !"
+
+msgctxt "In spanish"
+msgid "Hello, you !"
+msgstr "Hola ustedes !"
+
+msgid "(1 attempt)"
+msgid_plural "({{ remaining }} attempts)"
+msgstr[0] "(1 tentative)"
+msgstr[1] "({{ remaining }} tentatives)"
+
+#, fuzzy
+msgid "Action"
+msgstr "Something"
+
+msgid "Action failure"
+msgstr ""`;
+
+export const OUTPUT_DICT = {
+  headers: {
+    '': '',
+    'Content-Transfer-Encoding': '8bit',
+    'Content-Type': 'text/plain; charset=UTF-8',
+    'Language': 'fr',
+    'Language-Team': 'none',
+    'Last-Translator': 'Automatically generated',
+    'MIME-Version': '1.0',
+    'PO-Revision-Date': '',
+    'POT-Creation-Date': '',
+    'Plural-Forms': 'nplurals=2; plural=(n > 1);',
+    'Project-Id-Version': '',
+    'Report-Msgid-Bugs-To': '',
+  }, messages: {
+    '(1 attempt)': [
+      '(1 tentative)',
+      '({{ remaining }} tentatives)',
+    ],
+    'Hello, you !': {
+      '': 'Salut, toi !',
+      'In spanish': 'Hola ustedes !',
+    },
+  },
+};
+

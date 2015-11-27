@@ -4,10 +4,11 @@
 
 import fs from 'fs';
 import {po2json} from './compile.js';
+import minimist from 'minimist';
 
 
 // Process arguments
-const argv = require('minimist')(process.argv.slice(2));
+const argv = minimist(process.argv.slice(2));
 const files = argv._.sort() || [];
 const outputFile = argv.output || null;
 
