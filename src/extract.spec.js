@@ -79,4 +79,15 @@ describe('Raw translation data', () => {
     expect(data[3].comment).to.equal('foo is important');
     expect(data[6].reference.line).to.equal(13);
   });
+
+  it('should extract filters with various patterns', () => {
+    const data0 = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER0);
+    expect(data0.length).to.equal(1);
+    expect(data0[0].text).to.equal('Hola, hombre');
+    expect(data0[0].comment).to.equal('Fugazy');
+
+    const data1 = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER1);
+    expect(data1.length).to.equal(1);
+    expect(data1[0].text).to.equal('Hola, mujer');
+  });
 });

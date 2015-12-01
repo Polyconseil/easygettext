@@ -13,6 +13,9 @@ export const HTML1_PLURAL1 =  '<h2 translate="" translate-plural="Us works">I wo
 export const HTML2_COMMENT0 =  '<h2 translate i18n-comment="My first comment">Hello</h2>';
 export const HTML2_COMMENT1 =  '<h2 translate="" translate-comment="Another comment">Hello</h2>';
 
+export const HTML3_FILTER0 =  '<h2 translate-comment="Fugazy">{{ "Hola, hombre" | translate }}</h2>';
+export const HTML3_FILTER1 =  "<h2 tooltip=\"{{'Hola, mujer'|i18n}}\">StufStuff</h2>";
+
 export const HTML_LONG =  `
   <div class="col-xs-4">
   <h4 translate="translate" translate-context="Pour maman">Hello world</h4>

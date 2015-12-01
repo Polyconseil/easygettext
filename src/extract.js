@@ -3,6 +3,9 @@ import Pofile from 'pofile';
 
 import * as constants from './constants.js';
 
+// Internal regylar expression used to escape special characters
+const ESCAPE_REGEX = /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g;
+
 
 function lineCount(text, charPosition = -1) {
   let data = text;
@@ -84,6 +87,11 @@ export class Extractor {
      * }
      */
     this.items = {};
+    this.filterRegexps = constants.DEFAULT_ATTRIBUTES.map((attribute) => {
+      const start = this.options.startDelim.replace(ESCAPE_REGEX, '\\$&');
+      const end = this.options.endDelim.replace(ESCAPE_REGEX, '\\$&');
+      return new RegExp(`${start}\\s*[\\'"](.*)[\\'"]\\s*\\|\\s*${attribute}\\s*${end}`);
+    });
   }
 
   parse(filename, content) {
@@ -152,19 +160,28 @@ export class Extractor {
           return new NodeTranslationInfo(node, text, reference, this.options.attributes);
         }
       }
-      if (this._hasTranslationFilter(node)) {
-        // TODO(vperron): Unimplemented
-        return undefined;
+
+      // In-depth search for filters
+      const attrs = Object.keys(node.attr()).map(key => node.attr()[key]);
+      const datas = Object.keys(node.data()).map(key => node.data()[key]);
+      let tokensFromFilters = [];
+      [node.html(), ...attrs, ...datas].forEach((item) => {
+        const matches = this.filterRegexps.map((re) => re.exec(item)).filter((x) => x !== null);
+        if (matches.length !== 0) {
+          const text = matches[0][1].trim();
+          if (text.length !== 0) {
+            tokensFromFilters.push(new NodeTranslationInfo(node, text, reference, this.options.attributes));
+          }
+        }
+      });
+      if (tokensFromFilters.length === 1) {
+        // TODO: For now, only support ONE token from either html, attrs or data in the same node.
+        return tokensFromFilters[0];
       }
     }.bind(this)).get().filter((x) => x !== undefined);
   }
 
   _hasTranslateAttribute(node) {
     return this.options.attributes.some((attrName) => node.attr(attrName) !== undefined);
-  }
-
-  _hasTranslationFilter(node) { // eslint-disable-line no-unused-vars
-    // TODO(vperron): unimplemented
-    return false;
   }
 }
