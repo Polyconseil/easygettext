@@ -26,8 +26,8 @@
     "mocha": "^2.3.4"
   },
   "bin": {
-    "gettext-compile": "./dist/compile-cli",
-    "gettext-extract": "./dist/extract-cli"
+    "gettext-compile": "./dist/compile-cli.js",
+    "gettext-extract": "./dist/extract-cli.js"
   },
   "dependencies": {
     "cheerio": "^0.19.0",
