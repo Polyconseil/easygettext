@@ -1,6 +1,6 @@
 {
   "name": "easygettext",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple tools to extract gettext strings",
   "main": "dist/index",
   "repository": {
@@ -36,7 +36,7 @@
     "minimist": "^1.2.0",
     "pofile": "^1.0.2"
   },
-    "files": [
+  "files": [
     "src",
     "dist",
     "package.json",
