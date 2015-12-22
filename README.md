@@ -8,7 +8,7 @@ Simple gettext tokens extraction tools for HTML and Jade files. Also converts fr
 ### Motivation
 
 [angular-gettext](https://angular-gettext.rocketeer.be/) is a very neat tool, that comes with Grunt tooling
-to extract translation tokens from your Jade/HTML templates and Javascript code.
+to extract translation tokens from your Jade/HTML templates and JavaScript code.
 
 Unfortunately, this has two drawbacks:
 
@@ -49,7 +49,7 @@ It recognizes the following token flavours (currently; feel free to extend it!)
 <div translate translate-context="According to...">Hello World</div>
 <div translate translate-comment="My comment...">Hello World</div>
 <div translate translate-plural="Hello worlds">Hello World</div>
-<div placeholder="{{ 'Hello World' | translate}}"></div>
+<div placeholder="{{ 'Hello World' | translate }}"></div>
 ```
 
 You can combine any context, comment and plural together. Also, you can use 'i18n' instead

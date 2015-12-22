@@ -15,8 +15,8 @@ import Pofile from 'pofile';
  * {
  *   "Hello World": "Bonjour monde",
  *   "Thank you": {
- *     "a ma mère": "Merci, m'man",
- *     "a mon patron": "Je vous remercie",
+ *     "à ma mère": "Merci, m'man",
+ *     "à mon patron": "Je vous remercie",
  *   }
  * }
  */
@@ -29,7 +29,7 @@ export function sanitizePoData(poItems) {
       if (!messages[item.msgid]) {
         messages[item.msgid] = {};
       }
-      // Add array for plural, single string for singular.
+      // Add an array for plural, a single string for singular.
       messages[item.msgid][ctx] = item.msgstr.length === 1 ? item.msgstr[0] : item.msgstr;
     }
   }
@@ -47,7 +47,7 @@ export function sanitizePoData(poItems) {
 export function po2json(poContent) {
   const catalog = Pofile.parse(poContent);
   if (!catalog.headers.Language) {
-    throw new Error('No Language header found!');
+    throw new Error('No Language headers found!');
   }
   return {
     headers: catalog.headers,

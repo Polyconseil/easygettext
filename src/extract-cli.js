@@ -13,7 +13,7 @@ const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade'];
 
 // Process arguments
 const argv = minimist(process.argv.slice(2));
-const files = argv._.sort() || [];
+const files = argv._.sort();
 const outputFile = argv.output || null;
 
 if (!files || files.length === 0) {

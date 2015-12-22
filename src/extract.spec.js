@@ -13,7 +13,7 @@ describe('Extractor object', () => {
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_0);
   });
 
-  it('should output a correct POT file from multiple HTML fitures', () => {
+  it('should output a correct POT file from multiple HTML fixtures', () => {
     const extractor = new Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML0_CTX0);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML1_PLURAL0);
