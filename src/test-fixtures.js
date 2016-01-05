@@ -61,7 +61,8 @@ msgstr ""
 #: bar.htm
 msgid "I work"
 msgid_plural "We work"
-msgstr ""
+msgstr[0] ""
+msgstr[1] ""
 `;
 
 export const POT_OUTPUT_CONTEXTS = `msgid ""
