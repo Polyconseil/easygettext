@@ -4,3 +4,5 @@ node_modules
 jspm_packages
 coverage
 npm-debug.log
+
+dist
