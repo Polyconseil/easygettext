@@ -155,7 +155,7 @@ export class Extractor {
     return $('*').map(function(_i, el) {
       const node = $(el);
       const reference = new TranslationReference(filename, content, el.startIndex);
-      if (this._hasTranslateAttribute(node)) {
+      if (this._hasTranslationToken(node)) {
         const text = node.html().trim();
         if (text.length !== 0) {
           return new NodeTranslationInfo(node, text, reference, this.options.attributes);
@@ -182,7 +182,7 @@ export class Extractor {
     }.bind(this)).get().filter((x) => x !== undefined);
   }
 
-  _hasTranslateAttribute(node) {
-    return this.options.attributes.some((attrName) => node.attr(attrName) !== undefined);
+  _hasTranslationToken(node) {
+    return this.options.attributes.some((keyword) => node.is(keyword) || node.attr(keyword) !== undefined);
   }
 }
