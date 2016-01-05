@@ -37,6 +37,23 @@ export const HTML_LONG =  `
   </tr>
 `;
 
+export const HTML_SORTING =  `
+  <i18n>f</i18n>
+  <i18n>0</i18n>
+  <i18n>c</i18n>
+  <i18n>abu</i18n>
+  <i18n>2 mississipi</i18n>
+  <i18n>b</i18n>
+  <i18n>a</i18n>
+  <i18n>1 mississippi</i18n>
+  <i18n>e</i18n>
+  <i18n>12 mississipi</i18n>
+  <i18n>g</i18n>
+  <i18n>3</i18n>
+  <i18n>aba</i18n>
+  <i18n>2</i18n>
+  <i18n>d</i18n>
+`;
 
 export const POT_OUTPUT_0 = `msgid ""
 msgstr ""
@@ -143,6 +160,74 @@ msgstr ""
 #: foo.htm
 #: bar.htm
 msgid "Hello"
+msgstr ""
+`;
+
+export const POT_OUTPUT_SORTED= `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: foo.htm
+msgid "0"
+msgstr ""
+
+#: foo.htm
+msgid "1 mississippi"
+msgstr ""
+
+#: foo.htm
+msgid "12 mississipi"
+msgstr ""
+
+#: foo.htm
+msgid "2"
+msgstr ""
+
+#: foo.htm
+msgid "2 mississipi"
+msgstr ""
+
+#: foo.htm
+msgid "3"
+msgstr ""
+
+#: foo.htm
+msgid "a"
+msgstr ""
+
+#: foo.htm
+msgid "aba"
+msgstr ""
+
+#: foo.htm
+msgid "abu"
+msgstr ""
+
+#: foo.htm
+msgid "b"
+msgstr ""
+
+#: foo.htm
+msgid "c"
+msgstr ""
+
+#: foo.htm
+msgid "d"
+msgstr ""
+
+#: foo.htm
+msgid "e"
+msgstr ""
+
+#: foo.htm
+msgid "f"
+msgstr ""
+
+#: foo.htm
+msgid "g"
 msgstr ""
 `;
 
