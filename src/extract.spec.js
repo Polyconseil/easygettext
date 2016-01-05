@@ -63,6 +63,12 @@ describe('Extractor object', () => {
       .to.throw(Error, `Incompatible plural definitions for I work: 'We work' !== 'Us works'`);
   });
 
+  it('should lexicographically sort the translations', () => {
+    const extractor = new Extractor();
+    extractor.parse(fixtures.FILENAME_0, fixtures.HTML_SORTING);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_SORTED);
+  });
+
 });
 
 
