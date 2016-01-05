@@ -27,6 +27,19 @@ describe('Extractor object', () => {
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_CONTEXTS);
   });
 
+  it('should output a correct POT file using keyword as tag', () => {
+    const extractor = new Extractor();
+    extractor.parse(fixtures.FILENAME_0, fixtures.HTML4_TAG0);
+    extractor.parse(fixtures.FILENAME_1, fixtures.HTML4_TAG1);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_TAGS);
+  });
+
+  it('should only translate a html block once', () => {
+    const extractor = new Extractor();
+    extractor.parse(fixtures.FILENAME_0, fixtures.HTML4_TAG2);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_MULTIPLE_TAGS);
+  });
+
   it('should merge multiple references correctly and not duplicate', () => {
     const extractor = new Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML0_CTX0);
@@ -48,6 +61,12 @@ describe('Extractor object', () => {
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML1_PLURAL0);
     expect(() => extractor.parse(fixtures.FILENAME_1, fixtures.HTML1_PLURAL1))
       .to.throw(Error, `Incompatible plural definitions for I work: 'We work' !== 'Us works'`);
+  });
+
+  it('should lexicographically sort the translations', () => {
+    const extractor = new Extractor();
+    extractor.parse(fixtures.FILENAME_0, fixtures.HTML_SORTING);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_SORTED);
   });
 
 });

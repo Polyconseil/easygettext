@@ -50,6 +50,7 @@ It recognizes the following token flavours (currently; feel free to extend it!)
 <div translate translate-comment="My comment...">Hello World</div>
 <div translate translate-plural="Hello worlds">Hello World</div>
 <div placeholder="{{ 'Hello World' | translate }}"></div>
+<translate>Hello World</translate>
 ```
 
 You can combine any context, comment and plural together. Also, you can use 'i18n' instead

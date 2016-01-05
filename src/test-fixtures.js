@@ -16,6 +16,10 @@ export const HTML2_COMMENT1 =  '<h2 translate="" translate-comment="Another comm
 export const HTML3_FILTER0 =  '<h2 translate-comment="Fugazy">{{ "Hola, hombre" | translate }}</h2>';
 export const HTML3_FILTER1 =  "<h2 tooltip=\"{{'Hola, mujer'|i18n}}\">StufStuff</h2>";
 
+export const HTML4_TAG0 =  '<translate>Duck</translate>';
+export const HTML4_TAG1 =  '<i18n>Dice</i18n>';
+export const HTML4_TAG2 =  '<i18n translate>overtranslate</i18n>';
+
 export const HTML_LONG =  `
   <div class="col-xs-4">
   <h4 translate="translate" translate-context="Pour maman">Hello world</h4>
@@ -32,6 +36,23 @@ export const HTML_LONG =  `
   </tr>
 `;
 
+export const HTML_SORTING =  `
+  <i18n>f</i18n>
+  <i18n>0</i18n>
+  <i18n>c</i18n>
+  <i18n>abu</i18n>
+  <i18n>2 mississipi</i18n>
+  <i18n>b</i18n>
+  <i18n>a</i18n>
+  <i18n>1 mississippi</i18n>
+  <i18n>e</i18n>
+  <i18n>12 mississipi</i18n>
+  <i18n>g</i18n>
+  <i18n>3</i18n>
+  <i18n>aba</i18n>
+  <i18n>2</i18n>
+  <i18n>d</i18n>
+`;
 
 export const POT_OUTPUT_0 = `msgid ""
 msgstr ""
@@ -83,6 +104,35 @@ msgid "Hello world"
 msgstr ""
 `;
 
+export const POT_OUTPUT_TAGS = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: bar.htm
+msgid "Dice"
+msgstr ""
+
+#: foo.htm
+msgid "Duck"
+msgstr ""
+`;
+
+export const POT_OUTPUT_MULTIPLE_TAGS = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: foo.htm
+msgid "overtranslate"
+msgstr ""
+`;
+
+
 export const POT_OUTPUT_MULTIREF = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
@@ -109,6 +159,74 @@ msgstr ""
 #: foo.htm
 #: bar.htm
 msgid "Hello"
+msgstr ""
+`;
+
+export const POT_OUTPUT_SORTED= `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: foo.htm
+msgid "0"
+msgstr ""
+
+#: foo.htm
+msgid "1 mississippi"
+msgstr ""
+
+#: foo.htm
+msgid "12 mississipi"
+msgstr ""
+
+#: foo.htm
+msgid "2"
+msgstr ""
+
+#: foo.htm
+msgid "2 mississipi"
+msgstr ""
+
+#: foo.htm
+msgid "3"
+msgstr ""
+
+#: foo.htm
+msgid "a"
+msgstr ""
+
+#: foo.htm
+msgid "aba"
+msgstr ""
+
+#: foo.htm
+msgid "abu"
+msgstr ""
+
+#: foo.htm
+msgid "b"
+msgstr ""
+
+#: foo.htm
+msgid "c"
+msgstr ""
+
+#: foo.htm
+msgid "d"
+msgstr ""
+
+#: foo.htm
+msgid "e"
+msgstr ""
+
+#: foo.htm
+msgid "f"
+msgstr ""
+
+#: foo.htm
+msgid "g"
 msgstr ""
 `;
 
