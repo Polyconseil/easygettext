@@ -61,6 +61,7 @@ export class NodeTranslationInfo {
     poItem.msgctxt = this.context === constants.MARKER_NO_CONTEXT ? null : this.context;
     poItem.references = [this.reference.toString(withLineNumbers)];
     poItem.msgid_plural = this.plural;
+    poItem.msgstr = this.plural ? ['', ''] : [];
     poItem.extractedComments = this.comment ? [this.comment] : [];
     return poItem;
   }
