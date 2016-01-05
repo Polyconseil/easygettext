@@ -91,7 +91,7 @@ export class Extractor {
     this.filterRegexps = constants.DEFAULT_ATTRIBUTES.map((attribute) => {
       const start = this.options.startDelim.replace(ESCAPE_REGEX, '\\$&');
       const end = this.options.endDelim.replace(ESCAPE_REGEX, '\\$&');
-      return new RegExp(`${start}\\s*[\\'"](.*)[\\'"]\\s*\\|\\s*${attribute}\\s*${end}`);
+      return new RegExp(`${start}.*[\\'"](.*)[\\'"]\\s*\\|\\s*${attribute}.*${end}`);
     });
   }
 

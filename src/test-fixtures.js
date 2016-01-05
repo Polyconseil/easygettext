@@ -15,6 +15,7 @@ export const HTML2_COMMENT1 =  '<h2 translate="" translate-comment="Another comm
 
 export const HTML3_FILTER0 =  '<h2 translate-comment="Fugazy">{{ "Hola, hombre" | translate }}</h2>';
 export const HTML3_FILTER1 =  "<h2 tooltip=\"{{'Hola, mujer'|i18n}}\">StufStuff</h2>";
+export const HTML3_FILTER2 =  "<h2 tooltip=\"{{ a || 'Hola, hola'|i18n }}\">StufStuff</h2>";
 
 export const HTML_LONG =  `
   <div class="col-xs-4">
