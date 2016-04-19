@@ -36,7 +36,8 @@ files.forEach(function(filename) {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
     if (ext === 'jade') {
       file = file.replace(/\.jade$/, '.html');
-      data = jade.render(data, {pretty: true});
+      // Add empty require function to the context to avoid errors with webpack require inside jade
+      data = jade.render(data, {pretty: true, require: function(){}});
     }
     extractor.parse(file, data);
   } catch (e) {
