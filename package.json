@@ -7,6 +7,7 @@
     "type": "git",
     "url": "https://github.com/polyconseil/easygettext"
   },
+  "publishConfig": {"registry":"https://registry.npmjs.org"},
   "scripts": {
     "prepublish": "babel --presets es2015 --plugins transform-object-assign --source-maps true src --out-dir dist/",
     "test": "mocha --compilers js:babel-core/register src/**/*.spec.js",
