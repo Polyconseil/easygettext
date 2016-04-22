@@ -9,7 +9,7 @@ import minimist from 'minimist';
 import {Extractor} from './extract.js';
 
 const PROGRAM_NAME = 'easygettext';
-const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade'];
+const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'pug'];
 
 // Process arguments
 const argv = minimist(process.argv.slice(2));
