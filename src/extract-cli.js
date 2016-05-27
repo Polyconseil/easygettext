@@ -13,10 +13,11 @@ const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade'];
 
 // Process arguments
 const argv = minimist(process.argv.slice(2));
-const files = argv._.sort();
+const files = argv._.sort() || [];
+const quietMode = argv.quiet || false;
 const outputFile = argv.output || null;
 
-if (!files || files.length === 0) {
+if (!quietMode && (!files || files.length === 0)) {
   console.log('Usage:\n\tgettext-extract [--output OUTFILE] <FILES>');
   process.exit(1);
 }

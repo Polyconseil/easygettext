@@ -62,7 +62,7 @@ of 'translate' as master token.
 Outputs or writes to an output file, the sanitized JSON version of a PO file.
 
 ```
-gettext-compile --output cn-translations.json cn.po
+gettext-compile --output translations.json fr.po en.po de.po
 ```
 
 ### Testing
