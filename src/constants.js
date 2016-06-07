@@ -1,6 +1,7 @@
 export const DEFAULT_ATTRIBUTES = [
-  'translate',
   'i18n',
+  'translate',
+  'v-translate',
 ];
 
 export const ATTRIBUTE_COMMENT = 'comment';
