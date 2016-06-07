@@ -44,7 +44,7 @@ gettext-extract --output dictionary.pot foo.html bar.jade
 
 It recognizes the following token flavours (currently; feel free to extend it!)
 
-```
+```html
 <div translate>Hello World</div>
 <div translate translate-context="According to...">Hello World</div>
 <div translate translate-comment="My comment...">Hello World</div>
@@ -56,6 +56,14 @@ It recognizes the following token flavours (currently; feel free to extend it!)
 
 You can combine any context, comment and plural together. Also, you can use 'i18n' instead
 of 'translate' as master token.
+
+You can also provide your own master tokens:
+
+```
+gettext-extract --attribute v-translate --output dictionary.pot foo.html bar.jade
+
+gettext-extract --attribute v-translate --attribute v-i18n --output dictionary.pot foo.html bar.jade
+```
 
 ##### gettext-compile
 
@@ -69,14 +77,28 @@ gettext-compile --output translations.json fr.po en.po de.po
 
 Run the tests using [mocha](https://mochajs.org/):
 
-```
+```javascript
 npm test
 ```
 
 We also have extensive coverage:
 
-```
+```javascript
 npm run cover
+```
+
+### Testing the CLI
+
+Run:
+
+```javascript
+npm run prepublish
+```
+
+Then run `extract-cli.js`:
+
+```
+./dist/extract-cli.js --attribute v-translate --attribute v-i18n ~/output.html
 ```
 
 ### Credits
