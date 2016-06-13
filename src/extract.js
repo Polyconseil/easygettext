@@ -47,7 +47,7 @@ export class TranslationReference {
 
 
 export class NodeTranslationInfo {
-  constructor(node, text, reference, attributes = constants.DEFAULT_ATTRIBUTES)  {
+  constructor(node, text, reference, attributes)  {
     this.text = text;
     this.reference = reference;
     this.context = getExtraAttribute(node, attributes, constants.ATTRIBUTE_CONTEXT) || constants.MARKER_NO_CONTEXT;
@@ -88,10 +88,12 @@ export class Extractor {
      * }
      */
     this.items = {};
-    this.filterRegexps = constants.DEFAULT_ATTRIBUTES.map((attribute) => {
+    this.filterRegexps = this.options.attributes.map((attribute) => {
+      const startOrEndQuotes = `(?:\\&quot;|[\\'"])`  // matches simple / double / HTML quotes
+      const spacesOrPipeChar = `\\s*\\|\\s*`        // matches the pipe string of the filter
       const start = this.options.startDelim.replace(ESCAPE_REGEX, '\\$&');
       const end = this.options.endDelim.replace(ESCAPE_REGEX, '\\$&');
-      return new RegExp(`${start}.*[\\'"](.*)[\\'"]\\s*\\|\\s*${attribute}.*${end}`);
+      return new RegExp(`${start}.*${startOrEndQuotes}(.*)${startOrEndQuotes}${spacesOrPipeChar}${attribute}.*${end}`);
     });
   }
 

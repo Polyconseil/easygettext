@@ -112,5 +112,9 @@ describe('Raw translation data', () => {
     const data2 = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER2);
     expect(data2.length).to.equal(1);
     expect(data2[0].text).to.equal('Hola, hola');
+
+    const data3 = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER3);
+    expect(data3.length).to.equal(1);
+    expect(data3[0].text).to.equal('So long, my dear');
   });
 });
