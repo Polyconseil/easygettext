@@ -3,12 +3,12 @@
 [![Build Status](https://travis-ci.org/Polyconseil/easygettext.svg?branch=master)](https://travis-ci.org/Polyconseil/easygettext)
 [![codecov.io](https://codecov.io/github/Polyconseil/easygettext/coverage.svg?branch=master)](https://codecov.io/github/Polyconseil/easygettext?branch=master)
 
-Simple gettext tokens extraction tools for HTML and Jade files. Also converts from PO to JSON.
+Simple gettext tokens extraction tools for HTML and Jade/Pug files. Also converts from PO to JSON.
 
 ### Motivation
 
 [angular-gettext](https://angular-gettext.rocketeer.be/) is a very neat tool, that comes with Grunt tooling
-to extract translation tokens from your Jade/HTML templates and JavaScript code.
+to extract translation tokens from your Jade/Pug/HTML templates and JavaScript code.
 
 Unfortunately, this has two drawbacks:
 

@@ -10,7 +10,7 @@ import * as constants from './constants.js';
 import {Extractor} from './extract.js';
 
 const PROGRAM_NAME = 'easygettext';
-const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade'];
+const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'pug'];
 
 // Process arguments
 const argv = minimist(process.argv.slice(2));
@@ -50,8 +50,8 @@ files.forEach(function(filename) {
   console.log(`[${PROGRAM_NAME}] extracting: '${filename}`);
   try {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
-    if (ext === 'jade') {
-      file = file.replace(/\.jade$/, '.html');
+    if (ext === 'jade' || ext === 'pug') {
+      file = file.replace(/\.(jade|pug)$/, '.html');
       // Add empty require function to the context to avoid errors with webpack require inside jade
       data = jade.render(data, {pretty: true, require: function(){}});
     }
