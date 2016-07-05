@@ -1,4 +1,5 @@
 export const DEFAULT_ATTRIBUTES = [
+  'get-text',
   'i18n',
   'translate',
 ];
