@@ -10,7 +10,7 @@ import * as constants from './constants.js';
 import {Extractor} from './extract.js';
 
 const PROGRAM_NAME = 'easygettext';
-const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade'];
+const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'vue'];
 
 // Process arguments
 const argv = minimist(process.argv.slice(2));
