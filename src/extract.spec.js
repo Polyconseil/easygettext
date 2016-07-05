@@ -31,12 +31,13 @@ describe('Extractor object', () => {
     const extractor = new Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML4_TAG0);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML4_TAG1);
+    extractor.parse(fixtures.FILENAME_2, fixtures.HTML4_TAG2);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_TAGS);
   });
 
   it('should only translate a html block once', () => {
     const extractor = new Extractor();
-    extractor.parse(fixtures.FILENAME_0, fixtures.HTML4_TAG2);
+    extractor.parse(fixtures.FILENAME_0, fixtures.HTML4_TAG3);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_MULTIPLE_TAGS);
   });
 

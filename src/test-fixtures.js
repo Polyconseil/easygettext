@@ -1,5 +1,6 @@
 export const FILENAME_0 = 'foo.htm';
 export const FILENAME_1 = 'bar.htm';
+export const FILENAME_2 = 'baz.vue';
 
 
 export const HTML0_CTX0 =  `
@@ -20,7 +21,8 @@ export const HTML3_FILTER3 =  "<h2 attr=\"{{ &quot;So long, my dear' |i18n }}\">
 
 export const HTML4_TAG0 =  '<translate>Duck</translate>';
 export const HTML4_TAG1 =  '<i18n>Dice</i18n>';
-export const HTML4_TAG2 =  '<i18n translate>overtranslate</i18n>';
+export const HTML4_TAG2 =  '<get-text>Rabbit</get-text>';
+export const HTML4_TAG3 =  '<i18n translate>overtranslate</i18n>';
 
 export const HTML_LONG =  `
   <div class="col-xs-4">
@@ -119,6 +121,10 @@ msgstr ""
 
 #: foo.htm
 msgid "Duck"
+msgstr ""
+
+#: baz.vue
+msgid "Rabbit"
 msgstr ""
 `;
 
