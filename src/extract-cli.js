@@ -50,7 +50,7 @@ files.forEach(function(filename) {
   console.log(`[${PROGRAM_NAME}] extracting: '${filename}`);
   try {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
-    if (['jade', 'pug'].includes(ext)) {
+    if (['jade', 'pug'].indexOf(ext) !== -1) {
       file = file.replace(/\.(jade|pug)$/, '.html');
       // Add empty require function to the context to avoid errors with webpack require inside jade
       data = jade.render(data, { filename: file, pretty: true, require: function(){}});
