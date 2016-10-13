@@ -51,6 +51,8 @@ It recognizes the following token flavours (currently; feel free to extend it!)
 <div translate translate-plural="Hello worlds">Hello World</div>
 <div placeholder="{{ 'Hello World' | translate }}"></div>
 <div placeholder="{{ scopeVariable || ('Hello World' | translate) }}"></div>
+<get-text>Hello World</get-text>
+<i18n>Hello World</i18n>
 <translate>Hello World</translate>
 ```
 
