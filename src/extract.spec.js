@@ -117,5 +117,13 @@ describe('Raw translation data', () => {
     const data3 = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER3);
     expect(data3.length).to.equal(1);
     expect(data3[0].text).to.equal('So long, my dear');
+
+    const extractorWithParams = new Extractor({
+      startDelim: '',
+      endDelim: '',
+    });
+    const data4 = extractorWithParams._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER4);
+    expect(data4.length).to.equal(1);
+    expect(data4[0].text).to.equal('So long, my dear');
   });
 });
