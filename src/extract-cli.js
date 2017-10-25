@@ -17,8 +17,8 @@ const argv = minimist(process.argv.slice(2));
 const files = argv._.sort() || [];
 const quietMode = argv.quiet || false;
 const outputFile = argv.output || null;
-const startDelim = argv.startDelim === undefined ? constants.DEFAULT_DELIM.start : argv.startDelim;
-const endDelim = argv.endDelim === undefined ? constants.DEFAULT_DELIM.end : argv.endDelim;
+const startDelimiter = argv.startDelimiter === undefined ? constants.DEFAULT_DELIMITERS.start : argv.startDelimiter;
+const endDelimiter = argv.endDelimiter === undefined ? constants.DEFAULT_DELIMITERS.end : argv.endDelimiter;
 // Allow to pass extra attributes, e.g. gettext-extract --attribute v-translate --attribute v-i18n
 const extraAttribute = argv.attribute || false;
 
@@ -40,8 +40,8 @@ if (extraAttribute) {
 const extractor = new Extractor({
   lineNumbers: true,
   attributes,
-  startDelim,
-  endDelim
+  startDelimiter,
+  endDelimiter,
 });
 
 files.forEach(function(filename) {

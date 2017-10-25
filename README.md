@@ -50,11 +50,12 @@ It recognizes the following token flavours (currently; feel free to extend it!)
 <div translate translate-comment="My comment...">Hello World</div>
 <div translate translate-plural="Hello worlds">Hello World</div>
 <div placeholder="{{ 'Hello World' | translate }}"></div>
-<div placeholder="'Hello World' | translate"></div>
 <div placeholder="{{ scopeVariable || ('Hello World' | translate) }}"></div>
 <get-text>Hello World</get-text>
 <i18n>Hello World</i18n>
 <translate>Hello World</translate>
+<!--  The default delimiters '{{' and '}}' must be changed to empty strings to handle this example -->
+<div placeholder="'Hello World' | translate"></div>
 ```
 
 You can combine any context, comment and plural together. Also, you can use 'i18n' instead
@@ -67,7 +68,7 @@ gettext-extract --attribute v-translate --output dictionary.pot foo.html bar.jad
 
 gettext-extract --attribute v-translate --attribute v-i18n --output dictionary.pot foo.html bar.jade
 
-gettext-extract --startDelim '[#' --endDelim '#]' --output dictionary.pot foo.html bar.jade
+gettext-extract --startDelimiter '[#' --endDelimiter '#]' --output dictionary.pot foo.html bar.jade
 ```
 
 ##### gettext-compile

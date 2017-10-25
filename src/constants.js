@@ -4,10 +4,10 @@ export const DEFAULT_ATTRIBUTES = [
   'translate',
 ];
 
-export const DEFAULT_DELIM = {
-	start: '{{',
-	end: '}}'
-}
+export const DEFAULT_DELIMITERS = {
+  start: '{{',
+  end: '}}',
+};
 
 export const ATTRIBUTE_COMMENT = 'comment';
 export const ATTRIBUTE_CONTEXT = 'context';

@@ -119,8 +119,8 @@ describe('Raw translation data', () => {
     expect(data3[0].text).to.equal('So long, my dear');
 
     const extractorWithParams = new Extractor({
-      startDelim: '',
-      endDelim: '',
+      startDelimiter: '',
+      endDelimiter: '',
     });
     const data4 = extractorWithParams._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER4);
     expect(data4.length).to.equal(1);

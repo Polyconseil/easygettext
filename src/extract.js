@@ -72,8 +72,8 @@ export class Extractor {
 
   constructor(options) {
     this.options = Object.assign({
-      startDelim: '{{',
-      endDelim: '}}',
+      startDelimiter: '{{',
+      endDelimiter: '}}',
       attributes: constants.DEFAULT_ATTRIBUTES,
       lineNumbers: false,
     }, options);
@@ -89,10 +89,10 @@ export class Extractor {
      */
     this.items = {};
     this.filterRegexps = this.options.attributes.map((attribute) => {
-      const startOrEndQuotes = `(?:\\&quot;|[\\'"])`  // matches simple / double / HTML quotes
-      const spacesOrPipeChar = `\\s*\\|\\s*`        // matches the pipe string of the filter
-      const start = this.options.startDelim.replace(ESCAPE_REGEX, '\\$&');
-      const end = this.options.endDelim.replace(ESCAPE_REGEX, '\\$&');
+      const startOrEndQuotes = `(?:\\&quot;|[\\'"])`;  // matches simple / double / HTML quotes
+      const spacesOrPipeChar = `\\s*\\|\\s*`;        // matches the pipe string of the filter
+      const start = this.options.startDelimiter.replace(ESCAPE_REGEX, '\\$&');
+      const end = this.options.endDelimiter.replace(ESCAPE_REGEX, '\\$&');
       return new RegExp(`${start}.*${startOrEndQuotes}(.*)${startOrEndQuotes}${spacesOrPipeChar}${attribute}.*${end}`);
     });
   }
