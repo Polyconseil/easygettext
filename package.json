@@ -36,9 +36,9 @@
   "dependencies": {
     "cheerio": "^0.19.0",
     "fs": "0.0.2",
-    "jade": "^1.11.0",
     "minimist": "^1.2.0",
-    "pofile": "^1.0.2"
+    "pofile": "^1.0.2",
+    "pug": "^2.0.0-rc.4"
   },
   "files": [
     "src",
