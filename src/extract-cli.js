@@ -27,12 +27,12 @@ if (!quietMode && (!files || files.length === 0)) {
   process.exit(1);
 }
 
-let attributes = constants.DEFAULT_ATTRIBUTES.slice()
+let attributes = constants.DEFAULT_ATTRIBUTES.slice();
 if (extraAttribute) {
   if (typeof extraAttribute === 'string') {  // Only one extra attribute was passed.
-    attributes.push(extraAttribute)
+    attributes.push(extraAttribute);
   } else {  // Multiple extra attributes were passed.
-    attributes = attributes.concat(extraAttribute)
+    attributes = attributes.concat(extraAttribute);
   }
 }
 
@@ -57,7 +57,7 @@ files.forEach(function(filename) {
     if (['jade', 'pug'].indexOf(ext) !== -1) {
       file = file.replace(/\.(jade|pug)$/, '.html');
       // Add empty require function to the context to avoid errors with webpack require inside jade
-      data = jade.render(data, { filename: file, pretty: true, require: function(){}});
+      data = jade.render(data, { filename: file, pretty: true, require: function() {}});
     }
     extractor.parse(file, data);
   } catch (e) {
