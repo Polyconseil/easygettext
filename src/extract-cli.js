@@ -67,7 +67,7 @@ files.forEach(function(filename) {
   }
 });
 if (outputFile) {
-  fs.writeFile(outputFile, extractor.toString());
+  fs.writeFileSync(outputFile, extractor.toString());
 } else {
   console.log(extractor.toString());
 }
