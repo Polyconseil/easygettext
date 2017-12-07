@@ -93,7 +93,7 @@ export class Extractor {
       const spacesOrPipeChar = `\\s*\\|\\s*`;        // matches the pipe string of the filter
       const start = this.options.startDelimiter.replace(ESCAPE_REGEX, '\\$&');
       const end = this.options.endDelimiter.replace(ESCAPE_REGEX, '\\$&');
-      return new RegExp(`${start}.*${startOrEndQuotes}(.*)${startOrEndQuotes}${spacesOrPipeChar}${attribute}.*${end}`);
+      return new RegExp(`${start}[^'"]*${startOrEndQuotes}(.*)${startOrEndQuotes}${spacesOrPipeChar}${attribute}\\s*${end}`);
     });
   }
 
