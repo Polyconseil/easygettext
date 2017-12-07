@@ -19,6 +19,9 @@ export const HTML3_FILTER1 =  "<h2 tooltip=\"{{'Hola, mujer'|i18n}}\">StufStuff<
 export const HTML3_FILTER2 =  "<h2 tooltip=\"{{ a || 'Hola, hola'|i18n }}\">StufStuff</h2>";
 export const HTML3_FILTER3 =  "<h2 attr=\"{{ &quot;So long, my dear' |i18n }}\">Martha</h2>";
 export const HTML3_FILTER4 =  "<h2 attr=\"&quot;So long, my dear' |i18n\">Martha</h2>";
+export const HTML3_FILTER5 =  "<h2 attr=\"{{ 'Guns\'n roses, my dear' |i18n }}\">Martha</h2>";
+export const HTML3_FILTER6 =  "<h2 attr=\"'Guns\'n roses, my dear' |i18n \">Martha</h2>";
+export const HTML3_FILTER7 =  "<h2 attr=\"::'Guns\'n roses, my dear' |i18n \">Martha</h2>";
 
 export const HTML4_TAG0 =  '<translate>Duck</translate>';
 export const HTML4_TAG1 =  '<i18n>Dice</i18n>';

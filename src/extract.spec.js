@@ -125,5 +125,21 @@ describe('Raw translation data', () => {
     const data4 = extractorWithParams._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER4);
     expect(data4.length).to.equal(1);
     expect(data4[0].text).to.equal('So long, my dear');
+
+    const data5 = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER5);
+    expect(data5.length).to.equal(1);
+    expect(data5[0].text).to.equal('Guns\'n roses, my dear');
+
+    const data6 = extractorWithParams._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER6);
+    expect(data6.length).to.equal(1);
+    expect(data6[0].text).to.equal('Guns\'n roses, my dear');
+
+    const extractorWithBindOnce = new Extractor({
+      startDelimiter: '::',
+      endDelimiter: '',
+    });
+    const data7 = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER7);
+    expect(data7.length).to.equal(1);
+    expect(data7[0].text).to.equal('Guns\'n roses, my dear');
   });
 });
