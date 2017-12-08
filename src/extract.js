@@ -160,7 +160,7 @@ export class Extractor {
       if (this._hasTranslationToken(node)) {
         const text = node.html().trim();
         if (text.length !== 0) {
-          return new NodeTranslationInfo(node, text, reference, this.options.attributes);
+          return [new NodeTranslationInfo(node, text, reference, this.options.attributes)];
         }
       }
 
@@ -177,11 +177,12 @@ export class Extractor {
           }
         }
       });
-      if (tokensFromFilters.length === 1) {
-        // TODO: For now, only support ONE token from either html, attrs or data in the same node.
-        return tokensFromFilters[0];
+      if (tokensFromFilters.length > 0) {
+        return tokensFromFilters;
       }
-    }.bind(this)).get().filter((x) => x !== undefined);
+    }.bind(this)).get()
+      .reduce((acc, cur) => acc.concat(cur), [])
+      .filter((x) => x !== undefined);
   }
 
   _hasTranslationToken(node) {
