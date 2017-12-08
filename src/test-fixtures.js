@@ -23,6 +23,14 @@ export const HTML3_FILTER5 =  "<h2 attr=\"{{ 'Guns\'n roses, my dear' |i18n }}\"
 export const HTML3_FILTER6 =  "<h2 attr=\"'Guns\'n roses, my dear' |i18n \">Martha</h2>";
 export const HTML3_FILTER7 =  "<h2 attr=\"::'Guns\'n roses, my dear' |i18n \">Martha</h2>";
 
+export const HTML_NESTED_FILTER = `
+  <li class="action thumbs-up"
+      title="{{::'Like' |translate}}" alt="{{::'Gets extracted now' |translate}}">
+      <span ng-bind="::vm.voteCount |translate" alt="{{:: 'Number of votes' |translate}}"></span>
+      <span ng-bind-html="::'Votes <i class=\'fa fa-star\'></i>' |translate"></span>
+  </li>
+`;
+
 export const HTML4_TAG0 =  '<translate>Duck</translate>';
 export const HTML4_TAG1 =  '<i18n>Dice</i18n>';
 export const HTML4_TAG2 =  '<get-text>Rabbit</get-text>';

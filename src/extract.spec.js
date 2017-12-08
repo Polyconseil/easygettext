@@ -142,4 +142,25 @@ describe('Raw translation data', () => {
     expect(data7.length).to.equal(1);
     expect(data7[0].text).to.equal('Guns\'n roses, my dear');
   });
+
+  it('should extract filters from nested constructs', () => {
+    const extractorWithBindOnce = new Extractor({
+      startDelimiter: '::',
+      endDelimiter: '',
+    });
+
+    const data8 = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_NESTED_FILTER);
+    expect(data8.length).to.equal(1);
+    expect(data8[0].text).to.equal('Votes <i class=\'fa fa-star\'></i>');
+
+    const extractorWithInterpolateBindOnce = new Extractor({
+      startDelimiter: '{{::',
+      endDelimiter: '}}',
+    });
+    const data9 = extractorWithInterpolateBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_NESTED_FILTER);
+    expect(data9.length).to.equal(3);
+    expect(data9[0].text).to.equal('Like');
+    expect(data9[1].text).to.equal('Gets extracted now');
+    expect(data9[2].text).to.equal('Number of votes');
+  });
 });
