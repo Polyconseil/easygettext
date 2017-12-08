@@ -3,7 +3,7 @@
 /* eslint no-console:0 */
 
 import fs from 'fs';
-import jade from 'jade';
+import pug from 'pug';
 import minimist from 'minimist';
 
 import * as constants from './constants.js';
@@ -27,12 +27,12 @@ if (!quietMode && (!files || files.length === 0)) {
   process.exit(1);
 }
 
-let attributes = constants.DEFAULT_ATTRIBUTES.slice()
+let attributes = constants.DEFAULT_ATTRIBUTES.slice();
 if (extraAttribute) {
   if (typeof extraAttribute === 'string') {  // Only one extra attribute was passed.
-    attributes.push(extraAttribute)
+    attributes.push(extraAttribute);
   } else {  // Multiple extra attributes were passed.
-    attributes = attributes.concat(extraAttribute)
+    attributes = attributes.concat(extraAttribute);
   }
 }
 
@@ -56,8 +56,8 @@ files.forEach(function(filename) {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
     if (['jade', 'pug'].indexOf(ext) !== -1) {
       file = file.replace(/\.(jade|pug)$/, '.html');
-      // Add empty require function to the context to avoid errors with webpack require inside jade
-      data = jade.render(data, { filename: file, pretty: true, require: function(){}});
+      // Add empty require function to the context to avoid errors with webpack require inside pug
+      data = pug.render(data, { filename: file, pretty: true, require: function() {}});
     }
     extractor.parse(file, data);
   } catch (e) {
@@ -67,7 +67,7 @@ files.forEach(function(filename) {
   }
 });
 if (outputFile) {
-  fs.writeFile(outputFile, extractor.toString());
+  fs.writeFileSync(outputFile, extractor.toString());
 } else {
   console.log(extractor.toString());
 }
