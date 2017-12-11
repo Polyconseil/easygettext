@@ -17,7 +17,7 @@ Unfortunately, this has two drawbacks:
 
 This library comes up with two simple CLI tools to extract and compile your HTML tokens.
 
-### Why this library?
+### Why This Library?
 
 Our frontend toolchain, [systematic](https://github.com/Polyconseil/systematic) doesn't rely on Grunt/Gulp/Broccoli/...
 and uses a combination of simple Makefiles and CLI tools to do the job.
@@ -54,7 +54,15 @@ It recognizes the following token flavours (currently; feel free to extend it!)
 <get-text>Hello World</get-text>
 <i18n>Hello World</i18n>
 <translate>Hello World</translate>
-<!--  The default delimiters '{{' and '}}' must be changed to empty strings to handle this example -->
+<!--  The following becomes 'Broken strings are joined'  --> 
+<span ng-bind="{{ 'Broken '
+ + 'strings ' +
+ 'are ' + 
+ 'joined' |translate}}"></span>
+<!--  By supplying the  --filterPrefix '::' parameter  -->  
+<span>{{:: 'Something …' |translate}}</span>
+<!--  The default delimiters '{{' and '}}' must be changed to empty strings to handle these examples  -->
+<span ng-bind=":: 'Something …' |translate"></span>
 <div placeholder="'Hello World' | translate"></div>
 ```
 
@@ -63,7 +71,7 @@ of 'translate' as master token.
 
 You can also provide your own master tokens:
 
-```
+```bash
 gettext-extract --attribute v-translate --output dictionary.pot foo.html bar.jade
 
 gettext-extract --attribute v-translate --attribute v-i18n --output dictionary.pot foo.html bar.jade
@@ -75,21 +83,81 @@ gettext-extract --startDelimiter '[#' --endDelimiter '#]' --output dictionary.po
 
 Outputs or writes to an output file, the sanitized JSON version of a PO file.
 
-```
+```bash
 gettext-compile --output translations.json fr.po en.po de.po
 ```
+
+### AngularJS
+If you use `easygettext` to extract files from an AngularJS code base, you might find the following tips helpful.
+
+To cover the cases (1)
+```html
+<input placeholder="{{:: 'Insert name …' |translate }}">
+<input placeholder="{{ 'Insert name …' |translate }}">
+```
+
+and (2)
+```html
+<a href="#" ng-bind=":: 'Link text' |translate"></a>
+<a href="#" ng-bind="'Link text' |translate"></a>
+<a href="#">{{::'Link text' |translate}}</a>
+<a href="#">{{'Link text' |translate}}</a>
+``` 
+you should run the extraction tool twice.  Once with the command-line arguments
+```bash
+--startDelimiter '{{' --endDelimiter '}}' --filterPrefix '::'
+```
+and once with the command-line arguments
+```bash
+--output ${html_b} --startDelimiter '' --endDelimiter '' --filterPrefix '::'
+```
+
+The following Bash script shows how `msgcat` might help
+```bash
+#!/usr/bin/env bash
+
+input_files="$(find ./src/ -iname \*\.html)"
+workdir=$(mktemp -d "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX") || exit 1
+
+html_a=${workdir}/messages-html-interpolate.pot
+html_b=${workdir}/messages-html.pot
+
+./dist/extract-cli.js --output ${html_a} --startDelimiter '{{' --endDelimiter '}}' --filterPrefix '::' ${input_files}
+./dist/extract-cli.js --output ${html_b} --startDelimiter '' --endDelimiter '' --filterPrefix '::' ${input_files}
+
+# Extract gettext “messages” from JavaScript files here, into ${es_a} …
+es_a=${workdir}/ecmascript.pot
+# [...] > ${es_a}
+
+# Merge the different catalog templates with `msgcat`:  
+merged_pot=${workdir}/merged.pot
+msgcat ${html_a} ${html_b} ${es_a} > ${merged_pot}
+
+# Cleanup, in case `msgcat` gave merge-conflicts in catalog header.
+header=${workdir}/header.pot
+sed -e '/^$/q' < ${html_a} > ${header}
+
+body=${workdir}/body.pot
+sed '1,/^$/d' < ${merged_pot} > ${body}
+
+cat ${header} ${body} > ${output_file}
+
+# Remove temporary directory with working files.
+rm -r ${workdir}
+``` 
+Please note that the script needs to be modified to match your needs and environment.
 
 ### Testing
 
 Run the tests using [mocha](https://mochajs.org/):
 
-```javascript
+```bash
 npm test
 ```
 
 We also have extensive coverage:
 
-```javascript
+```bash
 npm run cover
 ```
 
@@ -97,13 +165,13 @@ npm run cover
 
 Run:
 
-```javascript
+```bash
 npm run prepublish
 ```
 
 Then run `extract-cli.js`:
 
-```
+```bash
 ./dist/extract-cli.js --attribute v-translate --attribute v-i18n ~/output.html
 ```
 
