@@ -268,7 +268,7 @@ describe('Raw translation data', () => {
       startDelimiter: '{{',
       endDelimiter: '}}',
     });
-    const data = extractorInterpolate._extractTranslationData('mtr.html', fixtures.HTML_TEXT_MULTIPLE_FILTER);
+    const data = extractorInterpolate._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_TEXT_MULTIPLE_FILTER);
     expect(data.length).to.equal(3);
     expect(data[0].text).to.equal('Text 0');
     expect(data[1].text).to.equal('Text 1');
