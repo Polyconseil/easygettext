@@ -23,6 +23,24 @@ export const HTML3_FILTER5 = `<h2 attr="{{ 'Guns'n roses, my dear' |i18n }}">Son
 export const HTML3_FILTER6 = `<h2 attr="'Guns'n roses, my dear' |i18n ">Daughter</h2>`;
 export const HTML3_FILTER7 = `<h2 attr="::'Guns'n roses, my dear' |i18n ">Wife</h2>`;
 
+export const HTML_FILTER_SPLIT_STRING = `
+<h2 ng-bind="::'Three' +' parts, '  +   'one whole.' |i18n ">Will be replaced</h2>
+`;
+
+export const HTML_FILTER_SPLIT_MULTILINE_STRING_ATTR = `
+<h2 ng-bind="::'Four' +
+ ' parts, ' +
+  'maybe, '
+  + 'one whole.' |i18n ">Will be replaced</h2>
+`;
+
+export const HTML_FILTER_SPLIT_MULTILINE_STRING_INTERPOLATED = `
+<h2>{{::'Four' +
+ ' parts, ' +
+  'probably, '
+  + 'one whole.' |i18n}}</h2>
+`;
+
 
 export const HTML_COMPLEX_NESTING = `<div translate translate-comment="Outer comment …"
      translate-context="Outer Context">

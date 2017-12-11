@@ -286,4 +286,29 @@ describe('Raw translation data', () => {
     expect(data[0].text).to.equal('Text 1');
   });
 
+  it('should join split strings', () => {
+    const extractorInterpolate = new Extractor({
+      startDelimiter: '',
+      endDelimiter: '',
+      filterPrefix: '::',
+    });
+    const data = extractorInterpolate._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_FILTER_SPLIT_STRING);
+    expect(data.length).to.equal(1);
+    expect(data[0].text).to.equal('Three parts, one whole.');
+  });
+
+  it('should join strings split over multiple lines', () => {
+    const extractorInterpolate = new Extractor({
+      startDelimiter: '',
+      endDelimiter: '',
+      filterPrefix: '::',
+    });
+    const data0 = extractorInterpolate._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_FILTER_SPLIT_MULTILINE_STRING_ATTR);
+    expect(data0.length).to.equal(1);
+    expect(data0[0].text).to.equal('Four parts, maybe, one whole.');
+
+    const data1 = extractorInterpolate._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_FILTER_SPLIT_MULTILINE_STRING_INTERPOLATED);
+    expect(data1.length).to.equal(1);
+    expect(data1[0].text).to.equal('Four parts, probably, one whole.');
+  });
 });

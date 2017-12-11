@@ -104,6 +104,7 @@ export class Extractor {
     this.items = {};
     this.attrFilterRegexps = this.createRegexps('attr');
     this.textFilterRegexps = this.createRegexps('text');
+    this.splitStringRe = /(?:['"])\s*\+\s*(?:['"])/g;
   }
 
   createRegexps(type) {
@@ -124,10 +125,10 @@ export class Extractor {
     const end = endDelimiter.replace(ESCAPE_REGEX, '\\$&');
 
     const prefix = this.options.filterPrefix === null ? '' : `\\s*(?:${this.options.filterPrefix})?\\s*`;
-    const body = endDelimiter === '' ? '(.*)' : '(.*)(?!${end})';
+    const body = endDelimiter === '' ? '((.|\\n)*)' : `((.|\\n)*?(?!${end}))`;
 
-    return this.options.filters.map((attribute) => {
-      return new RegExp(`${start}${prefix}[^'"]*${startOrEndQuotes}${body}${startOrEndQuotes}${spacesOrPipeChar}${attribute}\\s*${end}`, 'g');
+    return this.options.filters.map((filter) => {
+      return new RegExp(`${start}${prefix}[^'"]*${startOrEndQuotes}${body}${startOrEndQuotes}${spacesOrPipeChar}${filter}\\s*${end}`, 'g');
     });
   }
 
@@ -230,6 +231,7 @@ export class Extractor {
           .filter((match) => match.length)
           .map((match) => match[1].trim())
           .filter((text) => text.length !== 0)
+          .map((text) => text.split(this.splitStringRe).join(''))
           .forEach((text) => {
             tokensFromFilters.push(
               new NodeTranslationInfo(node, text, reference,
