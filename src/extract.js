@@ -182,16 +182,6 @@ export class Extractor {
     return catalog.toString();
   }
 
-  _traverseTree(nodes, sequence) {
-    nodes.forEach((el) => {
-      sequence.push(el);
-      if (typeof el.children !== 'undefined') {
-        this._traverseTree(el.children, sequence);
-      }
-    });
-    return sequence;
-  }
-
   _parseElement($, el, filename, content) {
     const reference = new TranslationReference(filename, content, el.startIndex);
     const node = $(el);
@@ -249,6 +239,16 @@ export class Extractor {
     ];
   }
 
+  _traverseTree(nodes, sequence) {
+    nodes.forEach((el) => {
+      sequence.push(el);
+      if (typeof el.children !== 'undefined') {
+        this._traverseTree(el.children, sequence);
+      }
+    });
+    return sequence;
+  }
+
   _extractTranslationData(filename, content) {
     const $ = cheerio.load(content, {
       decodeEntities: false,
@@ -256,9 +256,7 @@ export class Extractor {
     });
 
     return this._traverseTree($.root()[0].children, [])
-      .map((el) => {
-        return this._parseElement($, el, filename, content);
-      })
+      .map((el) => this._parseElement($, el, filename, content))
       .reduce((acc, cur) => acc.concat(cur), [])
       .filter((x) => x !== undefined);
   }
