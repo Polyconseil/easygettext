@@ -212,21 +212,21 @@ export class Extractor {
     // In-depth search for filters
     return this.getAttrsAndDatas(node)
       .reduce((tokensFromFilters, item) => {
-        function getAllMatches(matches, re) {
+
+        function _getAllMatches(matches, re) {
           while (true) {
             const match = re.exec(item.text);
-            if (match) {
-              matches.push(match);
-            } else {
+            if (match === null) {
               break;
             }
+            matches.push(match);
           }
           return matches;
         }
 
         const regexps = item.type === 'html' ? this.textFilterRegexps : this.attrFilterRegexps;
         regexps
-          .reduce(getAllMatches, [])
+          .reduce(_getAllMatches, [])
           .filter((match) => match.length)
           .map((match) => match[1].trim())
           .filter((text) => text.length !== 0)
