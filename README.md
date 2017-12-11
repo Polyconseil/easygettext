@@ -26,9 +26,18 @@ The toolchain being framework-agnostic, we don't want to depend on Angular to ex
 On another note, we use the standard [xgettext](http://www.gnu.org/savannah-checkouts/gnu/gettext/manual/html_node/xgettext-Invocation.html)
 tool to extract our JavaScript translation tokens.
 
-Nevertheless, the way [angular-gettext] does it (with tokens, directly in HTML) is elegant, is used by many other
+Nevertheless, the way [angular-gettext](https://angular-gettext.rocketeer.be/) does it (with tokens, directly in HTML) is elegant, is used by many other
 libraries and will also be the way to do it in Angular2.
 
+### Installation
+You can install the [easygettext](https://www.npmjs.com/package/easygettext) package by running 
+```bash
+npm install --dev easygettext
+```
+or 
+```bash
+yarn add --save-dev easygettext
+```
 
 
 ### Usage & Examples
