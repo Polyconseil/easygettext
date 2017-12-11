@@ -23,6 +23,69 @@ export const HTML3_FILTER5 =  "<h2 attr=\"{{ 'Guns\'n roses, my dear' |i18n }}\"
 export const HTML3_FILTER6 =  "<h2 attr=\"'Guns\'n roses, my dear' |i18n \">Martha</h2>";
 export const HTML3_FILTER7 =  "<h2 attr=\"::'Guns\'n roses, my dear' |i18n \">Martha</h2>";
 
+export const HTML_COMPLEX_NESTING = `<div translate translate-comment="Outer comment …"
+     translate-context="Outer Context">
+  <div translate translate-comment="Inner comment …"
+       translate-context="Inner Context">
+    Before {{:: 'I18n before' |translate }}
+    <a href="#" aria-label="{{ 'Test link 1' |translate }}">
+      {{ 'Link part 1' |translate }}
+      {{:: 'Link part 2' |translate }}
+      {{ 'Link part 3' |translate }}</a>
+    Between {{:: 'I18n between' |translate }}
+    <a href="#" aria-label="{{ 'Test link 2' |translate }}">
+      {{ 'Reference part 1' |translate }}
+      {{:: 'Reference part 2' |translate }}
+      {{ 'Reference part 3' |translate }}</a>
+    After {{:: 'I18n after' |translate }}
+  </div>
+</div>`;
+
+export const HTML_LINEBREAK_FILTER = `
+<div class="buttons">
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{ 'Multi-line 0' |translate }}</a>
+  
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{ 
+ 'Multi-line 1' |translate }}</a>
+
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{ 'Multi-line 2'
+ |translate }}</a>
+
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{'Multi-line 3' |
+ translate }}</a>
+
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{ 'Multi-line 4' | translate 
+}}</a>
+`;
+
+export const HTML_TEXT_FILTER = `
+{{ 'Outside 0' |translate }}
+<div class="buttons">
+<a href="#">{{ 'Text 0' |translate }}</a>
+{{ 'Between 0' |translate }}
+<a href="#">{{ 'Text 3' |translate }}</a>
+</div>
+{{ 'Outside 1' |translate }}
+`;
+
+export const HTML_TEXT_MULTIPLE_FILTER = `
+<a href="#">
+{{ 'Text 0' |translate }} between
+ {{ 'Text 1' |translate }} between again
+ {{ 'Text 2' |translate }}
+</a>
+`;
+
 export const HTML_NESTED_FILTER = `
   <li class="action thumbs-up"
       title="{{::'Like' |translate}}" alt="{{::'Gets extracted now' |translate}}">
