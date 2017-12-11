@@ -22,9 +22,10 @@ const endDelimiter = argv.endDelimiter === undefined ? constants.DEFAULT_DELIMIT
 // Allow to pass extra attributes, e.g. gettext-extract --attribute v-translate --attribute v-i18n
 const extraAttribute = argv.attribute || false;
 const extraFilter = argv.filter || false;
+const filterPrefix = argv.filterPrefix || constants.DEFAULT_FILTER_PREFIX;
 
 if (!quietMode && (!files || files.length === 0)) {
-  console.log('Usage:\n\tgettext-extract [--attribute EXTRA-ATTRIBUTE] [--output OUTFILE] <FILES>');
+  console.log('Usage:\n\tgettext-extract [--attribute EXTRA-ATTRIBUTE] [--filterPrefix FILTER-PREFIX] [--output OUTFILE] <FILES>');
   process.exit(1);
 }
 
@@ -48,6 +49,7 @@ const extractor = new Extractor({
   lineNumbers: true,
   attributes,
   filters,
+  filterPrefix,
   startDelimiter,
   endDelimiter,
 });
