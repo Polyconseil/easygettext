@@ -182,46 +182,6 @@ export class Extractor {
     return catalog.toString();
   }
 
-  _parseElement($, el, filename, content) {
-    const reference = new TranslationReference(filename, content, el.startIndex);
-    const node = $(el);
-    if (this._hasTranslationToken(node)) {
-      const text = node.html().trim();
-      if (text.length !== 0) {
-        return [new NodeTranslationInfo(node, text, reference, this.options.attributes)];
-      }
-    }
-
-    // In-depth search for filters
-    return this.getAttrsAndDatas(node).reduce((tokensFromFilters, item) => {
-      function getAllMatches(matches, re) {
-        while (true) {
-          const match = re.exec(item.text);
-          if (match) {
-            matches.push(match);
-          } else {
-            break;
-          }
-        }
-        return matches;
-      }
-
-      const regexps = item.type === 'html' ? this.textFilterRegexps : this.attrFilterRegexps;
-      regexps
-        .reduce(getAllMatches, [])
-        .filter((match) => match.length)
-        .map((match) => match[1].trim())
-        .filter((text) => text.length !== 0)
-        .forEach((text) => {
-          tokensFromFilters.push(
-            new NodeTranslationInfo(node, text, reference,
-              this.options.attributes));
-        });
-
-      return tokensFromFilters;
-    }, []);
-  }
-
   getAttrsAndDatas(node) {
     if (node[0].type === 'text') {
       return [{text: node[0].data.trim(), type: 'text'}];
@@ -237,6 +197,47 @@ export class Extractor {
         return {text: attr[key], type: 'attr'};
       }),
     ];
+  }
+
+  _parseElement($, el, filename, content) {
+    const reference = new TranslationReference(filename, content, el.startIndex);
+    const node = $(el);
+    if (this._hasTranslationToken(node)) {
+      const text = node.html().trim();
+      if (text.length !== 0) {
+        return [new NodeTranslationInfo(node, text, reference, this.options.attributes)];
+      }
+    }
+
+    // In-depth search for filters
+    return this.getAttrsAndDatas(node)
+      .reduce((tokensFromFilters, item) => {
+        function getAllMatches(matches, re) {
+          while (true) {
+            const match = re.exec(item.text);
+            if (match) {
+              matches.push(match);
+            } else {
+              break;
+            }
+          }
+          return matches;
+        }
+
+        const regexps = item.type === 'html' ? this.textFilterRegexps : this.attrFilterRegexps;
+        regexps
+          .reduce(getAllMatches, [])
+          .filter((match) => match.length)
+          .map((match) => match[1].trim())
+          .filter((text) => text.length !== 0)
+          .forEach((text) => {
+            tokensFromFilters.push(
+              new NodeTranslationInfo(node, text, reference,
+                this.options.attributes));
+          });
+
+        return tokensFromFilters;
+      }, []);
   }
 
   _traverseTree(nodes, sequence) {
@@ -256,6 +257,7 @@ export class Extractor {
     });
 
     return this._traverseTree($.root()[0].children, [])
+      .filter((el) => el.type === 'tag' || el.type === 'text')
       .map((el) => this._parseElement($, el, filename, content))
       .reduce((acc, cur) => acc.concat(cur), [])
       .filter((x) => x !== undefined);

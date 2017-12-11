@@ -275,4 +275,15 @@ describe('Raw translation data', () => {
     expect(data[2].text).to.equal('Text 2');
   });
 
+  it('should ignore comments and directives when extracting filters', () => {
+    const extractorInterpolate = new Extractor({
+      startDelimiter: '',
+      endDelimiter: '',
+      filterPrefix: '::',
+    });
+    const data = extractorInterpolate._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_TEXT_FILTER_COMMENT);
+    expect(data.length).to.equal(1);
+    expect(data[0].text).to.equal('Text 1');
+  });
+
 });
