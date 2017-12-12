@@ -225,7 +225,7 @@ export class Extractor {
           return matches;
         }
 
-        const regexps = item.type === 'html' ? this.textFilterRegexps : this.attrFilterRegexps;
+        const regexps = item.type === 'text' ? this.textFilterRegexps : this.attrFilterRegexps;
         regexps
           .reduce(_getAllMatches, [])
           .filter((match) => match.length)

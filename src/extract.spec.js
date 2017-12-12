@@ -275,6 +275,18 @@ describe('Raw translation data', () => {
     expect(data[2].text).to.equal('Text 2');
   });
 
+  it('should extract filters from text blocks with empty delimiters', () => {
+    const extractor = new Extractor({
+      startDelimiter: '',
+      endDelimiter: '',
+    });
+    const data = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_TEXT_CHALLENGE);
+    expect(data.length).to.equal(3);
+    expect(data[0].text).to.equal('Thanks for joining ….  However, … does not start until');
+    expect(data[1].text).to.equal(', but will open');
+    expect(data[2].text).to.equal('minutes before that.');
+  });
+
   it('should ignore comments and directives when extracting filters', () => {
     const extractorInterpolate = new Extractor({
       startDelimiter: '',

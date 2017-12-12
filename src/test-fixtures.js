@@ -87,6 +87,16 @@ export const HTML_LINEBREAK_FILTER = `
 }}</a>
 `;
 
+export const HTML_TEXT_CHALLENGE = `
+<p>{{ 'Thanks for joining ….  However, … does not start until'
+  |translate }}
+  <span>{{ vm.startDatetime |amCalendar}}</span>{{ ', but will open' |
+  translate}}
+  {{ vm.roll_call_duration_minutes }}
+  {{ 'minutes before that.' |translate }}
+</p>
+`;
+
 export const HTML_TEXT_FILTER = `
 {{ 'Outside 0' |translate }}
 <div class="buttons">
