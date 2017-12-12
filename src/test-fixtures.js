@@ -132,6 +132,18 @@ export const HTML_NESTED_FILTER = `
   </li>
 `;
 
+export const HTML_COMMENTED_NESTED_FILTER = `
+<!--
+${HTML_NESTED_FILTER}
+-->
+`;
+
+export const HTML_COMMENTED_COMPLEX_NESTING = `
+<!--
+${HTML_COMPLEX_NESTING}
+-->
+`;
+
 export const HTML4_TAG0 = '<translate>Duck</translate>';
 export const HTML4_TAG1 = '<i18n>Dice</i18n>';
 export const HTML4_TAG2 = '<get-text>Rabbit</get-text>';

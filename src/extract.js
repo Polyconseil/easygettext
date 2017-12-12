@@ -1,4 +1,5 @@
 import cheerio from 'cheerio';
+import {isHtml} from 'cheerio/lib/utils';
 import Pofile from 'pofile';
 
 import * as constants from './constants.js';
@@ -184,7 +185,7 @@ export class Extractor {
   }
 
   getAttrsAndDatas(node) {
-    if (node[0].type === 'text') {
+    if (node[0].type === 'text' || node[0].type === 'comment') {
       return [{text: node[0].data.trim(), type: 'text'}];
     }
 
@@ -201,8 +202,14 @@ export class Extractor {
   }
 
   _parseElement($, el, filename, content) {
+    if (el.type === 'comment' && isHtml(el.data)) {
+      // Recursive parse call if el.data is recognized as HTML.
+      return this._extractTranslationDataFromNodes(Array.from($(el.data)), $, filename, content);
+    }
+
     const reference = new TranslationReference(filename, content, el.startIndex);
     const node = $(el);
+
     if (this._hasTranslationToken(node)) {
       const text = node.html().trim();
       if (text.length !== 0) {
@@ -252,17 +259,21 @@ export class Extractor {
     return sequence;
   }
 
+  _extractTranslationDataFromNodes(rootChildren, $, filename, content) {
+    return this._traverseTree(rootChildren, [])
+      .filter((el) => el.type === 'tag' || el.type === 'text' || el.type === 'comment')
+      .map((el) => this._parseElement($, el, filename, content))
+      .reduce((acc, cur) => acc.concat(cur), [])
+      .filter((x) => x !== undefined);
+  }
+
   _extractTranslationData(filename, content) {
     const $ = cheerio.load(content, {
       decodeEntities: false,
       withStartIndices: true,
     });
 
-    return this._traverseTree($.root()[0].children, [])
-      .filter((el) => el.type === 'tag' || el.type === 'text')
-      .map((el) => this._parseElement($, el, filename, content))
-      .reduce((acc, cur) => acc.concat(cur), [])
-      .filter((x) => x !== undefined);
+    return this._extractTranslationDataFromNodes($.root()[0].children, $, filename, content);
   }
 
   _hasTranslationToken(node) {

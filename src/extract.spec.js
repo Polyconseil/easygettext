@@ -323,4 +323,93 @@ describe('Raw translation data', () => {
     expect(data1.length).to.equal(1);
     expect(data1[0].text).to.equal('Four parts, probably, one whole.');
   });
+
+  it('should extract translatable strings from commented nested filters', () => {
+    const extractorWithBindOnce = new Extractor({
+      startDelimiter: '',
+      endDelimiter: '',
+      filterPrefix: '::',
+    });
+
+    const data = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_COMMENTED_NESTED_FILTER);
+    expect(data.length).to.equal(4);
+    expect(data[0].text).to.equal('Like');
+    expect(data[1].text).to.equal('Gets extracted now');
+    expect(data[2].text).to.equal('Number of votes');
+    expect(data[3].text).to.equal('Votes <i class=\'fa fa-star\'></i>');
+  });
+
+  it('should extract strings from commented', () => {
+    const extractorWithBindOnce = new Extractor({
+      filterPrefix: '::',
+    });
+
+    const data = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_COMMENTED_COMPLEX_NESTING);
+    expect(data.length).to.equal(13);
+
+    expect(data[0].text).to.equal(
+      `<div translate="" translate-comment="Inner comment …" translate-context="Inner Context">
+    Before {{:: 'I18n before' |translate }}
+    <a href="#" aria-label="{{ 'Test link 1' |translate }}">
+      {{ 'Link part 1' |translate }}
+      {{:: 'Link part 2' |translate }}
+      {{ 'Link part 3' |translate }}</a>
+    Between {{:: 'I18n between' |translate }}
+    <a href="#" aria-label="{{ 'Test link 2' |translate }}">
+      {{ 'Reference part 1' |translate }}
+      {{:: 'Reference part 2' |translate }}
+      {{ 'Reference part 3' |translate }}</a>
+    After {{:: 'I18n after' |translate }}
+  </div>`);
+    expect(data[0].comment).to.equal('Outer comment …');
+    expect(data[0].context).to.equal('Outer Context');
+
+    expect(data[1].text).to.equal(
+      `Before {{:: 'I18n before' |translate }}
+    <a href="#" aria-label="{{ 'Test link 1' |translate }}">
+      {{ 'Link part 1' |translate }}
+      {{:: 'Link part 2' |translate }}
+      {{ 'Link part 3' |translate }}</a>
+    Between {{:: 'I18n between' |translate }}
+    <a href="#" aria-label="{{ 'Test link 2' |translate }}">
+      {{ 'Reference part 1' |translate }}
+      {{:: 'Reference part 2' |translate }}
+      {{ 'Reference part 3' |translate }}</a>
+    After {{:: 'I18n after' |translate }}`);
+    expect(data[1].comment).to.equal('Inner comment …');
+    expect(data[1].context).to.equal('Inner Context');
+
+    expect(data[2].text).to.equal(`I18n before`);
+    expect(data[2].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[3].text).to.equal(`Test link 1`);
+    expect(data[3].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[4].text).to.equal(`Link part 1`);
+    expect(data[4].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[5].text).to.equal(`Link part 2`);
+    expect(data[5].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[6].text).to.equal(`Link part 3`);
+    expect(data[6].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[7].text).to.equal(`I18n between`);
+    expect(data[7].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[8].text).to.equal(`Test link 2`);
+    expect(data[8].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[9].text).to.equal(`Reference part 1`);
+    expect(data[9].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[10].text).to.equal(`Reference part 2`);
+    expect(data[10].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[11].text).to.equal(`Reference part 3`);
+    expect(data[11].context).to.equal(constants.MARKER_NO_CONTEXT);
+
+    expect(data[12].text).to.equal(`I18n after`);
+    expect(data[12].context).to.equal(constants.MARKER_NO_CONTEXT);
+  });
 });
