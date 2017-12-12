@@ -17,8 +17,8 @@ export const HTML2_COMMENT1 = '<h2 translate="" translate-comment="Another comme
 export const HTML3_FILTER0 = `<h2 translate-comment="Fugazy">{{ "Hola, hombre" | translate }}</h2>`;
 export const HTML3_FILTER1 = `<h2 tooltip="{{'Hola, mujer'|i18n}}">StufStuff</h2>`;
 export const HTML3_FILTER2 = `<h2 tooltip="{{ a || 'Hola, hola'|i18n }}">StufStuff</h2>`;
-export const HTML3_FILTER3 = `<h2 attr="{{ &quot;So long, my dear' |i18n }}">Martha</h2>`;
-export const HTML3_FILTER4 = `<h2 attr="&quot;So long, my dear' |i18n">Martha</h2>`;
+export const HTML3_FILTER3 = `<h2 attr="{{ &quot;So long, my dear&quot; |i18n }}">Martha</h2>`;
+export const HTML3_FILTER4 = `<h2 attr="&quot;So long, my dear&quot; |i18n">Martha</h2>`;
 export const HTML3_FILTER5 = `<h2 attr="{{ 'Guns'n roses, my dear' |i18n }}">Son</h2>`;
 export const HTML3_FILTER6 = `<h2 attr="'Guns'n roses, my dear' |i18n ">Daughter</h2>`;
 export const HTML3_FILTER7 = `<h2 attr="::'Guns'n roses, my dear' |i18n ">Wife</h2>`;

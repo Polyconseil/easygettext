@@ -109,7 +109,7 @@ export class Extractor {
   }
 
   createRegexps(type) {
-    const startOrEndQuotes = `(?:\\&quot;|[\\'"])`;  // matches simple / double / HTML quotes
+    const startOrEndQuotes = `(\\&quot;|[\\'"])`;  // matches simple / double / HTML quotes
     const spacesOrPipeChar = `\\s*\\|\\s*`;        // matches the pipe string of the filter
 
     let startDelimiter = this.options.startDelimiter;
@@ -129,7 +129,7 @@ export class Extractor {
     const body = endDelimiter === '' ? '((.|\\n)*)' : `((.|\\n)*?(?!${end}))`;
 
     return this.options.filters.map((filter) => {
-      return new RegExp(`${start}${prefix}[^'"]*${startOrEndQuotes}${body}${startOrEndQuotes}${spacesOrPipeChar}${filter}\\s*${end}`, 'g');
+      return new RegExp(`${start}${prefix}[^'"]*${startOrEndQuotes}${body}\\1${spacesOrPipeChar}${filter}\\s*${end}`, 'g');
     });
   }
 
@@ -236,7 +236,7 @@ export class Extractor {
         regexps
           .reduce(_getAllMatches, [])
           .filter((match) => match.length)
-          .map((match) => match[1].trim())
+          .map((match) => match[2].trim())
           .filter((text) => text.length !== 0)
           .map((text) => text.split(this.splitStringRe).join(''))
           .forEach((text) => {
