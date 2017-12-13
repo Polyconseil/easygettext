@@ -1,4 +1,5 @@
 import cheerio from 'cheerio';
+import {isHtml} from 'cheerio/lib/utils';
 import Pofile from 'pofile';
 
 import * as constants from './constants.js';
@@ -47,11 +48,23 @@ export class TranslationReference {
 
 
 export class NodeTranslationInfo {
-  constructor(node, text, reference, attributes)  {
+  constructor(node, text, reference, attributes) {
     this.text = text;
     this.reference = reference;
-    this.context = getExtraAttribute(node, attributes, constants.ATTRIBUTE_CONTEXT) || constants.MARKER_NO_CONTEXT;
-    this.comment = getExtraAttribute(node, attributes, constants.ATTRIBUTE_COMMENT);
+
+    const el = node[0];
+    /* NOTE: It might make sense to let _all_ TEXT child nodes inherit the
+     * `context` and `comment` from the parent, not only single children.
+     * However, the following conditions generate output equal to
+     * `angular-gettext-tools`. */
+    const doInheritContext
+      = el.type === 'text' && el.prev === null && el.next === null;
+
+    this.context = getExtraAttribute(doInheritContext
+      ? node.parent() : node, attributes, constants.ATTRIBUTE_CONTEXT)
+      || constants.MARKER_NO_CONTEXT;
+    this.comment = getExtraAttribute(doInheritContext
+      ? node.parent() : node, attributes, constants.ATTRIBUTE_COMMENT);
     this.plural = getExtraAttribute(node, attributes, constants.ATTRIBUTE_PLURAL);
   }
 
@@ -72,9 +85,11 @@ export class Extractor {
 
   constructor(options) {
     this.options = Object.assign({
-      startDelimiter: '{{',
-      endDelimiter: '}}',
+      startDelimiter: constants.DEFAULT_START_DELIMITER,
+      endDelimiter: constants.DEFAULT_END_DELIMITER,
       attributes: constants.DEFAULT_ATTRIBUTES,
+      filters: constants.DEFAULT_FILTERS,
+      filterPrefix: constants.DEFAULT_FILTER_PREFIX,
       lineNumbers: false,
     }, options);
 
@@ -88,12 +103,33 @@ export class Extractor {
      * }
      */
     this.items = {};
-    this.filterRegexps = this.options.attributes.map((attribute) => {
-      const startOrEndQuotes = `(?:\\&quot;|[\\'"])`;  // matches simple / double / HTML quotes
-      const spacesOrPipeChar = `\\s*\\|\\s*`;        // matches the pipe string of the filter
-      const start = this.options.startDelimiter.replace(ESCAPE_REGEX, '\\$&');
-      const end = this.options.endDelimiter.replace(ESCAPE_REGEX, '\\$&');
-      return new RegExp(`^${start}[^'"]*${startOrEndQuotes}(.*)${startOrEndQuotes}${spacesOrPipeChar}${attribute}\\s*${end}$`);
+    this.attrFilterRegexps = this.createRegexps('attr');
+    this.textFilterRegexps = this.createRegexps('text');
+    this.splitStringRe = /(?:['"])\s*\+\s*(?:['"])/g;
+  }
+
+  createRegexps(type) {
+    const startOrEndQuotes = `(\\&quot;|[\\'"])`;  // matches simple / double / HTML quotes
+    const spacesOrPipeChar = `\\s*\\|\\s*`;        // matches the pipe string of the filter
+
+    let startDelimiter = this.options.startDelimiter;
+    let endDelimiter = this.options.endDelimiter;
+    if (type === 'text') {
+      if (startDelimiter === '') {
+        startDelimiter = constants.DEFAULT_START_DELIMITER;
+      }
+      if (endDelimiter === '') {
+        endDelimiter = constants.DEFAULT_END_DELIMITER;
+      }
+    }
+    const start = startDelimiter.replace(ESCAPE_REGEX, '\\$&');
+    const end = endDelimiter.replace(ESCAPE_REGEX, '\\$&');
+
+    const prefix = this.options.filterPrefix === null ? '' : `\\s*(?:${this.options.filterPrefix})?\\s*`;
+    const body = endDelimiter === '' ? '((.|\\n)*)' : `((.|\\n)*?(?!${end}))`;
+
+    return this.options.filters.map((filter) => {
+      return new RegExp(`${start}${prefix}[^'"]*${startOrEndQuotes}${body}\\1${spacesOrPipeChar}${filter}\\s*${end}`, 'g');
     });
   }
 
@@ -148,41 +184,96 @@ export class Extractor {
     return catalog.toString();
   }
 
+  getAttrsAndDatas(node) {
+    if (node[0].type === 'text' || node[0].type === 'comment') {
+      return [{text: node[0].data.trim(), type: 'text'}];
+    }
+
+    const data = node.data();
+    const attr = node.attr();
+    return [
+      ...Object.keys(data).map(key => {
+        return {text: data[key], type: 'data'};
+      }),
+      ...Object.keys(attr).map(key => {
+        return {text: attr[key], type: 'attr'};
+      }),
+    ];
+  }
+
+  _parseElement($, el, filename, content) {
+    if (el.type === 'comment' && isHtml(el.data)) {
+      // Recursive parse call if el.data is recognized as HTML.
+      return this._extractTranslationDataFromNodes(Array.from($(el.data)), $, filename, content);
+    }
+
+    const reference = new TranslationReference(filename, content, el.startIndex);
+    const node = $(el);
+
+    if (this._hasTranslationToken(node)) {
+      const text = node.html().trim();
+      if (text.length !== 0) {
+        return [new NodeTranslationInfo(node, text, reference, this.options.attributes)];
+      }
+    }
+
+    // In-depth search for filters
+    return this.getAttrsAndDatas(node)
+      .reduce((tokensFromFilters, item) => {
+
+        function _getAllMatches(matches, re) {
+          while (true) {
+            const match = re.exec(item.text);
+            if (match === null) {
+              break;
+            }
+            matches.push(match);
+          }
+          return matches;
+        }
+
+        const regexps = item.type === 'text' ? this.textFilterRegexps : this.attrFilterRegexps;
+        regexps
+          .reduce(_getAllMatches, [])
+          .filter((match) => match.length)
+          .map((match) => match[2].trim())
+          .filter((text) => text.length !== 0)
+          .map((text) => text.split(this.splitStringRe).join(''))
+          .forEach((text) => {
+            tokensFromFilters.push(
+              new NodeTranslationInfo(node, text, reference,
+                this.options.attributes));
+          });
+
+        return tokensFromFilters;
+      }, []);
+  }
+
+  _traverseTree(nodes, sequence) {
+    nodes.forEach((el) => {
+      sequence.push(el);
+      if (typeof el.children !== 'undefined') {
+        this._traverseTree(el.children, sequence);
+      }
+    });
+    return sequence;
+  }
+
+  _extractTranslationDataFromNodes(rootChildren, $, filename, content) {
+    return this._traverseTree(rootChildren, [])
+      .filter((el) => el.type === 'tag' || el.type === 'text' || el.type === 'comment')
+      .map((el) => this._parseElement($, el, filename, content))
+      .reduce((acc, cur) => acc.concat(cur), [])
+      .filter((x) => x !== undefined);
+  }
+
   _extractTranslationData(filename, content) {
     const $ = cheerio.load(content, {
       decodeEntities: false,
       withStartIndices: true,
     });
 
-    return $('*').map(function(_i, el) {
-      const node = $(el);
-      const reference = new TranslationReference(filename, content, el.startIndex);
-      if (this._hasTranslationToken(node)) {
-        const text = node.html().trim();
-        if (text.length !== 0) {
-          return [new NodeTranslationInfo(node, text, reference, this.options.attributes)];
-        }
-      }
-
-      // In-depth search for filters
-      const attrs = Object.keys(node.attr()).map(key => node.attr()[key]);
-      const datas = Object.keys(node.data()).map(key => node.data()[key]);
-      let tokensFromFilters = [];
-      [node.html(), ...attrs, ...datas].forEach((item) => {
-        const matches = this.filterRegexps.map((re) => re.exec(item)).filter((x) => x !== null);
-        if (matches.length !== 0) {
-          const text = matches[0][1].trim();
-          if (text.length !== 0) {
-            tokensFromFilters.push(new NodeTranslationInfo(node, text, reference, this.options.attributes));
-          }
-        }
-      });
-      if (tokensFromFilters.length > 0) {
-        return tokensFromFilters;
-      }
-    }.bind(this)).get()
-      .reduce((acc, cur) => acc.concat(cur), [])
-      .filter((x) => x !== undefined);
+    return this._extractTranslationDataFromNodes($.root()[0].children, $, filename, content);
   }
 
   _hasTranslationToken(node) {

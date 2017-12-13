@@ -3,25 +3,126 @@ export const FILENAME_1 = 'bar.htm';
 export const FILENAME_2 = 'baz.vue';
 
 
-export const HTML0_CTX0 =  `
+export const HTML0_CTX0 = `
 <div><h4 translate="translate" translate-context="For charlie">Hello world</h4></div>`;
-export const HTML0_CTX1 =  `
+export const HTML0_CTX1 = `
 <div><h4 translate="translate" translate-context="For jacques">Hello world</h4></div>`;
 
-export const HTML1_PLURAL0 =  '<h2 translate="" i18n-plural="We work">I work</h2>';
-export const HTML1_PLURAL1 =  '<h2 translate="" translate-plural="Us works">I work</h2>';
+export const HTML1_PLURAL0 = '<h2 translate="" i18n-plural="We work">I work</h2>';
+export const HTML1_PLURAL1 = '<h2 translate="" translate-plural="Us works">I work</h2>';
 
-export const HTML2_COMMENT0 =  '<h2 translate i18n-comment="My first comment">Hello</h2>';
-export const HTML2_COMMENT1 =  '<h2 translate="" translate-comment="Another comment">Hello</h2>';
+export const HTML2_COMMENT0 = '<h2 translate i18n-comment="My first comment">Hello</h2>';
+export const HTML2_COMMENT1 = '<h2 translate="" translate-comment="Another comment">Hello</h2>';
 
-export const HTML3_FILTER0 =  '<h2 translate-comment="Fugazy">{{ "Hola, hombre" | translate }}</h2>';
-export const HTML3_FILTER1 =  "<h2 tooltip=\"{{'Hola, mujer'|i18n}}\">StufStuff</h2>";
-export const HTML3_FILTER2 =  "<h2 tooltip=\"{{ a || 'Hola, hola'|i18n }}\">StufStuff</h2>";
-export const HTML3_FILTER3 =  "<h2 attr=\"{{ &quot;So long, my dear' |i18n }}\">Martha</h2>";
-export const HTML3_FILTER4 =  "<h2 attr=\"&quot;So long, my dear' |i18n\">Martha</h2>";
-export const HTML3_FILTER5 =  "<h2 attr=\"{{ 'Guns\'n roses, my dear' |i18n }}\">Martha</h2>";
-export const HTML3_FILTER6 =  "<h2 attr=\"'Guns\'n roses, my dear' |i18n \">Martha</h2>";
-export const HTML3_FILTER7 =  "<h2 attr=\"::'Guns\'n roses, my dear' |i18n \">Martha</h2>";
+export const HTML3_FILTER0 = `<h2 translate-comment="Fugazy">{{ "Hola, hombre" | translate }}</h2>`;
+export const HTML3_FILTER1 = `<h2 tooltip="{{'Hola, mujer'|i18n}}">StufStuff</h2>`;
+export const HTML3_FILTER2 = `<h2 tooltip="{{ a || 'Hola, hola'|i18n }}">StufStuff</h2>`;
+export const HTML3_FILTER3 = `<h2 attr="{{ &quot;So long, my dear&quot; |i18n }}">Martha</h2>`;
+export const HTML3_FILTER4 = `<h2 attr="&quot;So long, my dear&quot; |i18n">Martha</h2>`;
+export const HTML3_FILTER5 = `<h2 attr="{{ 'Guns'n roses, my dear' |i18n }}">Son</h2>`;
+export const HTML3_FILTER6 = `<h2 attr="'Guns'n roses, my dear' |i18n ">Daughter</h2>`;
+export const HTML3_FILTER7 = `<h2 attr="::'Guns'n roses, my dear' |i18n ">Wife</h2>`;
+
+export const HTML_FILTER_SPLIT_STRING = `
+<h2 ng-bind="::'Three' +' parts, '  +   'one whole.' |i18n ">Will be replaced</h2>
+`;
+
+export const HTML_FILTER_SPLIT_MULTILINE_STRING_ATTR = `
+<h2 ng-bind="::'Four' +
+ ' parts, ' +
+  'maybe, '
+  + 'one whole.' |i18n ">Will be replaced</h2>
+`;
+
+export const HTML_FILTER_SPLIT_MULTILINE_STRING_INTERPOLATED = `
+<h2>{{::'Four' +
+ ' parts, ' +
+  'probably, '
+  + 'one whole.' |i18n}}</h2>
+`;
+
+
+export const HTML_COMPLEX_NESTING = `<div translate translate-comment="Outer comment …"
+     translate-context="Outer Context">
+  <div translate translate-comment="Inner comment …"
+       translate-context="Inner Context">
+    Before {{:: 'I18n before' |translate }}
+    <a href="#" aria-label="{{ 'Test link 1' |translate }}">
+      {{ 'Link part 1' |translate }}
+      {{:: 'Link part 2' |translate }}
+      {{ 'Link part 3' |translate }}</a>
+    Between {{:: 'I18n between' |translate }}
+    <a href="#" aria-label="{{ 'Test link 2' |translate }}">
+      {{ 'Reference part 1' |translate }}
+      {{:: 'Reference part 2' |translate }}
+      {{ 'Reference part 3' |translate }}</a>
+    After {{:: 'I18n after' |translate }}
+  </div>
+</div>`;
+
+export const HTML_LINEBREAK_FILTER = `
+<div class="buttons">
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{ 'Multi-line 0' |translate }}</a>
+  
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{ 
+ 'Multi-line 1' |translate }}</a>
+
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{ 'Multi-line 2'
+ |translate }}</a>
+
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{'Multi-line 3' |
+ translate }}</a>
+
+<a href="#"
+  ng-click="vm.doSomething()"
+  class="button">{{ 'Multi-line 4' | translate 
+}}</a>
+`;
+
+export const HTML_TEXT_CHALLENGE = `
+<p>{{ 'Thanks for joining ….  However, … does not start until'
+  |translate }}
+  <span>{{ vm.startDatetime |amCalendar}}</span>{{ ', but will open' |
+  translate}}
+  {{ vm.roll_call_duration_minutes }}
+  {{ 'minutes before that.' |translate }}
+</p>
+`;
+
+export const HTML_TEXT_FILTER = `
+{{ 'Outside 0' |translate }}
+<div class="buttons">
+<a href="#">{{ 'Text 0' |translate }}</a>
+{{ 'Between 0' |translate }}
+<a href="#">{{ 'Text 3' |translate }}</a>
+</div>
+{{ 'Outside 1' |translate }}
+`;
+
+export const HTML_TEXT_MULTIPLE_FILTER = `
+<a href="#">
+{{ 'Text 0' |translate }} between
+ {{ 'Text 1' |translate }} between again
+ {{ 'Text 2' |translate }}
+</a>
+`;
+
+export const HTML_TEXT_FILTER_COMMENT = `
+<!doctype html>
+<a href="#">
+  <!-- First comment -->
+  {{:: 'Text 1' |translate }} between again
+  <!-- Second comment -->
+</a>
+`;
 
 export const HTML_NESTED_FILTER = `
   <li class="action thumbs-up"
@@ -31,12 +132,24 @@ export const HTML_NESTED_FILTER = `
   </li>
 `;
 
-export const HTML4_TAG0 =  '<translate>Duck</translate>';
-export const HTML4_TAG1 =  '<i18n>Dice</i18n>';
-export const HTML4_TAG2 =  '<get-text>Rabbit</get-text>';
-export const HTML4_TAG3 =  '<i18n translate>overtranslate</i18n>';
+export const HTML_COMMENTED_NESTED_FILTER = `
+<!--
+${HTML_NESTED_FILTER}
+-->
+`;
 
-export const HTML_LONG =  `
+export const HTML_COMMENTED_COMPLEX_NESTING = `
+<!--
+${HTML_COMPLEX_NESTING}
+-->
+`;
+
+export const HTML4_TAG0 = '<translate>Duck</translate>';
+export const HTML4_TAG1 = '<i18n>Dice</i18n>';
+export const HTML4_TAG2 = '<get-text>Rabbit</get-text>';
+export const HTML4_TAG3 = '<i18n translate>overtranslate</i18n>';
+
+export const HTML_LONG = `
   <div class="col-xs-4">
   <h4 translate="translate" translate-context="Pour maman">Hello world</h4>
   <h2 translate="" i18n-plural='We work'>I work</h2>
@@ -52,7 +165,7 @@ export const HTML_LONG =  `
   </tr>
 `;
 
-export const HTML_SORTING =  `
+export const HTML_SORTING = `
   <i18n>f</i18n>
   <i18n>0</i18n>
   <i18n>c</i18n>
@@ -182,7 +295,7 @@ msgid "Hello"
 msgstr ""
 `;
 
-export const POT_OUTPUT_SORTED= `msgid ""
+export const POT_OUTPUT_SORTED = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"

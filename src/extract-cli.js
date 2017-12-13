@@ -21,31 +21,41 @@ const startDelimiter = argv.startDelimiter === undefined ? constants.DEFAULT_DEL
 const endDelimiter = argv.endDelimiter === undefined ? constants.DEFAULT_DELIMITERS.end : argv.endDelimiter;
 // Allow to pass extra attributes, e.g. gettext-extract --attribute v-translate --attribute v-i18n
 const extraAttribute = argv.attribute || false;
+const extraFilter = argv.filter || false;
+const filterPrefix = argv.filterPrefix || constants.DEFAULT_FILTER_PREFIX;
 
 if (!quietMode && (!files || files.length === 0)) {
-  console.log('Usage:\n\tgettext-extract [--attribute EXTRA-ATTRIBUTE] [--output OUTFILE] <FILES>');
+  console.log('Usage:\n\tgettext-extract [--attribute EXTRA-ATTRIBUTE] [--filterPrefix FILTER-PREFIX] [--output OUTFILE] <FILES>');
   process.exit(1);
 }
 
-let attributes = constants.DEFAULT_ATTRIBUTES.slice();
-if (extraAttribute) {
-  if (typeof extraAttribute === 'string') {  // Only one extra attribute was passed.
-    attributes.push(extraAttribute);
-  } else {  // Multiple extra attributes were passed.
-    attributes = attributes.concat(extraAttribute);
+function _getExtraNames(extraEntities, defaultEntities) {
+  let attributes = defaultEntities.slice();
+  if (extraEntities) {
+    if (typeof extraEntities === 'string') {  // Only one extra attribute was passed.
+      attributes.push(extraEntities);
+    } else {  // Multiple extra attributes were passed.
+      attributes = attributes.concat(extraEntities);
+    }
   }
+  return attributes;
 }
+
+const attributes = _getExtraNames(extraAttribute, constants.DEFAULT_ATTRIBUTES);
+const filters = _getExtraNames(extraFilter, constants.DEFAULT_FILTERS);
 
 // Extract strings
 const extractor = new Extractor({
   lineNumbers: true,
   attributes,
+  filters,
+  filterPrefix,
   startDelimiter,
   endDelimiter,
 });
 
-files.forEach(function(filename) {
-  let file =  filename;
+files.forEach(function (filename) {
+  let file = filename;
   const ext = file.split('.').pop();
   if (ALLOWED_EXTENSIONS.indexOf(ext) === -1) {
     console.log(`[${PROGRAM_NAME}] will not extract: '${filename}' (invalid extension)`);
@@ -57,7 +67,7 @@ files.forEach(function(filename) {
     if (['jade', 'pug'].indexOf(ext) !== -1) {
       file = file.replace(/\.(jade|pug)$/, '.html');
       // Add empty require function to the context to avoid errors with webpack require inside pug
-      data = pug.render(data, { filename: file, pretty: true, require: function() {}});
+      data = pug.render(data, {filename: file, pretty: true, require: function () {}});
     }
     extractor.parse(file, data);
   } catch (e) {
