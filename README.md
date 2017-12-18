@@ -29,6 +29,22 @@ tool to extract our JavaScript translation tokens.
 Nevertheless, the way [angular-gettext](https://angular-gettext.rocketeer.be/) does it (with tokens, directly in HTML) is elegant, is used by many other
 libraries and will also be the way to do it in Angular2.
 
+Also, by utilizing [acorn](https://github.com/ternjs/acorn), this tool will parse and compile typical JavaScript expressions used in translate-filter expressions.  For example, exposed to a (AngularJS-based) fragment like 
+```html
+<span ng-bind="isNight ? 'Moon' + 'shine' : 'Day' + 'light' |translate"></span>
+<span ng-bind="isC ? 'C' + (isD ? 'D' : 'd') : 'c' + (isE ? 'E' : 'e') |i18n "></span>
+``` 
+will produce the following strings
+```text
+Moonshine
+Daylight
+CD
+Cd
+cE
+ce
+``` 
+Which will be correctly looked up and translated during runtime, at least by [angular-gettext](https://angular-gettext.rocketeer.be/). 
+
 ### Installation
 You can install the [easygettext](https://www.npmjs.com/package/easygettext) package by running 
 ```bash
@@ -68,6 +84,9 @@ It recognizes the following token flavours (currently; feel free to extend it!)
  + 'strings ' +
  'are ' + 
  'joined' |translate}}"></span>
+ <span ng-bind="'Bed n\'' + ' breakfast' |translate"></span>
+ <!-- JavaScript expressions are parsed and compiled -->
+<span ng-bind="true ? 'Always' : 'Never' |i18n "></span>
 <!--  By supplying the  --filterPrefix '::' parameter  -->  
 <span>{{:: 'Something …' |translate}}</span>
 <!--  The default delimiters '{{' and '}}' must be changed to empty strings to handle these examples  -->

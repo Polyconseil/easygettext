@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <span ng-bind="'Guns n\' roses' |i18n "></span>
+  <span ng-bind="'Bed n\'' + 'breakfast' |translate"></span>
+  <span ng-bind="true ? 'Always' : 'Never' |i18n "></span>
+  <span ng-bind="'it will ' + (true ? 'Always' : 'Never') + ' be true' |i18n "></span>
+  <span ng-bind="isNight ? 'Moon' + 'shine' : 'Day' + 'light' |translate"></span>
+  <--! AB, Ab, a -->
+  <span ng-bind="isATrue ? 'A' + isBTrue ? 'B' : 'b' : 'a' |i18n "></span>
+  <--! AB, Ab, aC, ac -->
+  <span ng-bind="isNight ? 'A' + isBTrue ? 'B' : 'b' : 'a' + isCTrue ? 'C' : 'c' |translate"></span>
+</body>
+</html>
