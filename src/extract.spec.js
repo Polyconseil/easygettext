@@ -70,6 +70,14 @@ describe('Extractor object', () => {
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_SORTED);
   });
 
+  it('should output a correct POT file without unnecessary escaped quotes', () => {
+    const extractor = new Extractor();
+    extractor.parse(fixtures.FILENAME_0, fixtures.HTML4_TAG4);
+    extractor.parse(fixtures.FILENAME_1, fixtures.HTML4_TAG5);
+    extractor.parse(fixtures.FILENAME_2, fixtures.HTML4_TAG6);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_QUOTES);
+  });
+
 });
 
 
@@ -130,11 +138,11 @@ describe('Raw translation data', () => {
 
     const data5 = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER5);
     expect(data5.length).to.equal(1);
-    expect(data5[0].text).to.equal('Guns\'n roses, my dear');
+    expect(data5[0].text).to.equal(`Guns'n roses, my dear`);
 
     const data6 = extractorWithParams._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER6);
     expect(data6.length).to.equal(1);
-    expect(data6[0].text).to.equal('Guns\'n roses, my dear');
+    expect(data6[0].text).to.equal(`Guns'n roses, my dear`);
 
     const extractorWithBindOnce = new Extractor({
       startDelimiter: '',
@@ -143,7 +151,61 @@ describe('Raw translation data', () => {
     });
     const data7 = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML3_FILTER7);
     expect(data7.length).to.equal(1);
-    expect(data7[0].text).to.equal('Guns\'n roses, my dear');
+    expect(data7[0].text).to.equal(`Guns'n roses, my dear`);
+  });
+
+  it('should unescape quotes', () => {
+    const data = new Extractor({
+      startDelimiter: '',
+      endDelimiter: '',
+    })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_FILTER_ESCAPED_QUOTES);
+    expect(data.length).to.equal(5);
+    expect(data[0].text).to.equal(`Life's a tough teacher.`);
+    expect(data[1].text).to.equal(`Life's a tough journey.`);
+    expect(data[2].text).to.equal(`Life's a tough road.`);
+    expect(data[3].text).to.equal(`Life's a tough "boulevard".`);
+    expect(data[4].text).to.equal(`Life's a tough 'journey'.`);
+  });
+
+  it('should concatenate numbers', () => {
+    const data = new Extractor({
+      startDelimiter: '{{',
+      endDelimiter: '}}',
+    })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_JS_EXPRESSION_WITH_NUMBER);
+    expect(data.length).to.equal(1);
+    expect(data[0].text).to.equal(`A42.`);
+  });
+
+  it('should report syntax errors', () => {
+    const extract = () => {
+      new Extractor({
+        startDelimiter: '{{',
+        endDelimiter: '}}',
+      })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_JS_EXPRESSION_SYNTAX_ERROR);
+    };
+    expect(extract).to.throw('Unterminated string constant, when trying to parse `{{ \'A\' + b\' |translate }}` foo.htm:1');
+  });
+
+  it('should treat delimiters inside filter text as plain text', () => {
+    const data = new Extractor({
+      startDelimiter: '',
+      endDelimiter: '',
+    })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_DELIMITERS_INSIDE_FILTER_TEXT);
+    expect(data.length).to.equal(1);
+    expect(data[0].text).to.equal(`You received {{ vm.count}} coins!`);
+  });
+
+  it('should compile and extract translatable strings from JavaScript expressions in filters', () => {
+    const data = new Extractor({
+      startDelimiter: '',
+      endDelimiter: '',
+    })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_VARIED_CHALLENGES);
+    expect(data.length).to.equal(5);
+    expect(data[0].text).to.equal(`Preview`);
+    expect(data[1].text).to.equal(`Exit Preview`);
+    expect(data[2].text).to.equal(`Send Message`);
+    expect(data[3].text).to.equal(`Reset`);
+    expect(data[4].text).to.equal(`Cancel`);
   });
 
   it('should handle complex nesting constructs with multiple interpolated filters', () => {
@@ -232,7 +294,7 @@ describe('Raw translation data', () => {
     expect(data[0].text).to.equal('Like');
     expect(data[1].text).to.equal('Gets extracted now');
     expect(data[2].text).to.equal('Number of votes');
-    expect(data[3].text).to.equal('Votes <i class=\'fa fa-star\'></i>');
+    expect(data[3].text).to.equal(`Votes <i class='fa fa-star'></i>`);
   });
 
   it('should extract filters that are broken across multiple lines', () => {
@@ -287,6 +349,17 @@ describe('Raw translation data', () => {
     expect(data[2].text).to.equal('minutes before that.');
   });
 
+  it('should extract filters from text blocks with nonempty delimiters', () => {
+    const data = new Extractor({
+      startDelimiter: '{{',
+      endDelimiter: '}}',
+    })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_TEXT_CHALLENGE);
+    expect(data.length).to.equal(3);
+    expect(data[0].text).to.equal('Thanks for joining ….  However, … does not start until');
+    expect(data[1].text).to.equal(', but will open');
+    expect(data[2].text).to.equal('minutes before that.');
+  });
+
   it('should ignore comments and directives when extracting filters', () => {
     const extractorInterpolate = new Extractor({
       startDelimiter: '',
@@ -325,26 +398,22 @@ describe('Raw translation data', () => {
   });
 
   it('should extract translatable strings from commented nested filters', () => {
-    const extractorWithBindOnce = new Extractor({
+    const data = new Extractor({
       startDelimiter: '',
       endDelimiter: '',
       filterPrefix: '::',
-    });
-
-    const data = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_COMMENTED_NESTED_FILTER);
+    })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_COMMENTED_NESTED_FILTER);
     expect(data.length).to.equal(4);
     expect(data[0].text).to.equal('Like');
     expect(data[1].text).to.equal('Gets extracted now');
     expect(data[2].text).to.equal('Number of votes');
-    expect(data[3].text).to.equal('Votes <i class=\'fa fa-star\'></i>');
+    expect(data[3].text).to.equal(`Votes <i class='fa fa-star'></i>`);
   });
 
   it('should extract strings from commented', () => {
-    const extractorWithBindOnce = new Extractor({
+    const data = new Extractor({
       filterPrefix: '::',
-    });
-
-    const data = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_COMMENTED_COMPLEX_NESTING);
+    })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_COMMENTED_COMPLEX_NESTING);
     expect(data.length).to.equal(13);
 
     expect(data[0].text).to.equal(
@@ -411,5 +480,38 @@ describe('Raw translation data', () => {
 
     expect(data[12].text).to.equal(`I18n after`);
     expect(data[12].context).to.equal(constants.MARKER_NO_CONTEXT);
+  });
+
+  it('should compile complex inline JavaScript filter expressions', () => {
+    const data = new Extractor({
+      startDelimiter: '',
+      endDelimiter: '',
+      filterPrefix: '::',
+    })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_JS_EXPRESSION_COMPLEX_FILTERS);
+    expect(data.length).to.equal(14);
+    expect(data[0].text).to.equal(`Bed n' breakfast`);
+    expect(data[1].text).to.equal(`Always`);
+    expect(data[2].text).to.equal(`Never`);
+    expect(data[3].text).to.equal(`This will always be true`);
+    expect(data[4].text).to.equal(`This will never be true`);
+    expect(data[5].text).to.equal(`Moonshine`);
+    expect(data[6].text).to.equal(`Daylight`);
+    expect(data[7].text).to.equal(`AB`);
+    expect(data[8].text).to.equal(`Ab`);
+    expect(data[9].text).to.equal(`a`);
+    expect(data[10].text).to.equal(`CD`);
+    expect(data[11].text).to.equal(`Cd`);
+    expect(data[12].text).to.equal(`cE`);
+    expect(data[13].text).to.equal(`ce`);
+  });
+
+  it('cannot handle incomplete commented filters', () => {
+  const extract = () => {
+      new Extractor({
+        startDelimiter: '',
+        endDelimiter: '',
+      })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_INCOMPLETE_COMMENT);
+    };
+    expect(extract).to.throw('Assigning to rvalue, when trying to parse `ng-bind="\'Cancel\' |translate">` foo.htm:1');
   });
 });

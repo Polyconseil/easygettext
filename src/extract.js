@@ -1,11 +1,12 @@
 import cheerio from 'cheerio';
 import {isHtml} from 'cheerio/lib/utils';
 import Pofile from 'pofile';
-
+import * as acorn from 'acorn';
+import * as walk from 'acorn/dist/walk';
 import * as constants from './constants.js';
 
-// Internal regylar expression used to escape special characters
-const ESCAPE_REGEX = /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g;
+// Internal regular expression used to escape special characters
+const ESCAPE_REGEX = /[\-\[\]\/{}()*+?.\\^$|]/g;
 
 
 function lineCount(text, charPosition = -1) {
@@ -81,6 +82,40 @@ export class NodeTranslationInfo {
 }
 
 
+function isNumber(value) {
+  return typeof value === 'number';
+}
+
+
+function isString(value) {
+  return typeof value === 'string';
+}
+
+
+function _popN(stack, count) {
+  return stack.splice(-count, count)
+}
+
+
+const _cartesian = (a, b) => [].concat(...a.map(d => b.map(e => [].concat(d, e))));
+const cartesian = (a, b, ...c) => (b ? cartesian(_cartesian(a, b), ...c) : a);
+
+
+// Functions helpful during development:
+// function _dump(value) {
+//   return JSON.stringify(value, null, 2);
+// }
+// function _log() {
+//   console.log(...arguments);
+// }
+// function _log() {}
+//
+// function _logMapper(text) {
+//   _log(`Found "${_dump(text)}"`);
+//   return text;
+// }
+
+
 export class Extractor {
 
   constructor(options) {
@@ -103,34 +138,48 @@ export class Extractor {
      * }
      */
     this.items = {};
-    this.attrFilterRegexps = this.createRegexps('attr');
-    this.textFilterRegexps = this.createRegexps('text');
-    this.splitStringRe = /(?:['"])\s*\+\s*(?:['"])/g;
+    this.tokens = this._getTokens();
+    this.filterRegexp = this.createExtractRegexps(this.tokens);
+    this.unwrapRegexps = Extractor.createUnwrapRegexps(this.tokens);
   }
 
-  createRegexps(type) {
-    const startOrEndQuotes = `(\\&quot;|[\\'"])`;  // matches simple / double / HTML quotes
-    const spacesOrPipeChar = `\\s*\\|\\s*`;        // matches the pipe string of the filter
-
-    let startDelimiter = this.options.startDelimiter;
-    let endDelimiter = this.options.endDelimiter;
-    if (type === 'text') {
-      if (startDelimiter === '') {
-        startDelimiter = constants.DEFAULT_START_DELIMITER;
-      }
-      if (endDelimiter === '') {
-        endDelimiter = constants.DEFAULT_END_DELIMITER;
-      }
-    }
-    const start = startDelimiter.replace(ESCAPE_REGEX, '\\$&');
+  _getTokens() {
+    const startDelimiter = this.options.startDelimiter === ''
+      ? constants.DEFAULT_START_DELIMITER : this.options.startDelimiter;
+    const endDelimiter = this.options.endDelimiter === ''
+      ? constants.DEFAULT_END_DELIMITER : this.options.endDelimiter;
     const end = endDelimiter.replace(ESCAPE_REGEX, '\\$&');
+    const bodyCore = `(.|\\n)*`;
+    return {
+      startDelimiter,
+      endDelimiter,
+      bodyCore,
+      end,
+      startOrEndQuotes: `(\\&quot;|[\\'"])`,  // matches simple / double / HTML quotes
+      spacesOrPipeChar: `\\s*\\|\\s*`,        // matches the pipe string of the filter
+      start: startDelimiter.replace(ESCAPE_REGEX, '\\$&'),
+      prefix: this.options.filterPrefix === null ?
+        '\\s*' : `\\s*(?:${this.options.filterPrefix})?\\s*`,
 
-    const prefix = this.options.filterPrefix === null ? '' : `\\s*(?:${this.options.filterPrefix})?\\s*`;
-    const body = endDelimiter === '' ? '((.|\\n)*)' : `((.|\\n)*?(?!${end}))`;
+      body: endDelimiter === '' ? `(${bodyCore})` : `(${bodyCore}?(?!${end}))`,
+      filters: this.options.attributes.join('|'),
+    };
+  }
 
-    return this.options.filters.map((filter) => {
-      return new RegExp(`${start}${prefix}[^'"]*${startOrEndQuotes}${body}\\1${spacesOrPipeChar}${filter}\\s*${end}`, 'g');
-    });
+  createExtractRegexps(tokens) {
+    const start = this.options.startDelimiter === '' ? '' : tokens.start;
+    const end = this.options.endDelimiter === '' ? '' : tokens.end;
+
+    return new RegExp(`${start}${tokens.prefix}[^'"]*${tokens.startOrEndQuotes}?${tokens.body}\\1${tokens.spacesOrPipeChar}(${tokens.filters})\\s*${end}`, 'g');
+  }
+
+  static createUnwrapRegexps(tokens) {
+    const coreExpression = `${tokens.prefix}(${tokens.bodyCore})(?:${tokens.spacesOrPipeChar}(?:${tokens.filters}))\\s*`;
+
+    return [
+      new RegExp(`^(?:\\s|\\n)*(?:${tokens.start})${coreExpression}(?:${tokens.end})?`),
+      new RegExp(`${coreExpression}`)
+    ];
   }
 
   parse(filename, content) {
@@ -201,6 +250,124 @@ export class Extractor {
     ];
   }
 
+  _compileExpressions(ast) {
+    const _state = {
+      stack: [],
+      output: [],
+    };
+
+    walk.full(ast, (node, state) => {
+      switch (node.type) {
+        case 'Identifier':
+          state.stack.push([]);
+          break;
+        case 'Literal':
+          const items = isString(node.value) || isNumber(node.value) ? [node.value] : [];
+          state.stack.push(items);
+          break;
+        case 'MemberExpression':
+          _popN(state.stack, 1);
+          state.stack.push([]);
+          break;
+        case 'ConditionalExpression':
+          let [test_, consequent, alternate] = _popN(state.stack, node.alternate ? 3 : 2);
+          state.stack.push([...consequent, ...alternate]);
+          break;
+        case 'BinaryExpression':
+          const [left, right] = _popN(state.stack, node.left ? 2 : 1);
+          if (node.operator === '+') {
+            let variants = cartesian((left ? left : state.stack.pop()), right)
+              .map((variant) => variant.join(''))
+              .reduce((acc, cur) => acc.concat(cur), []);
+            state.stack.push(variants);
+          } else {
+            state.stack.push([]);
+          }
+          break;
+        case 'ExpressionStatement':
+          if (state.stack.length) {
+            state.stack.pop().forEach((item) => {
+              state.output.push(Array.isArray(item) ?
+                item.reduce((acc, cur) => acc.concat(cur), []) : item);
+            });
+          }
+          break;
+      }
+    }, null, _state);
+
+    return _state.output;
+  }
+
+  _extractStringsFromMatch(contexts) {
+    // Try to parse from wide to narrow contexts.  First successful parse wins.
+    for (let i = 0; i < contexts.length; i++) {
+      const context = contexts[i];
+      let expr = context;
+
+      for (let re of this.unwrapRegexps) {
+        const match = re.exec(context);
+        if (match !== null) {
+          expr = match[1];
+          break;
+        }
+      }
+
+      if (expr.startsWith('&quot;')) {
+        return [/^&quot;(.*)&quot;/.exec(expr)[1]];
+      }
+
+      if (!expr.match(/['"]/)) {
+        continue;
+      }
+      try {
+        return this._compileExpressions(acorn.parse(expr));
+      }
+      catch (exception) {
+        if (i === (contexts.length - 1)) {
+          throw exception;
+        }
+      }
+    }
+    return [];
+  }
+
+  _prepareContexts(match) {
+    // Return different contexts around the match, ordered from wide to narrow.
+    const context = match[0];
+    const contexts = [context];
+
+    const matchIndex = context.lastIndexOf(match[2]);
+    const lastStartIndex = context.lastIndexOf(this.tokens.startDelimiter, matchIndex);
+    const lastEndIndex = context.lastIndexOf(this.tokens.endDelimiter, matchIndex);
+
+    // Strip greedy matched delimiter scopes; for example: `}}…{{ [match]` --> `{{ [match]`
+    if ((lastEndIndex !== -1) &&
+      (lastStartIndex > lastEndIndex) &&
+      (lastEndIndex < matchIndex)) {
+      contexts.push(context.slice(lastEndIndex + this.tokens.endDelimiter.length));
+    }
+
+    // Set context to match + surrounding quotes: `[match]` --> `'[match]'`
+    if (matchIndex > 1
+      && context[matchIndex - 1].match(/(['"])/)
+      && context[matchIndex + match[2].length].match(/(['"])/)) {
+      contexts.push(context.slice(matchIndex - 1, matchIndex + match[2].length + 1));
+    }
+    return contexts;
+  }
+
+  _getAllMatches(text, matches, re) {
+    while (true) {
+      const match = re.exec(text);
+      if (match === null) {
+        break;
+      }
+      matches.splice(matches.length, 0,
+        ...this._extractStringsFromMatch(this._prepareContexts(match)));
+    }
+    return matches;
+  };
+
   _parseElement($, el, filename, content) {
     if (el.type === 'comment' && isHtml(el.data)) {
       // Recursive parse call if el.data is recognized as HTML.
@@ -220,32 +387,20 @@ export class Extractor {
     // In-depth search for filters
     return this.getAttrsAndDatas(node)
       .reduce((tokensFromFilters, item) => {
+        try {
+          this._getAllMatches(item.text, [], this.filterRegexp)// .map(_logMapper)
+            .filter((text) => text.length !== 0)
+            .forEach((text) => {
+              tokensFromFilters.push(
+                new NodeTranslationInfo(node, text, reference,
+                  this.options.attributes));
+            });
 
-        function _getAllMatches(matches, re) {
-          while (true) {
-            const match = re.exec(item.text);
-            if (match === null) {
-              break;
-            }
-            matches.push(match);
-          }
-          return matches;
+          return tokensFromFilters;
+        } catch (exception) {
+          throw new SyntaxError(
+            `${exception.message.split(/ \(.*\)/)} when trying to parse \`${item.text}\` ${reference.toString(true)}`)
         }
-
-        const regexps = item.type === 'text' ? this.textFilterRegexps : this.attrFilterRegexps;
-        regexps
-          .reduce(_getAllMatches, [])
-          .filter((match) => match.length)
-          .map((match) => match[2].trim())
-          .filter((text) => text.length !== 0)
-          .map((text) => text.split(this.splitStringRe).join(''))
-          .forEach((text) => {
-            tokensFromFilters.push(
-              new NodeTranslationInfo(node, text, reference,
-                this.options.attributes));
-          });
-
-        return tokensFromFilters;
       }, []);
   }
 
