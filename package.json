@@ -24,6 +24,9 @@
     "isparta": "^4.0.0",
     "mocha": "^4.0.1"
   },
+  "engines": {
+    "node": ">=8"
+  },
   "bin": {
     "gettext-compile": "./src/compile-cli.js",
     "gettext-extract": "./src/extract-cli.js"
