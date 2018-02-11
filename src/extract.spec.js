@@ -81,6 +81,16 @@ describe('Extractor object', () => {
 });
 
 
+describe('data preprocessor', () => {
+  it('should preprocess data accordingly', () => {
+    expect(extract.preprocessTemplate("<h1>hello</h1>")).to.equal("<h1>hello</h1>")
+    expect(extract.preprocessTemplate("h1 hello", 'pug')).to.equal("<h1>hello</h1>")
+    expect(extract.preprocessTemplate("<template><h1>hello</h1></template>", 'vue')).to.equal("<h1>hello</h1>")
+    expect(extract.preprocessTemplate("<template lang='jade'>h1 hello</template>", 'vue')).to.equal("<h1>hello</h1>")
+  });
+})
+
+
 describe('Raw translation data', () => {
   const extractor = new extract.Extractor({
     filterPrefix: '::'

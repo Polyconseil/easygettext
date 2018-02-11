@@ -33,7 +33,9 @@
     "fs": "0.0.2",
     "minimist": "^1.2.0",
     "pofile": "^1.0.2",
-    "pug": "^2.0.0-rc.4"
+    "pug": "^2.0.0-rc.4",
+    "vue-loader": "^14.1.1",
+    "vue-template-compiler": "^2.5.13"
   },
   "files": [
     "src"

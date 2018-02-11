@@ -1,6 +1,8 @@
 const cheerio = require('cheerio');
 const cheerioUtils = require('cheerio/lib/utils');
 const Pofile = require('pofile');
+const pug = require('pug');
+const parseVue = require('vue-loader/lib/parser')
 const acorn = require('acorn');
 const walk = require('acorn/dist/walk');
 const constants = require('./constants.js');
@@ -46,6 +48,27 @@ exports.TranslationReference = class TranslationReference {
   }
 }
 
+function preprocessTemplate (data, type) {
+  let templateData = data
+  switch (type) {
+    case 'jade':
+    case 'pug':
+      // Add empty require function to the context to avoid errors with webpack require inside pug
+      templateData = pug.render(data, {filename: 'source.html', pretty: true, require: function () {}});
+      break;
+    case 'vue':
+      const vueFile = parseVue(data, 'source.vue', false);
+      if (!vueFile.template) return ''  // return an empty string
+      templateData = vueFile.template.content
+      if (vueFile.template.lang) {
+        return preprocessTemplate(templateData, vueFile.template.lang);
+      }
+      break;
+  }
+  return templateData.trim()
+}
+
+exports.preprocessTemplate = preprocessTemplate
 
 exports.NodeTranslationInfo = class NodeTranslationInfo {
   constructor(node, text, reference, attributes) {

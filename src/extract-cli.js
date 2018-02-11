@@ -3,7 +3,6 @@
 /* eslint no-console:0 */
 
 const fs = require('fs');
-const pug = require('pug');
 const minimist = require('minimist');
 
 const constants = require('./constants.js');
@@ -54,6 +53,7 @@ const extractor = new extract.Extractor({
   endDelimiter,
 });
 
+
 files.forEach(function (filename) {
   let file = filename;
   const ext = file.split('.').pop();
@@ -64,12 +64,7 @@ files.forEach(function (filename) {
   console.log(`[${PROGRAM_NAME}] extracting: '${filename}`);
   try {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
-    if (['jade', 'pug'].indexOf(ext) !== -1) {
-      file = file.replace(/\.(jade|pug)$/, '.html');
-      // Add empty require function to the context to avoid errors with webpack require inside pug
-      data = pug.render(data, {filename: file, pretty: true, require: function () {}});
-    }
-    extractor.parse(file, data);
+    extractor.parse(file, extract.preprocessTemplate(data, ext));
   } catch (e) {
     console.error(`[${PROGRAM_NAME}] could not read: '${filename}`);
     console.trace(e);
