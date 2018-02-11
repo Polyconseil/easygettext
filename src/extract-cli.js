@@ -2,12 +2,12 @@
 
 /* eslint no-console:0 */
 
-import fs from 'fs';
-import pug from 'pug';
-import minimist from 'minimist';
+const fs = require('fs');
+const pug = require('pug');
+const minimist = require('minimist');
 
-import * as constants from './constants.js';
-import {Extractor} from './extract.js';
+const constants = require('./constants.js');
+const extract = require('./extract.js');
 
 const PROGRAM_NAME = 'easygettext';
 const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'pug', 'vue'];
@@ -45,7 +45,7 @@ const attributes = _getExtraNames(extraAttribute, constants.DEFAULT_ATTRIBUTES);
 const filters = _getExtraNames(extraFilter, constants.DEFAULT_FILTERS);
 
 // Extract strings
-const extractor = new Extractor({
+const extractor = new extract.Extractor({
   lineNumbers: true,
   attributes,
   filters,

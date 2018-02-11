@@ -1,13 +1,12 @@
-import cheerio from 'cheerio';
-import {isHtml} from 'cheerio/lib/utils';
-import Pofile from 'pofile';
-import * as acorn from 'acorn';
-import * as walk from 'acorn/dist/walk';
-import * as constants from './constants.js';
+const cheerio = require('cheerio');
+const cheerioUtils = require('cheerio/lib/utils');
+const Pofile = require('pofile');
+const acorn = require('acorn');
+const walk = require('acorn/dist/walk');
+const constants = require('./constants.js');
 
 // Internal regular expression used to escape special characters
 const ESCAPE_REGEX = /[\-\[\]\/{}()*+?.\\^$|]/g;
-
 
 function lineCount(text, charPosition = -1) {
   let data = text;
@@ -32,7 +31,7 @@ function getExtraAttribute(node, attrs, attrType) {
 }
 
 
-export class TranslationReference {
+exports.TranslationReference = class TranslationReference {
   constructor(filename, content, charPosition) {
     this.file = filename;
     this.line = lineCount(content, charPosition);
@@ -48,7 +47,7 @@ export class TranslationReference {
 }
 
 
-export class NodeTranslationInfo {
+exports.NodeTranslationInfo = class NodeTranslationInfo {
   constructor(node, text, reference, attributes) {
     this.text = text;
     this.reference = reference;
@@ -115,8 +114,7 @@ const cartesian = (a, b, ...c) => (b ? cartesian(_cartesian(a, b), ...c) : a);
 //   return text;
 // }
 
-
-export class Extractor {
+exports.Extractor = class Extractor {
 
   constructor(options) {
     this.options = Object.assign({
@@ -369,18 +367,18 @@ export class Extractor {
   };
 
   _parseElement($, el, filename, content) {
-    if (el.type === 'comment' && isHtml(el.data)) {
+    if (el.type === 'comment' && cheerioUtils.isHtml(el.data)) {
       // Recursive parse call if el.data is recognized as HTML.
       return this._extractTranslationDataFromNodes(Array.from($(el.data)), $, filename, content);
     }
 
-    const reference = new TranslationReference(filename, content, el.startIndex);
+    const reference = new exports.TranslationReference(filename, content, el.startIndex);
     const node = $(el);
 
     if (this._hasTranslationToken(node)) {
       const text = node.html().trim();
       if (text.length !== 0) {
-        return [new NodeTranslationInfo(node, text, reference, this.options.attributes)];
+        return [new exports.NodeTranslationInfo(node, text, reference, this.options.attributes)];
       }
     }
 
@@ -392,7 +390,7 @@ export class Extractor {
             .filter((text) => text.length !== 0)
             .forEach((text) => {
               tokensFromFilters.push(
-                new NodeTranslationInfo(node, text, reference,
+                new exports.NodeTranslationInfo(node, text, reference,
                   this.options.attributes));
             });
 

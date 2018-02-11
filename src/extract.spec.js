@@ -1,34 +1,34 @@
-import {Extractor} from './extract.js';
-import * as constants from './constants.js';
-import * as fixtures from './test-fixtures.js';
+const extract = require('./extract.js');
+const constants = require('./constants.js');
+const fixtures = require('./test-fixtures.js');
 
-import {expect} from 'chai';
+const {expect} = require('chai');
 
 
 describe('Extractor object', () => {
 
   it('should output a correct POT file from the supplied HTML', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML0_CTX0);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_0);
   });
 
   it('should output a correct POT file from multiple HTML fixtures', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML0_CTX0);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML1_PLURAL0);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_1);
   });
 
   it('should output a correct POT file with multiple contexts', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML0_CTX0);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML0_CTX1);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_CONTEXTS);
   });
 
   it('should output a correct POT file using keyword as tag', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML4_TAG0);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML4_TAG1);
     extractor.parse(fixtures.FILENAME_2, fixtures.HTML4_TAG2);
@@ -36,13 +36,13 @@ describe('Extractor object', () => {
   });
 
   it('should only translate a html block once', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML4_TAG3);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_MULTIPLE_TAGS);
   });
 
   it('should merge multiple references correctly and not duplicate', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML0_CTX0);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML0_CTX0);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML0_CTX0);
@@ -50,7 +50,7 @@ describe('Extractor object', () => {
   });
 
   it('should merge multiple comments correctly and not duplicate', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML2_COMMENT0);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML2_COMMENT1);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML2_COMMENT1);
@@ -58,20 +58,20 @@ describe('Extractor object', () => {
   });
 
   it('should fail when plurals dont match', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML1_PLURAL0);
     expect(() => extractor.parse(fixtures.FILENAME_1, fixtures.HTML1_PLURAL1))
       .to.throw(Error, `Incompatible plural definitions for I work: 'We work' !== 'Us works'`);
   });
 
   it('should lexicographically sort the translations', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML_SORTING);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_SORTED);
   });
 
   it('should output a correct POT file without unnecessary escaped quotes', () => {
-    const extractor = new Extractor();
+    const extractor = new extract.Extractor();
     extractor.parse(fixtures.FILENAME_0, fixtures.HTML4_TAG4);
     extractor.parse(fixtures.FILENAME_1, fixtures.HTML4_TAG5);
     extractor.parse(fixtures.FILENAME_2, fixtures.HTML4_TAG6);
@@ -82,7 +82,7 @@ describe('Extractor object', () => {
 
 
 describe('Raw translation data', () => {
-  const extractor = new Extractor({
+  const extractor = new extract.Extractor({
     filterPrefix: '::'
   });
 
@@ -128,7 +128,7 @@ describe('Raw translation data', () => {
     expect(data3.length).to.equal(1);
     expect(data3[0].text).to.equal('So long, my dear');
 
-    const extractorWithParams = new Extractor({
+    const extractorWithParams = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
     });
@@ -144,7 +144,7 @@ describe('Raw translation data', () => {
     expect(data6.length).to.equal(1);
     expect(data6[0].text).to.equal(`Guns'n roses, my dear`);
 
-    const extractorWithBindOnce = new Extractor({
+    const extractorWithBindOnce = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
       filterPrefix: '::',
@@ -155,7 +155,7 @@ describe('Raw translation data', () => {
   });
 
   it('should unescape quotes', () => {
-    const data = new Extractor({
+    const data = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
     })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_FILTER_ESCAPED_QUOTES);
@@ -168,7 +168,7 @@ describe('Raw translation data', () => {
   });
 
   it('should concatenate numbers', () => {
-    const data = new Extractor({
+    const data = new extract.Extractor({
       startDelimiter: '{{',
       endDelimiter: '}}',
     })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_JS_EXPRESSION_WITH_NUMBER);
@@ -177,17 +177,17 @@ describe('Raw translation data', () => {
   });
 
   it('should report syntax errors', () => {
-    const extract = () => {
-      new Extractor({
+    const extractCall = () => {
+      new extract.Extractor({
         startDelimiter: '{{',
         endDelimiter: '}}',
       })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_JS_EXPRESSION_SYNTAX_ERROR);
     };
-    expect(extract).to.throw('Unterminated string constant, when trying to parse `{{ \'A\' + b\' |translate }}` foo.htm:1');
+    expect(extractCall).to.throw('Unterminated string constant, when trying to parse `{{ \'A\' + b\' |translate }}` foo.htm:1');
   });
 
   it('should treat delimiters inside filter text as plain text', () => {
-    const data = new Extractor({
+    const data = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
     })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_DELIMITERS_INSIDE_FILTER_TEXT);
@@ -196,7 +196,7 @@ describe('Raw translation data', () => {
   });
 
   it('should compile and extract translatable strings from JavaScript expressions in filters', () => {
-    const data = new Extractor({
+    const data = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
     })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_VARIED_CHALLENGES);
@@ -209,7 +209,7 @@ describe('Raw translation data', () => {
   });
 
   it('should handle complex nesting constructs with multiple interpolated filters', () => {
-    const extractorWithBindOnce = new Extractor({
+    const extractorWithBindOnce = new extract.Extractor({
       filterPrefix: '::',
     });
 
@@ -283,7 +283,7 @@ describe('Raw translation data', () => {
   });
 
   it('should extract filters from nested constructs', () => {
-    const extractorWithBindOnce = new Extractor({
+    const extractorWithBindOnce = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
       filterPrefix: '::',
@@ -298,7 +298,7 @@ describe('Raw translation data', () => {
   });
 
   it('should extract filters that are broken across multiple lines', () => {
-    const extractorInterpolate = new Extractor({
+    const extractorInterpolate = new extract.Extractor({
       startDelimiter: '{{',
       endDelimiter: '}}',
     });
@@ -312,7 +312,7 @@ describe('Raw translation data', () => {
   });
 
   it('should extract filters from text before and after elements', () => {
-    const extractorInterpolate = new Extractor({
+    const extractorInterpolate = new extract.Extractor({
       startDelimiter: '{{',
       endDelimiter: '}}',
     });
@@ -326,7 +326,7 @@ describe('Raw translation data', () => {
   });
 
   it('should extract multiple filters from text blocks', () => {
-    const extractorInterpolate = new Extractor({
+    const extractorInterpolate = new extract.Extractor({
       startDelimiter: '{{',
       endDelimiter: '}}',
     });
@@ -338,7 +338,7 @@ describe('Raw translation data', () => {
   });
 
   it('should extract filters from text blocks with empty delimiters', () => {
-    const extractor = new Extractor({
+    const extractor = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
     });
@@ -350,7 +350,7 @@ describe('Raw translation data', () => {
   });
 
   it('should extract filters from text blocks with nonempty delimiters', () => {
-    const data = new Extractor({
+    const data = new extract.Extractor({
       startDelimiter: '{{',
       endDelimiter: '}}',
     })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_TEXT_CHALLENGE);
@@ -361,7 +361,7 @@ describe('Raw translation data', () => {
   });
 
   it('should ignore comments and directives when extracting filters', () => {
-    const extractorInterpolate = new Extractor({
+    const extractorInterpolate = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
       filterPrefix: '::',
@@ -372,7 +372,7 @@ describe('Raw translation data', () => {
   });
 
   it('should join split strings', () => {
-    const extractorInterpolate = new Extractor({
+    const extractorInterpolate = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
       filterPrefix: '::',
@@ -383,7 +383,7 @@ describe('Raw translation data', () => {
   });
 
   it('should join strings split over multiple lines', () => {
-    const extractorInterpolate = new Extractor({
+    const extractorInterpolate = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
       filterPrefix: '::',
@@ -398,7 +398,7 @@ describe('Raw translation data', () => {
   });
 
   it('should extract translatable strings from commented nested filters', () => {
-    const data = new Extractor({
+    const data = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
       filterPrefix: '::',
@@ -411,7 +411,7 @@ describe('Raw translation data', () => {
   });
 
   it('should extract strings from commented', () => {
-    const data = new Extractor({
+    const data = new extract.Extractor({
       filterPrefix: '::',
     })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_COMMENTED_COMPLEX_NESTING);
     expect(data.length).to.equal(13);
@@ -483,7 +483,7 @@ describe('Raw translation data', () => {
   });
 
   it('should compile complex inline JavaScript filter expressions', () => {
-    const data = new Extractor({
+    const data = new extract.Extractor({
       startDelimiter: '',
       endDelimiter: '',
       filterPrefix: '::',
@@ -506,12 +506,12 @@ describe('Raw translation data', () => {
   });
 
   it('cannot handle incomplete commented filters', () => {
-  const extract = () => {
-      new Extractor({
+  const extractCall = () => {
+      new extract.Extractor({
         startDelimiter: '',
         endDelimiter: '',
       })._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_INCOMPLETE_COMMENT);
     };
-    expect(extract).to.throw('Assigning to rvalue, when trying to parse `ng-bind="\'Cancel\' |translate">` foo.htm:1');
+    expect(extractCall).to.throw('Assigning to rvalue, when trying to parse `ng-bind="\'Cancel\' |translate">` foo.htm:1');
   });
 });

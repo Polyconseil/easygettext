@@ -1,33 +1,33 @@
-export const FILENAME_0 = 'foo.htm';
-export const FILENAME_1 = 'bar.htm';
-export const FILENAME_2 = 'baz.vue';
+exports.FILENAME_0 = 'foo.htm';
+exports.FILENAME_1 = 'bar.htm';
+exports.FILENAME_2 = 'baz.vue';
 
 
-export const HTML0_CTX0 = `
+exports.HTML0_CTX0 = `
 <div><h4 translate="translate" translate-context="For charlie">Hello world</h4></div>`;
-export const HTML0_CTX1 = `
+exports.HTML0_CTX1 = `
 <div><h4 translate="translate" translate-context="For jacques">Hello world</h4></div>`;
 
-export const HTML1_PLURAL0 = '<h2 translate="" i18n-plural="We work">I work</h2>';
-export const HTML1_PLURAL1 = '<h2 translate="" translate-plural="Us works">I work</h2>';
+exports.HTML1_PLURAL0 = '<h2 translate="" i18n-plural="We work">I work</h2>';
+exports.HTML1_PLURAL1 = '<h2 translate="" translate-plural="Us works">I work</h2>';
 
-export const HTML2_COMMENT0 = '<h2 translate i18n-comment="My first comment">Hello</h2>';
-export const HTML2_COMMENT1 = '<h2 translate="" translate-comment="Another comment">Hello</h2>';
+exports.HTML2_COMMENT0 = '<h2 translate i18n-comment="My first comment">Hello</h2>';
+exports.HTML2_COMMENT1 = '<h2 translate="" translate-comment="Another comment">Hello</h2>';
 
-export const HTML3_FILTER0 = `<h2 translate-comment="Fugazy">{{ "Hola, hombre" | translate }}</h2>`;
-export const HTML3_FILTER1 = `<h2 tooltip="{{'Hola, mujer'|i18n}}">StufStuff</h2>`;
-export const HTML3_FILTER2 = `<h2 tooltip="{{ a || 'Hola, hola'|i18n }}">StufStuff</h2>`;
-export const HTML3_FILTER3 = `<h2 attr="{{ &quot;So long, my dear&quot; |i18n }}">Martha</h2>`;
-export const HTML3_FILTER4 = `<h2 attr="&quot;So long, my dear&quot; |i18n">Martha</h2>`;
-export const HTML3_FILTER5 = `<h2 attr="{{ 'Guns\\'n roses, my dear' |i18n }}">Son</h2>`;
-export const HTML3_FILTER6 = `<h2 attr="'Guns\\'n roses, my dear' |i18n ">Daughter</h2>`;
-export const HTML3_FILTER7 = `<h2 attr="::'Guns\\'n roses, my dear' |i18n ">Wife</h2>`;
+exports.HTML3_FILTER0 = `<h2 translate-comment="Fugazy">{{ "Hola, hombre" | translate }}</h2>`;
+exports.HTML3_FILTER1 = `<h2 tooltip="{{'Hola, mujer'|i18n}}">StufStuff</h2>`;
+exports.HTML3_FILTER2 = `<h2 tooltip="{{ a || 'Hola, hola'|i18n }}">StufStuff</h2>`;
+exports.HTML3_FILTER3 = `<h2 attr="{{ &quot;So long, my dear&quot; |i18n }}">Martha</h2>`;
+exports.HTML3_FILTER4 = `<h2 attr="&quot;So long, my dear&quot; |i18n">Martha</h2>`;
+exports.HTML3_FILTER5 = `<h2 attr="{{ 'Guns\\'n roses, my dear' |i18n }}">Son</h2>`;
+exports.HTML3_FILTER6 = `<h2 attr="'Guns\\'n roses, my dear' |i18n ">Daughter</h2>`;
+exports.HTML3_FILTER7 = `<h2 attr="::'Guns\\'n roses, my dear' |i18n ">Wife</h2>`;
 
-export const HTML_FILTER_SPLIT_STRING = `
+exports.HTML_FILTER_SPLIT_STRING = `
 <h2 ng-bind="::'Three' +' parts, '  +   'one whole.' |i18n ">Will be replaced</h2>
 `;
 
-export const HTML_FILTER_ESCAPED_QUOTES = `
+exports.HTML_FILTER_ESCAPED_QUOTES = `
 {{ 'Life\\'s a tough teacher.' |translate}} 
 {{ "Life's a tough journey." |translate}}
 {{ "Life\\'s a tough road." |translate}}
@@ -35,7 +35,7 @@ export const HTML_FILTER_ESCAPED_QUOTES = `
 {{ 'Life\\'s a tough \\'journey\\'.' |translate}}
 `;
 
-export const HTML_VARIED_CHALLENGES = `
+exports.HTML_VARIED_CHALLENGES = `
 <div aria-label="Message Selected Users">
   <button type="button" 
           ng-class="{'active': vm.messageView === 'preview', disabled: !vm.useHtml}"
@@ -48,14 +48,14 @@ export const HTML_VARIED_CHALLENGES = `
 </div>
 `;
 
-export const HTML_FILTER_SPLIT_MULTILINE_STRING_ATTR = `
+exports.HTML_FILTER_SPLIT_MULTILINE_STRING_ATTR = `
 <h2 ng-bind="::'Four' +
  ' parts, ' +
   'maybe, '
   + 'one whole.' |i18n ">Will be replaced</h2>
 `;
 
-export const HTML_FILTER_SPLIT_MULTILINE_STRING_INTERPOLATED = `
+exports.HTML_FILTER_SPLIT_MULTILINE_STRING_INTERPOLATED = `
 <h2>{{::'Four' +
  ' parts, ' +
   'probably, '
@@ -63,7 +63,7 @@ export const HTML_FILTER_SPLIT_MULTILINE_STRING_INTERPOLATED = `
 `;
 
 
-export const HTML_COMPLEX_NESTING = `<div translate translate-comment="Outer comment …"
+exports.HTML_COMPLEX_NESTING = `<div translate translate-comment="Outer comment …"
      translate-context="Outer Context">
   <div translate translate-comment="Inner comment …"
        translate-context="Inner Context">
@@ -81,7 +81,7 @@ export const HTML_COMPLEX_NESTING = `<div translate translate-comment="Outer com
   </div>
 </div>`;
 
-export const HTML_LINEBREAK_FILTER = `
+exports.HTML_LINEBREAK_FILTER = `
 <div class="buttons">
 <a href="#"
   ng-click="vm.doSomething()"
@@ -108,7 +108,7 @@ export const HTML_LINEBREAK_FILTER = `
 }}</a>
 `;
 
-export const HTML_TEXT_CHALLENGE = `
+exports.HTML_TEXT_CHALLENGE = `
 <p>{{ 'Thanks for joining ….  However, … does not start until'
   |translate }}
   <span>{{ vm.startDatetime |amCalendar}}</span>{{ ', but will open' |
@@ -118,7 +118,7 @@ export const HTML_TEXT_CHALLENGE = `
 </p>
 `;
 
-export const HTML_TEXT_FILTER = `
+exports.HTML_TEXT_FILTER = `
 {{ 'Outside 0' |translate }}
 <div class="buttons">
 <a href="#">{{ 'Text 0' |translate }}</a>
@@ -128,7 +128,7 @@ export const HTML_TEXT_FILTER = `
 {{ 'Outside 1' |translate }}
 `;
 
-export const HTML_TEXT_MULTIPLE_FILTER = `
+exports.HTML_TEXT_MULTIPLE_FILTER = `
 <a href="#">
 {{ 'Text 0' |translate }} between
  {{ 'Text 1' |translate }} between again
@@ -136,7 +136,7 @@ export const HTML_TEXT_MULTIPLE_FILTER = `
 </a>
 `;
 
-export const HTML_TEXT_FILTER_COMMENT = `
+exports.HTML_TEXT_FILTER_COMMENT = `
 <!doctype html>
 <a href="#">
   <!-- First comment -->
@@ -145,7 +145,7 @@ export const HTML_TEXT_FILTER_COMMENT = `
 </a>
 `;
 
-export const HTML_NESTED_FILTER = `
+exports.HTML_NESTED_FILTER = `
   <li class="action thumbs-up"
       title="{{::'Like' |translate}}" alt="{{::'Gets extracted now' |translate}}">
       <span ng-bind="::vm.voteCount |translate" alt="{{:: 'Number of votes' |translate}}"></span>
@@ -153,25 +153,25 @@ export const HTML_NESTED_FILTER = `
   </li>
 `;
 
-export const HTML_COMMENTED_NESTED_FILTER = `
+exports.HTML_COMMENTED_NESTED_FILTER = `
 <!--
-${HTML_NESTED_FILTER}
+${exports.HTML_NESTED_FILTER}
 -->
 `;
 
-export const HTML_COMMENTED_COMPLEX_NESTING = `
+exports.HTML_COMMENTED_COMPLEX_NESTING = `
 <!--
-${HTML_COMPLEX_NESTING}
+${exports.HTML_COMPLEX_NESTING}
 -->
 `;
 
-export const HTML4_TAG0 = '<translate>Duck</translate>';
-export const HTML4_TAG1 = '<i18n>Dice</i18n>';
-export const HTML4_TAG2 = '<get-text>Rabbit</get-text>';
-export const HTML4_TAG3 = '<i18n translate>overtranslate</i18n>';
-export const HTML4_TAG4 = `<i18n translate>Life's a tough "journey"</i18n>`;
-export const HTML4_TAG5 = `<div attr="{{ 'Life\\'s a tough teacher' |translate}}"></div>`;
-export const HTML4_TAG6 = `
+exports.HTML4_TAG0 = '<translate>Duck</translate>';
+exports.HTML4_TAG1 = '<i18n>Dice</i18n>';
+exports.HTML4_TAG2 = '<get-text>Rabbit</get-text>';
+exports.HTML4_TAG3 = '<i18n translate>overtranslate</i18n>';
+exports.HTML4_TAG4 = `<i18n translate>Life's a tough "journey"</i18n>`;
+exports.HTML4_TAG5 = `<div attr="{{ 'Life\\'s a tough teacher' |translate}}"></div>`;
+exports.HTML4_TAG6 = `
 <label class="btn btn-primary"
        ng-class="{'active': vm.respectUsersPreferences}">
   <input type="checkbox"
@@ -180,7 +180,7 @@ export const HTML4_TAG6 = `
 </label>
 `;
 
-export const HTML_LONG = `
+exports.HTML_LONG = `
   <div class="col-xs-4">
   <h4 translate="translate" translate-context="Pour maman">Hello world</h4>
   <h2 translate="" i18n-plural='We work'>I work</h2>
@@ -196,7 +196,7 @@ export const HTML_LONG = `
   </tr>
 `;
 
-export const HTML_SORTING = `
+exports.HTML_SORTING = `
   <i18n>f</i18n>
   <i18n>0</i18n>
   <i18n>c</i18n>
@@ -214,7 +214,7 @@ export const HTML_SORTING = `
   <i18n>d</i18n>
 `;
 
-export const HTML_JS_EXPRESSION_COMPLEX_FILTERS = `
+exports.HTML_JS_EXPRESSION_COMPLEX_FILTERS = `
 <span ng-bind="'Bed n\\'' + ' breakfast' |translate"></span>
 <span ng-bind="true ? 'Always' : 'Never' |i18n "></span>
 <span ng-bind="'This will ' + (true ? 'always' : 'never') + ' be true' |i18n "></span>
@@ -225,23 +225,23 @@ export const HTML_JS_EXPRESSION_COMPLEX_FILTERS = `
 <span ng-bind="isC ? 'C' + (isD ? 'D' : 'd') : 'c' + (isE ? 'E' : 'e') |i18n "></span>
 `;
 
-export const HTML_JS_EXPRESSION_WITH_NUMBER = `
+exports.HTML_JS_EXPRESSION_WITH_NUMBER = `
 {{ 'A' + 42 + '.' |translate }}
 `;
 
-export const HTML_JS_EXPRESSION_SYNTAX_ERROR = `
+exports.HTML_JS_EXPRESSION_SYNTAX_ERROR = `
 {{ 'A' + b' |translate }}
 `;
 
-export const HTML_INCOMPLETE_COMMENT = `
+exports.HTML_INCOMPLETE_COMMENT = `
 <!--ng-bind="'Cancel' |translate"></button>-->
 `;
 
-export const HTML_DELIMITERS_INSIDE_FILTER_TEXT = `
+exports.HTML_DELIMITERS_INSIDE_FILTER_TEXT = `
 <p ng-bind="'You received {{ vm.count}} coins!' |translate"></p>
 `;
 
-export const POT_OUTPUT_0 = `msgid ""
+exports.POT_OUTPUT_0 = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -254,7 +254,7 @@ msgid "Hello world"
 msgstr ""
 `;
 
-export const POT_OUTPUT_1 = `msgid ""
+exports.POT_OUTPUT_1 = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -273,7 +273,7 @@ msgstr[0] ""
 msgstr[1] ""
 `;
 
-export const POT_OUTPUT_CONTEXTS = `msgid ""
+exports.POT_OUTPUT_CONTEXTS = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -291,7 +291,7 @@ msgid "Hello world"
 msgstr ""
 `;
 
-export const POT_OUTPUT_TAGS = `msgid ""
+exports.POT_OUTPUT_TAGS = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -311,7 +311,7 @@ msgid "Rabbit"
 msgstr ""
 `;
 
-export const POT_OUTPUT_QUOTES = `msgid ""
+exports.POT_OUTPUT_QUOTES = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -331,7 +331,7 @@ msgid "Respect Users' Preferences"
 msgstr ""
 `;
 
-export const POT_OUTPUT_MULTIPLE_TAGS = `msgid ""
+exports.POT_OUTPUT_MULTIPLE_TAGS = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -344,7 +344,7 @@ msgstr ""
 `;
 
 
-export const POT_OUTPUT_MULTIREF = `msgid ""
+exports.POT_OUTPUT_MULTIREF = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -358,7 +358,7 @@ msgid "Hello world"
 msgstr ""
 `;
 
-export const POT_OUTPUT_MULTICOMMENTS = `msgid ""
+exports.POT_OUTPUT_MULTICOMMENTS = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -373,7 +373,7 @@ msgid "Hello"
 msgstr ""
 `;
 
-export const POT_OUTPUT_SORTED = `msgid ""
+exports.POT_OUTPUT_SORTED = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -441,7 +441,7 @@ msgid "g"
 msgstr ""
 `;
 
-export const INPUT_PO = `msgid ""
+exports.INPUT_PO = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -471,7 +471,7 @@ msgstr "Something"
 msgid "Action failure"
 msgstr ""`;
 
-export const OUTPUT_DICT = {
+exports.OUTPUT_DICT = {
   headers: {
     '': '',
     'Content-Transfer-Encoding': '8bit',

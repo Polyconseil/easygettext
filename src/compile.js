@@ -1,4 +1,4 @@
-import Pofile from 'pofile';
+const Pofile = require('pofile');
 
 
 /**
@@ -20,7 +20,7 @@ import Pofile from 'pofile';
  *   }
  * }
  */
-export function sanitizePoData(poItems) {
+function sanitizePoData(poItems) {
   const messages = {};
 
   for (let item of poItems) {
@@ -44,7 +44,7 @@ export function sanitizePoData(poItems) {
 }
 
 
-export function po2json(poContent) {
+function po2json(poContent) {
   const catalog = Pofile.parse(poContent);
   if (!catalog.headers.Language) {
     throw new Error('No Language headers found!');
@@ -55,4 +55,7 @@ export function po2json(poContent) {
   };
 }
 
-
+module.exports = {
+  sanitizePoData,
+  po2json,
+}

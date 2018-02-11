@@ -2,7 +2,7 @@
   "name": "easygettext",
   "version": "2.2.0",
   "description": "Simple tools to extract gettext strings",
-  "main": "dist/index",
+  "main": "src/extract-cli.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/polyconseil/easygettext"
@@ -11,7 +11,6 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "prepublish": "babel --presets es2015 --plugins transform-object-assign --source-maps true src --out-dir dist/",
     "test": "mocha --compilers js:babel-core/register src/**/*.spec.js",
     "cover": "babel-node node_modules/isparta/bin/isparta cover --report text  node_modules/mocha/bin/_mocha -- src/**/*.spec.js"
   },
@@ -19,19 +18,14 @@
   "author": "Polyconseil",
   "license": "MIT",
   "devDependencies": {
-    "babel": "^6.1.18",
-    "babel-cli": "^6.2.0",
-    "babel-core": "^6.2.1",
-    "babel-plugin-transform-object-assign": "^6.1.18",
-    "babel-preset-es2015": "^6.1.18",
     "chai": "^4.1.2",
     "eslint": "^4.13.0",
     "isparta": "^4.0.0",
     "mocha": "^4.0.1"
   },
   "bin": {
-    "gettext-compile": "./dist/compile-cli.js",
-    "gettext-extract": "./dist/extract-cli.js"
+    "gettext-compile": "./src/compile-cli.js",
+    "gettext-extract": "./src/extract-cli.js"
   },
   "dependencies": {
     "acorn": "^5.2.1",
@@ -42,7 +36,6 @@
     "pug": "^2.0.0-rc.4"
   },
   "files": [
-    "src",
-    "dist"
+    "src"
   ]
 }

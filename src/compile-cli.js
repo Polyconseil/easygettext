@@ -2,9 +2,9 @@
 
 /* eslint no-console:0 */
 
-import fs from 'fs';
-import {po2json} from './compile.js';
-import minimist from 'minimist';
+const fs = require('fs');
+const compile = require('./compile.js');
+const minimist = require('minimist');
 
 
 // Process arguments
@@ -24,7 +24,7 @@ for (let file of files) {
   console.log('[gettext] processing PO file:', file);
   try {
     const poContents = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
-    const data = po2json(poContents);
+    const data = compile.po2json(poContents);
     const lang = data.headers.Language;
     if (!translationData[lang]) {
       translationData[lang] = data.messages;
