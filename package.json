@@ -11,6 +11,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
+    "syntax": "eslint src/",
     "test": "mocha --compilers js:babel-core/register src/**/*.spec.js",
     "cover": "babel-node node_modules/isparta/bin/isparta cover --report text  node_modules/mocha/bin/_mocha -- src/**/*.spec.js"
   },

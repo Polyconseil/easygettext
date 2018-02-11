@@ -58,4 +58,4 @@ function po2json(poContent) {
 module.exports = {
   sanitizePoData,
   po2json,
-}
+};

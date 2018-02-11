@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 const cheerioUtils = require('cheerio/lib/utils');
 const Pofile = require('pofile');
 const pug = require('pug');
-const parseVue = require('vue-loader/lib/parser')
+const parseVue = require('vue-loader/lib/parser');
 const acorn = require('acorn');
 const walk = require('acorn/dist/walk');
 const constants = require('./constants.js');
@@ -46,29 +46,31 @@ exports.TranslationReference = class TranslationReference {
     }
     return ref;
   }
-}
+};
 
-function preprocessTemplate (data, type) {
-  let templateData = data
+function preprocessTemplate(data, type) {
+  let templateData = data;
   switch (type) {
-    case 'jade':
-    case 'pug':
-      // Add empty require function to the context to avoid errors with webpack require inside pug
-      templateData = pug.render(data, {filename: 'source.html', pretty: true, require: function () {}});
-      break;
-    case 'vue':
-      const vueFile = parseVue(data, 'source.vue', false);
-      if (!vueFile.template) return ''  // return an empty string
-      templateData = vueFile.template.content
-      if (vueFile.template.lang) {
-        return preprocessTemplate(templateData, vueFile.template.lang);
-      }
-      break;
+  case 'jade':
+  case 'pug':
+    // Add empty require function to the context to avoid errors with webpack require inside pug
+    templateData = pug.render(data, {filename: 'source.html', pretty: true, require: function() {}});
+    break;
+  case 'vue':
+    const vueFile = parseVue(data, 'source.vue', false);
+    if (!vueFile.template) return '';  // return an empty string
+    templateData = vueFile.template.content;
+    if (vueFile.template.lang) {
+      return preprocessTemplate(templateData, vueFile.template.lang);
+    }
+    break;
+  default:
+    break;
   }
-  return templateData.trim()
+  return templateData.trim();
 }
 
-exports.preprocessTemplate = preprocessTemplate
+exports.preprocessTemplate = preprocessTemplate;
 
 exports.NodeTranslationInfo = class NodeTranslationInfo {
   constructor(node, text, reference, attributes) {
@@ -101,7 +103,7 @@ exports.NodeTranslationInfo = class NodeTranslationInfo {
     poItem.extractedComments = this.comment ? [this.comment] : [];
     return poItem;
   }
-}
+};
 
 
 function isNumber(value) {
@@ -115,12 +117,18 @@ function isString(value) {
 
 
 function _popN(stack, count) {
-  return stack.splice(-count, count)
+  return stack.splice(-count, count);
 }
 
 
-const _cartesian = (a, b) => [].concat(...a.map(d => b.map(e => [].concat(d, e))));
-const cartesian = (a, b, ...c) => (b ? cartesian(_cartesian(a, b), ...c) : a);
+function _cartesian(a, b) {
+  return [].concat(...a.map(d => b.map(e => [].concat(d, e))));
+}
+
+
+function cartesian(a, b, ...c) {
+  return (b ? cartesian(_cartesian(a, b), ...c) : a);
+}
 
 
 // Functions helpful during development:
@@ -170,17 +178,17 @@ exports.Extractor = class Extractor {
     const endDelimiter = this.options.endDelimiter === ''
       ? constants.DEFAULT_END_DELIMITER : this.options.endDelimiter;
     const end = endDelimiter.replace(ESCAPE_REGEX, '\\$&');
-    const bodyCore = `(.|\\n)*`;
+    const bodyCore = '(.|\\n)*';
     return {
       startDelimiter,
       endDelimiter,
       bodyCore,
       end,
-      startOrEndQuotes: `(\\&quot;|[\\'"])`,  // matches simple / double / HTML quotes
-      spacesOrPipeChar: `\\s*\\|\\s*`,        // matches the pipe string of the filter
+      startOrEndQuotes: '(\\&quot;|[\\\'"])',  // matches simple / double / HTML quotes
+      spacesOrPipeChar: '\\s*\\|\\s*',        // matches the pipe string of the filter
       start: startDelimiter.replace(ESCAPE_REGEX, '\\$&'),
-      prefix: this.options.filterPrefix === null ?
-        '\\s*' : `\\s*(?:${this.options.filterPrefix})?\\s*`,
+      prefix: this.options.filterPrefix === null
+        ? '\\s*' : `\\s*(?:${this.options.filterPrefix})?\\s*`,
 
       body: endDelimiter === '' ? `(${bodyCore})` : `(${bodyCore}?(?!${end}))`,
       filters: this.options.attributes.join('|'),
@@ -199,7 +207,7 @@ exports.Extractor = class Extractor {
 
     return [
       new RegExp(`^(?:\\s|\\n)*(?:${tokens.start})${coreExpression}(?:${tokens.end})?`),
-      new RegExp(`${coreExpression}`)
+      new RegExp(`${coreExpression}`),
     ];
   }
 
@@ -279,40 +287,42 @@ exports.Extractor = class Extractor {
 
     walk.full(ast, (node, state) => {
       switch (node.type) {
-        case 'Identifier':
+      case 'Identifier':
+        state.stack.push([]);
+        break;
+      case 'Literal':
+        const items = isString(node.value) || isNumber(node.value) ? [node.value] : [];
+        state.stack.push(items);
+        break;
+      case 'MemberExpression':
+        _popN(state.stack, 1);
+        state.stack.push([]);
+        break;
+      case 'ConditionalExpression':
+        let [, consequent, alternate] = _popN(state.stack, node.alternate ? 3 : 2);
+        state.stack.push([...consequent, ...alternate]);
+        break;
+      case 'BinaryExpression':
+        const [left, right] = _popN(state.stack, node.left ? 2 : 1);
+        if (node.operator === '+') {
+          let variants = cartesian((left ? left : state.stack.pop()), right)
+            .map((variant) => variant.join(''))
+            .reduce((acc, cur) => acc.concat(cur), []);
+          state.stack.push(variants);
+        } else {
           state.stack.push([]);
-          break;
-        case 'Literal':
-          const items = isString(node.value) || isNumber(node.value) ? [node.value] : [];
-          state.stack.push(items);
-          break;
-        case 'MemberExpression':
-          _popN(state.stack, 1);
-          state.stack.push([]);
-          break;
-        case 'ConditionalExpression':
-          let [test_, consequent, alternate] = _popN(state.stack, node.alternate ? 3 : 2);
-          state.stack.push([...consequent, ...alternate]);
-          break;
-        case 'BinaryExpression':
-          const [left, right] = _popN(state.stack, node.left ? 2 : 1);
-          if (node.operator === '+') {
-            let variants = cartesian((left ? left : state.stack.pop()), right)
-              .map((variant) => variant.join(''))
-              .reduce((acc, cur) => acc.concat(cur), []);
-            state.stack.push(variants);
-          } else {
-            state.stack.push([]);
-          }
-          break;
-        case 'ExpressionStatement':
-          if (state.stack.length) {
-            state.stack.pop().forEach((item) => {
-              state.output.push(Array.isArray(item) ?
-                item.reduce((acc, cur) => acc.concat(cur), []) : item);
-            });
-          }
-          break;
+        }
+        break;
+      case 'ExpressionStatement':
+        if (state.stack.length) {
+          state.stack.pop().forEach((item) => {
+            state.output.push(Array.isArray(item)
+              ? item.reduce((acc, cur) => acc.concat(cur), []) : item);
+          });
+        }
+        break;
+      default:
+        break;
       }
     }, null, _state);
 
@@ -321,7 +331,7 @@ exports.Extractor = class Extractor {
 
   _extractStringsFromMatch(contexts) {
     // Try to parse from wide to narrow contexts.  First successful parse wins.
-    for (let i = 0; i < contexts.length; i++) {
+    for (let i = 0; i < contexts.length; i = i + 1) {
       const context = contexts[i];
       let expr = context;
 
@@ -342,8 +352,7 @@ exports.Extractor = class Extractor {
       }
       try {
         return this._compileExpressions(acorn.parse(expr));
-      }
-      catch (exception) {
+      } catch (exception) {
         if (i === (contexts.length - 1)) {
           throw exception;
         }
@@ -362,9 +371,9 @@ exports.Extractor = class Extractor {
     const lastEndIndex = context.lastIndexOf(this.tokens.endDelimiter, matchIndex);
 
     // Strip greedy matched delimiter scopes; for example: `}}…{{ [match]` --> `{{ [match]`
-    if ((lastEndIndex !== -1) &&
-      (lastStartIndex > lastEndIndex) &&
-      (lastEndIndex < matchIndex)) {
+    if ((lastEndIndex !== -1)
+      && (lastStartIndex > lastEndIndex)
+      && (lastEndIndex < matchIndex)) {
       contexts.push(context.slice(lastEndIndex + this.tokens.endDelimiter.length));
     }
 
@@ -387,7 +396,7 @@ exports.Extractor = class Extractor {
         ...this._extractStringsFromMatch(this._prepareContexts(match)));
     }
     return matches;
-  };
+  }
 
   _parseElement($, el, filename, content) {
     if (el.type === 'comment' && cheerioUtils.isHtml(el.data)) {
@@ -420,7 +429,7 @@ exports.Extractor = class Extractor {
           return tokensFromFilters;
         } catch (exception) {
           throw new SyntaxError(
-            `${exception.message.split(/ \(.*\)/)} when trying to parse \`${item.text}\` ${reference.toString(true)}`)
+            `${exception.message.split(/ \(.*\)/)} when trying to parse \`${item.text}\` ${reference.toString(true)}`);
         }
       }, []);
   }
@@ -455,4 +464,4 @@ exports.Extractor = class Extractor {
   _hasTranslationToken(node) {
     return this.options.attributes.some((keyword) => node.is(keyword) || node.attr(keyword) !== undefined);
   }
-}
+};

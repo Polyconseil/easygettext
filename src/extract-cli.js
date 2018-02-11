@@ -54,7 +54,7 @@ const extractor = new extract.Extractor({
 });
 
 
-files.forEach(function (filename) {
+files.forEach(function(filename) {
   let file = filename;
   const ext = file.split('.').pop();
   if (ALLOWED_EXTENSIONS.indexOf(ext) === -1) {

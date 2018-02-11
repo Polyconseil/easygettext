@@ -5,12 +5,10 @@ env:
   node: true
   phantomjs: true
   es6: true
-ecmaFeatures:
-  modules: true
 rules:
   strict:
   - 2
-  - global
+  - never
   no-shadow: 2
   no-shadow-restricted-names: 2
   no-unused-vars:
@@ -99,9 +97,6 @@ rules:
   - 2
   - 1tbs
   - allowSingleLine: true
-  func-style:
-  - 2
-  - declaration
   quotes:
   - 2
   - single
@@ -155,13 +150,12 @@ rules:
   - 2
   - before: false
     after: true
-  space-after-keywords: 2
+  keyword-spacing: 2
   space-before-blocks: 2
   space-before-function-paren:
   - 2
   - never
   space-infix-ops: 2
-  space-return-throw-case: 2
   spaced-comment: 2
 
   no-const-assign: 2
