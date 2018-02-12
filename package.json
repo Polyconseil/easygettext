@@ -12,8 +12,7 @@
   },
   "scripts": {
     "syntax": "eslint src/",
-    "test": "mocha --compilers js:babel-core/register src/**/*.spec.js",
-    "cover": "babel-node node_modules/isparta/bin/isparta cover --report text  node_modules/mocha/bin/_mocha -- src/**/*.spec.js"
+    "test": "mocha src/**/*.spec.js"
   },
   "keywords": [],
   "author": "Polyconseil",
@@ -21,7 +20,6 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "eslint": "^4.13.0",
-    "isparta": "^4.0.0",
     "mocha": "^4.0.1"
   },
   "engines": {
