@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 const cheerioUtils = require('cheerio/lib/utils');
 const Pofile = require('pofile');
 const pug = require('pug');
-const parseVue = require('vue-loader/lib/parser');
+const vueCompiler = require('@vue/component-compiler-utils');
 const acorn = require('acorn');
 const walk = require('acorn/dist/walk');
 const constants = require('./constants.js');
@@ -57,7 +57,7 @@ function preprocessTemplate(data, type) {
     templateData = pug.render(data, {filename: 'source.html', pretty: true, require: function() {}});
     break;
   case 'vue':
-    const vueFile = parseVue(data, 'source.vue', false);
+    const vueFile = vueCompiler.parse({source: data, needMap: false});
     if (!vueFile.template) return '';  // return an empty string
     templateData = vueFile.template.content;
     if (vueFile.template.lang) {
@@ -454,6 +454,7 @@ exports.Extractor = class Extractor {
 
   _extractTranslationData(filename, content) {
     const $ = cheerio.load(content, {
+      xmlMode: true,
       decodeEntities: false,
       withStartIndices: true,
     });

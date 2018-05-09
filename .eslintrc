@@ -119,7 +119,7 @@ rules:
     afterColon: true
   max-len:
   - 2
-  - 120
+  - 160
   - 2
   new-cap:
   - 2

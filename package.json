@@ -19,8 +19,8 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.1.2",
-    "eslint": "^4.13.0",
-    "mocha": "^4.0.1"
+    "eslint": "^4.19.1",
+    "mocha": "^5.1.1"
   },
   "engines": {
     "node": ">=8"
@@ -30,13 +30,13 @@
     "gettext-extract": "./src/extract-cli.js"
   },
   "dependencies": {
-    "acorn": "^5.2.1",
-    "cheerio": "^0.22.0",
+    "@vue/component-compiler-utils": "^1.2.1",
+    "acorn": "^5.5.3",
+    "cheerio": "^1.0.0-rc.2",
     "minimist": "^1.2.0",
-    "pofile": "^1.0.2",
-    "pug": "^2.0.0-rc.4",
-    "vue-loader": "^14.1.1",
-    "vue-template-compiler": "^2.5.13"
+    "pofile": "^1.0.10",
+    "pug": "^2.0.3",
+    "vue-template-compiler": "^2.5.16"
   },
   "files": [
     "src"
