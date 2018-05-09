@@ -41,7 +41,7 @@ for (let file of files) {
 // Output results
 const translationString = JSON.stringify(translationData);
 if (outputFile) {
-  fs.writeFile(outputFile, translationString);
+  fs.writeFileSync(outputFile, translationString);
 } else {
   console.log(translationString);
 }
