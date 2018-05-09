@@ -32,7 +32,6 @@
   "dependencies": {
     "acorn": "^5.2.1",
     "cheerio": "^0.22.0",
-    "fs": "0.0.2",
     "minimist": "^1.2.0",
     "pofile": "^1.0.2",
     "pug": "^2.0.0-rc.4",
