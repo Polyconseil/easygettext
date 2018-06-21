@@ -1,6 +1,7 @@
-exports.FILENAME_0 = 'foo.htm';
-exports.FILENAME_1 = 'bar.htm';
-exports.FILENAME_2 = 'baz.vue';
+exports.FILENAME_0             = 'foo.htm';
+exports.FILENAME_1             = 'bar.htm';
+exports.FILENAME_2             = 'baz.vue';
+exports.VUE_COMPONENT_FILENAME = 'GreetingsComponent.vue';
 
 
 exports.HTML0_CTX0 = `
@@ -240,6 +241,42 @@ exports.HTML_INCOMPLETE_COMMENT = `
 exports.HTML_DELIMITERS_INSIDE_FILTER_TEXT = `
 <p ng-bind="'You received {{ vm.count}} coins!' |translate"></p>
 `;
+
+exports.VUE_COMPONENT_WITH_SCRIPT_TAG = `
+    <template>
+        <h1>{{ greeting_message }}</h1>
+    </template>
+    <script>
+        export default {
+            name: "greetings",
+            computed: {
+                greeting_message() {
+                    return this.$gettext("Hello there!")
+                },
+                duplicated_greeting_message() {
+                    return  this.$gettext("Hello there!")
+                }
+            }
+        }
+     </script>
+`;
+
+exports.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG = `//
+//
+//
+//
+
+export default {
+    name: "greetings",
+    computed: {
+        greeting_message() {
+            return this.$gettext("Hello there!")
+        },
+        duplicated_greeting_message() {
+            return  this.$gettext("Hello there!")
+        }
+    }
+}`;
 
 exports.POT_OUTPUT_0 = `msgid ""
 msgstr ""
@@ -496,3 +533,15 @@ exports.OUTPUT_DICT = {
     },
   },
 };
+
+exports.POT_OUTPUT_VUE_SCRIPT = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: GreetingsComponent.vue
+msgid "Hello there!"
+msgstr ""
+`;
