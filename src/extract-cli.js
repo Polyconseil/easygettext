@@ -65,6 +65,7 @@ files.forEach(function(filename) {
   try {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
     extractor.parse(file, extract.preprocessTemplate(data, ext));
+    extractor.parseVueJavascript(file, extract.preprocessScriptTags(data, ext));
   } catch (e) {
     console.error(`[${PROGRAM_NAME}] could not read: '${filename}`);
     console.trace(e);

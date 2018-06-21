@@ -78,6 +78,11 @@ describe('Extractor object', () => {
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_QUOTES);
   });
 
+  it('should output a correct POT file with strings extracted from javascript', () => {
+    const extractor = new extract.Extractor();
+    extractor.parseVueJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_VUE_SCRIPT);
+  });
 });
 
 
@@ -91,6 +96,17 @@ describe('data preprocessor', () => {
   it('should preprocess VueJS templates correctly', () => {
     expect(extract.preprocessTemplate('<template><h1>hello</h1></template>', 'vue')).to.equal('<h1>hello</h1>');
     expect(extract.preprocessTemplate("<template lang='jade'>h1 hello</template>", 'vue')).to.equal('<h1>hello</h1>');
+  });
+
+  it('should preprocess VueJS script tag correctly', () => {
+    expect(
+      extract.preprocessScriptTags(
+        fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG,
+        'vue'
+      )
+    ).to.equal(
+      fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG
+    );
   });
 
 });

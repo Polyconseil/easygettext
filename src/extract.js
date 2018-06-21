@@ -6,6 +6,7 @@ const vueCompiler = require('@vue/component-compiler-utils');
 const acorn = require('acorn');
 const walk = require('acorn/dist/walk');
 const constants = require('./constants.js');
+const jsExtractor = require('./javascript-extract.js');
 
 // Internal regular expression used to escape special characters
 const ESCAPE_REGEX = /[\-\[\]\/{}()*+?.\\^$|]/g;
@@ -48,6 +49,14 @@ exports.TranslationReference = class TranslationReference {
   }
 };
 
+function preprocessScriptTags(data, type) {
+  const vueFile = vueCompiler.parse({ source: data, needMap: false });
+
+  return (type !== 'vue' || ! vueFile.script)
+    ? ''
+    : vueFile.script.content.trim();
+}
+
 function preprocessTemplate(data, type) {
   let templateData = data;
   switch (type) {
@@ -70,7 +79,8 @@ function preprocessTemplate(data, type) {
   return templateData.trim();
 }
 
-exports.preprocessTemplate = preprocessTemplate;
+exports.preprocessTemplate   = preprocessTemplate;
+exports.preprocessScriptTags = preprocessScriptTags;
 
 exports.NodeTranslationInfo = class NodeTranslationInfo {
   constructor(node, text, reference, attributes) {
@@ -214,6 +224,10 @@ exports.Extractor = class Extractor {
   parse(filename, content) {
     const extractedData = this._extractTranslationData(filename, content);
 
+    this.processStrings(extractedData);
+  }
+
+  processStrings(extractedData) {
     for (const d of extractedData) {
       if (!this.items[d.text]) {
         this.items[d.text] = {};
@@ -238,6 +252,12 @@ exports.Extractor = class Extractor {
         }
       }
     }
+  }
+
+  parseVueJavascript(filename, content) {
+    const extractedStringsFromScript = jsExtractor.extractStringsFromJavascript(filename, content);
+
+    this.processStrings(extractedStringsFromScript);
   }
 
   toString() {
