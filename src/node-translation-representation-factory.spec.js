@@ -1,16 +1,16 @@
 const { expect } = require('chai');
-const factory    = require('./javascript-node-translation-info-factory');
+const factory = require('./node-translation-representation-factory.js');
 
-describe('Node translation info factory', () => {
-  describe('Generated objects', () => {
-    const filename        = 'Grievous.vue';
+describe('Node translation representation factory', () => {
+  describe('Generated objects representations', () => {
+    const filename = 'Grievous.vue';
     const localizedString = 'General Kenobi!';
-    const lineNumber      = 4;
+    const lineNumber = 4;
 
     let node;
 
     beforeEach(() => {
-      node = factory.getNodeTranslationInfo(filename, localizedString, lineNumber);
+      node = factory.getNodeTranslationInfoRepresentation(filename, localizedString, lineNumber);
     });
 
     it('should correctly render the reference', () => {

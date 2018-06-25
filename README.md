@@ -110,6 +110,27 @@ gettext-extract --attribute v-translate --attribute v-i18n --output dictionary.p
 gettext-extract --startDelimiter '[#' --endDelimiter '#]' --output dictionary.pot foo.html bar.jade
 ```
 
+##### Extract from <script> section in Vue.js components
+You can also extract the strings marked as translatable inside the <script> section of Vue.js components:
+
+```html
+    <template>
+        <h1>{{ greeting_message }}</h1>
+    </template>
+    <script>
+        export default {
+            name: "greetings",
+            computed: {
+                greeting_message() {
+                    return this.$gettext("Hello there!")
+                }
+            }
+        }
+    </script>
+```
+
+> For the moment, only the the extraction of strings localized using the $gettext function of [vue-gettext](https://github.com/Polyconseil/vue-gettext) is supported.
+
 ##### gettext-compile
 
 Outputs or writes to an output file, the sanitized JSON version of a PO file.
