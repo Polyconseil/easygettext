@@ -1,4 +1,4 @@
-const Pofile                = require('pofile');
+const Pofile = require('pofile');
 const { MARKER_NO_CONTEXT } = require('./constants.js');
 
 function toString(withLineNumbers = false) {
@@ -10,14 +10,14 @@ function toString(withLineNumbers = false) {
 function toPoItem(withLineNumbers = false) {
   let poItem = new Pofile.Item();
 
-  poItem.msgid      = this.text;
+  poItem.msgid = this.text;
   poItem.references = [ this.reference.toString(withLineNumbers) ];
-  poItem.msgstr     = [];
+  poItem.msgstr = [];
 
   return poItem;
 }
 
-function getNodeTranslationInfo(filename, localizedString, lineNumber) {
+function getNodeTranslationInfoRepresentation(filename, localizedString, lineNumber) {
   return {
     text: localizedString,
     reference: {
@@ -31,5 +31,5 @@ function getNodeTranslationInfo(filename, localizedString, lineNumber) {
 }
 
 module.exports = {
-  getNodeTranslationInfo,
+  getNodeTranslationInfoRepresentation,
 };

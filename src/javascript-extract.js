@@ -1,6 +1,6 @@
-const acorn                      = require('acorn');
-const constants                  = require('./constants');
-const nodeTranslationInfoFactory = require('./javascript-node-translation-info-factory.js');
+const acorn = require('acorn');
+const constants = require('./constants.js');
+const nodeTranslationInfoFactory = require('./node-translation-representation-factory.js');
 
 function isAVueGettextFunction(token) {
   return constants.DEFAULT_VUE_GETTEXT_FUNCTIONS.includes(token.value);
@@ -8,7 +8,8 @@ function isAVueGettextFunction(token) {
 
 function getGettextTokensFromScript(script) {
   const extractedTokens = [];
-  const ACORN_OPTIONS   = {
+
+  const ACORN_OPTIONS = {
     ecmaVersion: 6,
     sourceType: 'module',
     locations: true,
@@ -21,11 +22,15 @@ function getGettextTokensFromScript(script) {
 }
 
 function getLocalizedStringsFromNode(filename, script, token) {
-  const expression       = acorn.parseExpressionAt(script, token.start);
+  const expression = acorn.parseExpressionAt(script, token.start);
   const localizedStrings = [];
 
   for (const argument of expression.arguments) {
-    const nodeTranslation = nodeTranslationInfoFactory.getNodeTranslationInfo(filename, argument.value, token.loc.start.line);
+    const nodeTranslation = nodeTranslationInfoFactory.getNodeTranslationInfoRepresentation(
+      filename,
+      argument.value,
+      token.loc.start.line
+    );
 
     localizedStrings.push(nodeTranslation);
   }
@@ -34,7 +39,7 @@ function getLocalizedStringsFromNode(filename, script, token) {
 }
 
 function extractStringsFromJavascript(filename, script) {
-  const tokens           =  getGettextTokensFromScript(script);
+  const tokens =  getGettextTokensFromScript(script);
   const localizedStrings = [];
 
   for (const token of tokens) {
