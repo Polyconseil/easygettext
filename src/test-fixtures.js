@@ -254,7 +254,12 @@ exports.VUE_COMPONENT_WITH_SCRIPT_TAG = `
                     return this.$gettext("Hello there!")
                 },
                 duplicated_greeting_message() {
-                    return  this.$gettext("Hello there!")
+                    return this.$gettext("Hello there!")
+                }
+            },
+            methods: {
+                async getGreetingMessageAnswer() {
+                    return await Promise.resolve('General Kenobi!');
                 }
             }
         }
@@ -273,7 +278,12 @@ export default {
             return this.$gettext("Hello there!")
         },
         duplicated_greeting_message() {
-            return  this.$gettext("Hello there!")
+            return this.$gettext("Hello there!")
+        }
+    },
+    methods: {
+        async getGreetingMessageAnswer() {
+            return await Promise.resolve('General Kenobi!');
         }
     }
 }`;

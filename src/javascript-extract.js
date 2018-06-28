@@ -10,7 +10,7 @@ function getGettextTokensFromScript(script) {
   const extractedTokens = [];
 
   const ACORN_OPTIONS = {
-    ecmaVersion: 6,
+    ecmaVersion: 10,
     sourceType: 'module',
     locations: true,
     onToken: extractedTokens,
