@@ -9,9 +9,10 @@ exports.DEFAULT_FILTERS = [
   'translate',
 ];
 
-exports.DEFAULT_VUE_GETTEXT_FUNCTIONS = [
-  '$gettext',
-];
+exports.DEFAULT_VUE_GETTEXT_FUNCTIONS = {
+  '$gettext': ['msgid'],
+  '$ngettext': ['msgid', 'plural', null],
+};
 
 exports.DEFAULT_START_DELIMITER = '{{';
 exports.DEFAULT_END_DELIMITER = '}}';

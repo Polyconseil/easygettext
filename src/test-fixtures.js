@@ -288,6 +288,19 @@ export default {
     }
 }`;
 
+exports.SCRIPT_USING_NGETTEXT = `
+    export default {
+        name: "greetings",
+        methods: {
+            alertPlural (n) {
+              let translated = this.$ngettext('%{ n } foo', '%{ n } foos', n)
+              let interpolated = this.$gettextInterpolate(translated, {n: n})
+              return window.alert(interpolated)
+            },
+        }
+    }
+`;
+
 exports.POT_OUTPUT_0 = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
@@ -544,7 +557,7 @@ exports.OUTPUT_DICT = {
   },
 };
 
-exports.POT_OUTPUT_VUE_SCRIPT = `msgid ""
+exports.POT_OUTPUT_VUE_SCRIPT_GETTEXT = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
@@ -554,4 +567,18 @@ msgstr ""
 #: GreetingsComponent.vue
 msgid "Hello there!"
 msgstr ""
+`;
+
+exports.POT_OUTPUT_VUE_SCRIPT_NGETTEXT = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: GreetingsComponent.vue
+msgid "%{ n } foo"
+msgid_plural "%{ n } foos"
+msgstr[0] ""
+msgstr[1] ""
 `;

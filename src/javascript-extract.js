@@ -1,9 +1,9 @@
 const acorn = require('acorn');
-const constants = require('./constants.js');
+const { DEFAULT_VUE_GETTEXT_FUNCTIONS } = require('./constants.js');
 const nodeTranslationInfoFactory = require('./node-translation-representation-factory.js');
 
 function isAVueGettextFunction(token) {
-  return constants.DEFAULT_VUE_GETTEXT_FUNCTIONS.includes(token.value);
+  return DEFAULT_VUE_GETTEXT_FUNCTIONS.hasOwnProperty(token.value);
 }
 
 function getGettextTokensFromScript(script) {
@@ -25,15 +25,13 @@ function getLocalizedStringsFromNode(filename, script, token) {
   const expression = acorn.parseExpressionAt(script, token.start);
   const localizedStrings = [];
 
-  for (const argument of expression.arguments) {
-    const nodeTranslation = nodeTranslationInfoFactory.getNodeTranslationInfoRepresentation(
-      filename,
-      argument.value,
-      token.loc.start.line
-    );
+  const nodeTranslation = nodeTranslationInfoFactory.getNodeTranslationInfoRepresentation(
+    filename,
+    token,
+    expression
+  );
 
-    localizedStrings.push(nodeTranslation);
-  }
+  localizedStrings.push(nodeTranslation);
 
   return localizedStrings;
 }

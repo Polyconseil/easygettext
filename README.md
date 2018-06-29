@@ -116,6 +116,7 @@ You can also extract the strings marked as translatable inside the <script> sect
 ```html
     <template>
         <h1>{{ greeting_message }}</h1>
+        <p>{{ number_of_people_here }}</p>
     </template>
     <script>
         export default {
@@ -123,13 +124,16 @@ You can also extract the strings marked as translatable inside the <script> sect
             computed: {
                 greeting_message() {
                     return this.$gettext("Hello there!")
+                },
+                number_of_people_here(nb_folks) {
+                    return this.$ngettext("There is ${ n } person here.", "There are ${ n } persons here.", nb_folks)
                 }
             }
         }
     </script>
 ```
 
-> For the moment, only the the extraction of strings localized using the $gettext function of [vue-gettext](https://github.com/Polyconseil/vue-gettext) is supported.
+> For the moment, only the the extraction of strings localized using the $gettext and $ngettext functions of [vue-gettext](https://github.com/Polyconseil/vue-gettext) is supported.
 
 ##### gettext-compile
 
