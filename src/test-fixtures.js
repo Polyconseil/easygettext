@@ -301,6 +301,18 @@ exports.SCRIPT_USING_NGETTEXT = `
     }
 `;
 
+exports.SCRIPT_CONTAINING_DECOYS = `
+import $gettext from '@helper/gettext';
+
+export default {
+  name: "$gettext", // because some people are actually weird
+  computed: {
+    message() {
+      return this.$gettext('Hello world from the $gettext function');
+    }
+  }
+}`;
+
 exports.POT_OUTPUT_0 = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"

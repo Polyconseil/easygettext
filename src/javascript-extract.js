@@ -25,6 +25,10 @@ function getLocalizedStringsFromNode(filename, script, token) {
   const expression = acorn.parseExpressionAt(script, token.start);
   const localizedStrings = [];
 
+  if (expression.type !== 'CallExpression') {
+    return [];
+  }
+
   const nodeTranslation = nodeTranslationInfoFactory.getNodeTranslationInfoRepresentation(
     filename,
     token,
