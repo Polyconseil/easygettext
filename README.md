@@ -133,7 +133,7 @@ You can also extract the strings marked as translatable inside the <script> sect
     </script>
 ```
 
-> For the moment, only the the extraction of strings localized using the $gettext and $ngettext functions of [vue-gettext](https://github.com/Polyconseil/vue-gettext) is supported.
+> For the moment, only the the extraction of strings localized using the $gettext, $ngettext and $pgettext functions of [vue-gettext](https://github.com/Polyconseil/vue-gettext) is supported.
 
 ##### gettext-compile
 
