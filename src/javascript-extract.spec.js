@@ -2,6 +2,7 @@ const { expect } = require('chai');
 
 const fixtures = require('./test-fixtures.js');
 const jsExtractor = require('./javascript-extract.js');
+const { MARKER_NO_CONTEXT } = require('./constants.js');
 
 
 describe('Javascript extractor object', () => {
@@ -19,10 +20,12 @@ describe('Javascript extractor object', () => {
       const secondString = extractedStrings[1];
 
       expect(firstString.msgid).to.be.equal('Hello there!');
+      expect(firstString.context).to.be.equal(MARKER_NO_CONTEXT);
       expect(firstString.reference.file).to.be.equal(filename);
       expect(firstString.reference.line).to.be.equal(10);
 
       expect(secondString.msgid).to.be.equal('Hello there!');
+      expect(firstString.context).to.be.equal(MARKER_NO_CONTEXT);
       expect(secondString.reference.file).to.be.equal(filename);
       expect(secondString.reference.line).to.be.equal(13);
     });
@@ -39,6 +42,7 @@ describe('Javascript extractor object', () => {
       const firstString = extractedStrings[0];
 
       expect(firstString.msgid).to.be.equal('%{ n } foo');
+      expect(firstString.context).to.be.equal(MARKER_NO_CONTEXT);
       expect(firstString.reference.file).to.be.equal(filename);
       expect(firstString.reference.line).to.be.equal(6);
     });
@@ -46,8 +50,7 @@ describe('Javascript extractor object', () => {
     it('should allow gettext calls in array, object initializers', () => {
       const filename = fixtures.SCRIPT_GETTEXT_SEQUENCE_FILENAME;
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
-        filename,
-	fixtures.SCRIPT_GETTEXT_SEQUENCE
+        filename, fixtures.SCRIPT_GETTEXT_SEQUENCE
       );
 
       expect(extractedStrings.length).to.be.equal(3);
@@ -66,6 +69,29 @@ describe('Javascript extractor object', () => {
       expect(thirdString.msgid).to.be.equal('Hello there!');
       expect(thirdString.reference.file).to.be.equal(filename);
       expect(thirdString.reference.line).to.be.equal(8);
+    });
+
+    it('should extract contextual strings localized using $pgettext from the script', () => {
+      const filename = '$ngettext.vue';
+      const extractedStrings = jsExtractor.extractStringsFromJavascript(
+        filename,
+        fixtures.SCRIPT_USING_PGETTEXT
+      );
+
+      expect(extractedStrings.length).to.be.equal(2);
+
+      const firstString = extractedStrings[0];
+      const secondString = extractedStrings[1];
+
+      expect(firstString.msgid).to.be.equal('Home');
+      expect(firstString.context).to.be.equal('menu');
+      expect(firstString.reference.file).to.be.equal(filename);
+      expect(firstString.reference.line).to.be.equal(6);
+
+      expect(secondString.msgid).to.be.equal('Home');
+      expect(secondString.context).to.be.equal('house');
+      expect(secondString.reference.file).to.be.equal(filename);
+      expect(secondString.reference.line).to.be.equal(9);
     });
 
     it('should not try to extract strings when the node is not a function', () => {

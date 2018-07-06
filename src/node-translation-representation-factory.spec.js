@@ -68,5 +68,32 @@ describe('Node translation representation factory', () => {
       expect(poItem.msgid_plural).to.be.equal('%{ n } droids');
       expect(poItem.references).to.have.members([ 'Grievous.vue:4' ]);
     });
+
+
+    it('Should correctly render $pgettext node representation to a PoItem', () => {
+      const ngettextExpression = {
+        arguments: [
+          { value: 'menu' },
+          { value: 'Home' },
+        ],
+      };
+
+      const ngettextToken = {
+        value: '$pgettext',
+        loc: {
+          start: {
+            line: 4,
+          },
+        },
+      };
+
+      const node = factory.getNodeTranslationInfoRepresentation(filename, ngettextToken, ngettextExpression);
+
+      const poItem = node.toPoItem(true);
+
+      expect(poItem.msgid).to.be.equal('Home');
+      expect(poItem.msgctxt).to.be.equal('menu');
+      expect(poItem.references).to.have.members([ 'Grievous.vue:4' ]);
+    });
   });
 });
