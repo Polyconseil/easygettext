@@ -67,6 +67,14 @@ The optional '--ouput' argument enables you to directly output to a file.
 gettext-extract --output dictionary.pot foo.html bar.pug hello.vue
 ```
 
+It also can recognize [globs](https://www.npmjs.com/package/fast-glob) to extract translations from directories:
+
+```
+# Don't forget to enclose the path in quotes so that your shell does not
+# escape it by itself. Shells need options for globstar (**/*) to work.
+gettext-extract --output dictionary.pot 'templates/**/*.html'
+```
+
 It recognizes the following token flavours (currently; feel free to extend it!)
 
 ```html

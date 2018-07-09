@@ -33,6 +33,7 @@
     "@vue/component-compiler-utils": "^1.2.1",
     "acorn": "^5.5.3",
     "cheerio": "^1.0.0-rc.2",
+    "fast-glob": "^2.2.2",
     "minimist": "^1.2.0",
     "pofile": "^1.0.10",
     "pug": "^2.0.3",
