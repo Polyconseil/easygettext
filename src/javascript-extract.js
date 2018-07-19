@@ -22,20 +22,22 @@ function getGettextTokensFromScript(script) {
 }
 
 function getLocalizedStringsFromNode(filename, script, token) {
-  const expression = acorn.parseExpressionAt(script, token.start);
+  let expression = acorn.parseExpressionAt(script, token.start);
   const localizedStrings = [];
 
-  if (expression.type !== 'CallExpression') {
-    return [];
+  if (expression.type == 'SequenceExpression') {
+    expression = expression.expressions[0];
   }
 
-  const nodeTranslation = nodeTranslationInfoFactory.getNodeTranslationInfoRepresentation(
-    filename,
-    token,
-    expression
-  );
+  if (expression.type == 'CallExpression') {
+    const nodeTranslation = nodeTranslationInfoFactory.getNodeTranslationInfoRepresentation(
+      filename,
+      token,
+      expression
+    );
 
-  localizedStrings.push(nodeTranslation);
+    localizedStrings.push(nodeTranslation);
+  }
 
   return localizedStrings;
 }
