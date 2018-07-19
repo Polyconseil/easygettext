@@ -78,10 +78,16 @@ describe('Extractor object', () => {
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_QUOTES);
   });
 
-  it('should output a correct POT file with strings extracted from javascript', () => {
+  it('should output a correct POT file with singular strings ($gettext) extracted from javascript', () => {
     const extractor = new extract.Extractor();
     extractor.parseVueJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG);
-    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_VUE_SCRIPT);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_VUE_SCRIPT_GETTEXT);
+  });
+
+  it('should output a correct POT file with plural strings ($ngettext) extracted from javascript', () => {
+    const extractor = new extract.Extractor();
+    extractor.parseVueJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.SCRIPT_USING_NGETTEXT);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_VUE_SCRIPT_NGETTEXT);
   });
 });
 
