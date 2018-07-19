@@ -313,6 +313,20 @@ export default {
   }
 }`;
 
+exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';
+exports.SCRIPT_GETTEXT_SEQUENCE = `
+export default {
+  name: 'greetings-sequence',
+  computed: {
+    messages_object() {
+      return {
+	a_string: this.$gettext('Hello there!'),
+	an_array: [this.$gettext('Hello there!'), this.$gettext('Hello there!')]
+      }
+    }
+  }
+}`;
+
 exports.POT_OUTPUT_0 = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
