@@ -42,5 +42,16 @@ describe('Javascript extractor object', () => {
       expect(firstString.reference.file).to.be.equal(filename);
       expect(firstString.reference.line).to.be.equal(6);
     });
+
+    it('should not try to extract strings when the node is not a function', () => {
+      const filename = 'traps.vue';
+      const extractedStrings = jsExtractor.extractStringsFromJavascript(
+        filename,
+        fixtures.SCRIPT_CONTAINING_DECOYS
+      );
+
+      expect(extractedStrings.length).to.be.equal(1);
+      expect(extractedStrings[0].msgid).to.be.equal('Hello world from the $gettext function');
+    });
   });
 });
