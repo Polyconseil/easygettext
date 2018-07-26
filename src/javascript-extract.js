@@ -1,4 +1,4 @@
-const acorn = require('acorn');
+const acorn = require('acorn-stage3');
 const Pofile = require('pofile');
 
 const {MARKER_NO_CONTEXT, DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
@@ -29,6 +29,9 @@ function getGettextEntriesFromScript(script) {
     sourceType: 'module',
     locations: true,
     onToken: allTokens,
+    plugins: {
+      stage3: true
+    },
   };
 
   acorn.parse(script, ACORN_OPTIONS);

@@ -32,6 +32,7 @@
   "dependencies": {
     "@vue/component-compiler-utils": "^1.2.1",
     "acorn": "^5.5.3",
+    "acorn-stage3": "^0.6.0",
     "cheerio": "^1.0.0-rc.2",
     "minimist": "^1.2.0",
     "pofile": "^1.0.10",
