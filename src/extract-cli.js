@@ -4,6 +4,7 @@
 
 const fs = require('fs');
 const minimist = require('minimist');
+const glob = require('fast-glob');
 
 const constants = require('./constants.js');
 const extract = require('./extract.js');
@@ -13,7 +14,7 @@ const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'pug', 'vue'];
 
 // Process arguments
 const argv = minimist(process.argv.slice(2));
-const files = argv._.sort() || [];
+const paths = argv._.sort() || [];
 const quietMode = argv.quiet || false;
 const outputFile = argv.output || null;
 const startDelimiter = argv.startDelimiter === undefined ? constants.DEFAULT_DELIMITERS.start : argv.startDelimiter;
@@ -23,7 +24,7 @@ const extraAttribute = argv.attribute || false;
 const extraFilter = argv.filter || false;
 const filterPrefix = argv.filterPrefix || constants.DEFAULT_FILTER_PREFIX;
 
-if (!quietMode && (!files || files.length === 0)) {
+if (!quietMode && (!paths || paths.length === 0)) {
   console.log('Usage:\n\tgettext-extract [--attribute EXTRA-ATTRIBUTE] [--filterPrefix FILTER-PREFIX] [--output OUTFILE] <FILES>');
   process.exit(1);
 }
@@ -53,6 +54,7 @@ const extractor = new extract.Extractor({
   endDelimiter,
 });
 
+const files = glob.sync(paths);
 
 files.forEach(function(filename) {
   let file = filename;
