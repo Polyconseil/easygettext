@@ -95,7 +95,7 @@ exports.NodeTranslationInfo = class NodeTranslationInfo {
     const doInheritContext
       = el.type === 'text' && el.prev === null && el.next === null;
 
-    this.context = getExtraAttribute(doInheritContext
+    this.msgctxt = getExtraAttribute(doInheritContext
       ? node.parent() : node, attributes, constants.ATTRIBUTE_CONTEXT)
       || constants.MARKER_NO_CONTEXT;
     this.comment = getExtraAttribute(doInheritContext
@@ -106,7 +106,7 @@ exports.NodeTranslationInfo = class NodeTranslationInfo {
   toPoItem(withLineNumbers = false) {
     let poItem = new Pofile.Item();
     poItem.msgid = this.text;
-    poItem.msgctxt = this.context === constants.MARKER_NO_CONTEXT ? null : this.context;
+    poItem.msgctxt = this.msgctxt === constants.MARKER_NO_CONTEXT ? null : this.msgctxt;
     poItem.references = [this.reference.toString(withLineNumbers)];
     poItem.msgid_plural = this.plural;
     poItem.msgstr = this.plural ? ['', ''] : [];
@@ -232,10 +232,10 @@ exports.Extractor = class Extractor {
       if (!this.items[d.text]) {
         this.items[d.text] = {};
       }
-      if (!this.items[d.text][d.context]) {
-        this.items[d.text][d.context] = d.toPoItem(this.options.lineNumbers);
+      if (!this.items[d.text][d.msgctxt]) {
+        this.items[d.text][d.msgctxt] = d.toPoItem(this.options.lineNumbers);
       } else {
-        let item = this.items[d.text][d.context];
+        let item = this.items[d.text][d.msgctxt];
         if (item.msgid_plural && d.plural && item.msgid_plural !== d.plural) {
           throw new Error(
             `Incompatible plural definitions for ${d.text}: '${item.msgid_plural}' !== '${d.plural}'`);

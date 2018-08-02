@@ -20,12 +20,12 @@ describe('Javascript extractor object', () => {
       const secondString = extractedStrings[1];
 
       expect(firstString.msgid).to.be.equal('Hello there!');
-      expect(firstString.context).to.be.equal(MARKER_NO_CONTEXT);
+      expect(firstString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
       expect(firstString.reference.file).to.be.equal(filename);
       expect(firstString.reference.line).to.be.equal(10);
 
       expect(secondString.msgid).to.be.equal('Hello there!');
-      expect(firstString.context).to.be.equal(MARKER_NO_CONTEXT);
+      expect(firstString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
       expect(secondString.reference.file).to.be.equal(filename);
       expect(secondString.reference.line).to.be.equal(13);
     });
@@ -42,7 +42,7 @@ describe('Javascript extractor object', () => {
       const firstString = extractedStrings[0];
 
       expect(firstString.msgid).to.be.equal('%{ n } foo');
-      expect(firstString.context).to.be.equal(MARKER_NO_CONTEXT);
+      expect(firstString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
       expect(firstString.reference.file).to.be.equal(filename);
       expect(firstString.reference.line).to.be.equal(6);
     });
@@ -50,22 +50,19 @@ describe('Javascript extractor object', () => {
     it('should allow gettext calls in array, object initializers', () => {
       const filename = fixtures.SCRIPT_GETTEXT_SEQUENCE_FILENAME;
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
-        filename, fixtures.SCRIPT_GETTEXT_SEQUENCE
+        filename,
+        fixtures.SCRIPT_GETTEXT_SEQUENCE
       );
-
       expect(extractedStrings.length).to.be.equal(3);
       const firstString = extractedStrings[0];
       const secondString = extractedStrings[1];
       const thirdString = extractedStrings[2];
-
       expect(firstString.msgid).to.be.equal('Hello there!');
       expect(firstString.reference.file).to.be.equal(filename);
       expect(firstString.reference.line).to.be.equal(7);
-
       expect(secondString.msgid).to.be.equal('Hello there!');
       expect(secondString.reference.file).to.be.equal(filename);
-      expect(secondString.reference.line).to.be.equal(8);
-
+      expect(secondString.reference.line).to.be.equal(7);
       expect(thirdString.msgid).to.be.equal('Hello there!');
       expect(thirdString.reference.file).to.be.equal(filename);
       expect(thirdString.reference.line).to.be.equal(8);
@@ -84,12 +81,12 @@ describe('Javascript extractor object', () => {
       const secondString = extractedStrings[1];
 
       expect(firstString.msgid).to.be.equal('Home');
-      expect(firstString.context).to.be.equal('menu');
+      expect(firstString.msgctxt).to.be.equal('menu');
       expect(firstString.reference.file).to.be.equal(filename);
       expect(firstString.reference.line).to.be.equal(6);
 
       expect(secondString.msgid).to.be.equal('Home');
-      expect(secondString.context).to.be.equal('house');
+      expect(secondString.msgctxt).to.be.equal('house');
       expect(secondString.reference.file).to.be.equal(filename);
       expect(secondString.reference.line).to.be.equal(9);
     });

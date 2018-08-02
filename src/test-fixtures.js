@@ -640,3 +640,17 @@ msgctxt "menu"
 msgid "Home"
 msgstr ""
 `;
+
+exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';
+exports.SCRIPT_GETTEXT_SEQUENCE = `
+export default {
+  name: 'greetings-sequence',
+  computed: {
+    messages_object() {
+      return {
+        an_array: [this.$gettext('Hello there!'), this.$gettext('Hello there!')],
+        a_string: this.$gettext('Hello there!'),
+      }
+    }
+  }
+}`;

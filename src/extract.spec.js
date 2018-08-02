@@ -135,7 +135,7 @@ describe('Raw translation data', () => {
     expect(data[0].text).to.equal('Hello world');
     expect(data[0].reference.file).to.equal(fixtures.FILENAME_0);
     expect(data[0].reference.line).to.equal(2);
-    expect(data[0].context).to.equal('For charlie');
+    expect(data[0].msgctxt).to.equal('For charlie');
     expect(data[0].comment).to.be.a('null');
     expect(data[0].plural).to.be.a('null');
   });
@@ -148,7 +148,7 @@ describe('Raw translation data', () => {
   it('should extract multiple tokens correctly', () => {
     const data = extractor._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_LONG);
     expect(data.length).to.equal(7);
-    expect(data[1].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[1].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
     expect(data[3].comment).to.equal('foo is important');
     expect(data[6].reference.line).to.equal(13);
   });
@@ -274,7 +274,7 @@ describe('Raw translation data', () => {
     After {{:: 'I18n after' |translate }}
   </div>`);
     expect(data[0].comment).to.equal('Outer comment …');
-    expect(data[0].context).to.equal('Outer Context');
+    expect(data[0].msgctxt).to.equal('Outer Context');
 
     expect(data[1].text).to.equal(
       `Before {{:: 'I18n before' |translate }}
@@ -289,40 +289,40 @@ describe('Raw translation data', () => {
       {{ 'Reference part 3' |translate }}</a>
     After {{:: 'I18n after' |translate }}`);
     expect(data[1].comment).to.equal('Inner comment …');
-    expect(data[1].context).to.equal('Inner Context');
+    expect(data[1].msgctxt).to.equal('Inner Context');
 
     expect(data[2].text).to.equal('I18n before');
-    expect(data[2].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[2].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[3].text).to.equal('Test link 1');
-    expect(data[3].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[3].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[4].text).to.equal('Link part 1');
-    expect(data[4].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[4].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[5].text).to.equal('Link part 2');
-    expect(data[5].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[5].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[6].text).to.equal('Link part 3');
-    expect(data[6].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[6].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[7].text).to.equal('I18n between');
-    expect(data[7].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[7].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[8].text).to.equal('Test link 2');
-    expect(data[8].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[8].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[9].text).to.equal('Reference part 1');
-    expect(data[9].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[9].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[10].text).to.equal('Reference part 2');
-    expect(data[10].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[10].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[11].text).to.equal('Reference part 3');
-    expect(data[11].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[11].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[12].text).to.equal('I18n after');
-    expect(data[12].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[12].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
   });
 
   it('should extract filters from nested constructs', () => {
@@ -474,7 +474,7 @@ describe('Raw translation data', () => {
     After {{:: 'I18n after' |translate }}
   </div>`);
     expect(data[0].comment).to.equal('Outer comment …');
-    expect(data[0].context).to.equal('Outer Context');
+    expect(data[0].msgctxt).to.equal('Outer Context');
 
     expect(data[1].text).to.equal(
       `Before {{:: 'I18n before' |translate }}
@@ -489,40 +489,40 @@ describe('Raw translation data', () => {
       {{ 'Reference part 3' |translate }}</a>
     After {{:: 'I18n after' |translate }}`);
     expect(data[1].comment).to.equal('Inner comment …');
-    expect(data[1].context).to.equal('Inner Context');
+    expect(data[1].msgctxt).to.equal('Inner Context');
 
     expect(data[2].text).to.equal('I18n before');
-    expect(data[2].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[2].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[3].text).to.equal('Test link 1');
-    expect(data[3].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[3].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[4].text).to.equal('Link part 1');
-    expect(data[4].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[4].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[5].text).to.equal('Link part 2');
-    expect(data[5].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[5].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[6].text).to.equal('Link part 3');
-    expect(data[6].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[6].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[7].text).to.equal('I18n between');
-    expect(data[7].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[7].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[8].text).to.equal('Test link 2');
-    expect(data[8].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[8].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[9].text).to.equal('Reference part 1');
-    expect(data[9].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[9].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[10].text).to.equal('Reference part 2');
-    expect(data[10].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[10].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[11].text).to.equal('Reference part 3');
-    expect(data[11].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[11].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
 
     expect(data[12].text).to.equal('I18n after');
-    expect(data[12].context).to.equal(constants.MARKER_NO_CONTEXT);
+    expect(data[12].msgctxt).to.equal(constants.MARKER_NO_CONTEXT);
   });
 
   it('should compile complex inline JavaScript filter expressions', () => {
