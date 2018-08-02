@@ -89,6 +89,12 @@ describe('Extractor object', () => {
     extractor.parseVueJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.SCRIPT_USING_NGETTEXT);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_VUE_SCRIPT_NGETTEXT);
   });
+
+  it('should output a correct POT file with contextualized strings ($pgettext) extracted from javascript', () => {
+    const extractor = new extract.Extractor();
+    extractor.parseVueJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.SCRIPT_USING_PGETTEXT);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_VUE_SCRIPT_PGETTEXT);
+  });
 });
 
 

@@ -301,6 +301,20 @@ exports.SCRIPT_USING_NGETTEXT = `
     }
 `;
 
+exports.SCRIPT_USING_PGETTEXT = `
+    export default {
+        name: "menuEntry",
+        computed: {
+            getEntryLabel() {
+                return this.$pgettext("menu", "Home")
+            },
+            getEntryLabel() {
+                return this.$pgettext("house", "Home")
+            },
+        }
+    }
+`;
+
 exports.SCRIPT_CONTAINING_DECOYS = `
 import $gettext from '@helper/gettext';
 
@@ -593,4 +607,22 @@ msgid "%{ n } foo"
 msgid_plural "%{ n } foos"
 msgstr[0] ""
 msgstr[1] ""
+`;
+
+exports.POT_OUTPUT_VUE_SCRIPT_PGETTEXT = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: GreetingsComponent.vue
+msgctxt "house"
+msgid "Home"
+msgstr ""
+
+#: GreetingsComponent.vue
+msgctxt "menu"
+msgid "Home"
+msgstr ""
 `;
