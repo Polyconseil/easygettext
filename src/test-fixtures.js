@@ -594,3 +594,17 @@ msgid_plural "%{ n } foos"
 msgstr[0] ""
 msgstr[1] ""
 `;
+
+exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';
+exports.SCRIPT_GETTEXT_SEQUENCE = `
+export default {
+  name: 'greetings-sequence',
+  computed: {
+    messages_object() {
+      return {
+        a_string: this.$gettext('Hello there!'),
+        an_array: [this.$gettext('Hello there!'), this.$gettext('Hello there!')]
+      }
+    }
+  }
+}`;
