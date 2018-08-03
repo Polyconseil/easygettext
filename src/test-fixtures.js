@@ -327,6 +327,11 @@ export default {
   }
 }`;
 
+exports.SCRIPT_WITH_ES_STAGE3_FEATURES = `
+const asyncModule = () => import('module');
+const message = this.$gettext('Hello world from the future');
+`;
+
 exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';
 exports.SCRIPT_GETTEXT_SEQUENCE = `
 export default {
