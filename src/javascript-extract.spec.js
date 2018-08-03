@@ -101,5 +101,16 @@ describe('Javascript extractor object', () => {
       expect(extractedStrings.length).to.be.equal(1);
       expect(extractedStrings[0].msgid).to.be.equal('Hello world from the $gettext function');
     });
+
+    it('should not break parser when using ECMAScript Stage 3 features', () => {
+      const filename = 'stage3.vue';
+      const extractedStrings = jsExtractor.extractStringsFromJavascript(
+        filename,
+        fixtures.SCRIPT_WITH_ES_STAGE3_FEATURES
+      );
+
+      expect(extractedStrings.length).to.be.equal(1);
+      expect(extractedStrings[0].msgid).to.be.equal('Hello world from the future');
+    });
   });
 });
