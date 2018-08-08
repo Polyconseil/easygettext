@@ -110,6 +110,19 @@ gettext-extract --attribute v-translate --attribute v-i18n --output dictionary.p
 gettext-extract --startDelimiter '[#' --endDelimiter '#]' --output dictionary.pot foo.html bar.jade
 ```
 
+##### Extract from multiple files
+`gettext-extract` needs the exact file paths to work. If you want to extract gettext from all files in a folder, you can use the UNIX find command. Here is an example as a npm script:
+
+```jsonc
+{
+  //...
+  "scripts": {
+    // This is for VueJS files, please adapt for HTML or Jade/Pug templates
+    "extract-gettext-cli": "gettext-extract --attribute v-translate --output dictionary.pot $(find scripts/src/components -type f -name '*.vue')"
+  }
+}
+```
+
 ##### Extract from <script> section in Vue.js components
 You can also extract the strings marked as translatable inside the <script> section of Vue.js components:
 
