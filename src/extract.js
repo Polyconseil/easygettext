@@ -229,16 +229,17 @@ exports.Extractor = class Extractor {
 
   processStrings(extractedData) {
     for (const d of extractedData) {
-      if (!this.items[d.text]) {
-        this.items[d.text] = {};
+      const msgid = d.text || d.msgid;
+      if (!this.items[msgid]) {
+        this.items[msgid] = {};
       }
-      if (!this.items[d.text][d.msgctxt]) {
-        this.items[d.text][d.msgctxt] = d.toPoItem(this.options.lineNumbers);
+      if (!this.items[msgid][d.msgctxt]) {
+        this.items[msgid][d.msgctxt] = d.toPoItem(this.options.lineNumbers);
       } else {
-        let item = this.items[d.text][d.msgctxt];
+        let item = this.items[msgid][d.msgctxt];
         if (item.msgid_plural && d.plural && item.msgid_plural !== d.plural) {
           throw new Error(
-            `Incompatible plural definitions for ${d.text}: '${item.msgid_plural}' !== '${d.plural}'`);
+            `Incompatible plural definitions for ${msgid}: '${item.msgid_plural}' !== '${d.plural}'`);
         }
         if (d.plural && !item.msgid_plural) {
           item.msgid_plural = d.plural;
