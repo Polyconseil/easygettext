@@ -14,10 +14,11 @@ describe('Javascript extractor object', () => {
         fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG
       );
 
-      expect(extractedStrings.length).to.be.equal(2);
+      expect(extractedStrings.length).to.be.equal(3);
 
       const firstString = extractedStrings[0];
       const secondString = extractedStrings[1];
+      const thirdString = extractedStrings[2];
 
       expect(firstString.msgid).to.be.equal('Hello there!');
       expect(firstString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
@@ -25,9 +26,14 @@ describe('Javascript extractor object', () => {
       expect(firstString.reference.line).to.be.equal(10);
 
       expect(secondString.msgid).to.be.equal('Hello there!');
-      expect(firstString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
+      expect(secondString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
       expect(secondString.reference.file).to.be.equal(filename);
       expect(secondString.reference.line).to.be.equal(13);
+
+      expect(thirdString.msgid).to.be.equal('General Kenobi! You are a bold one.');
+      expect(thirdString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
+      expect(thirdString.reference.file).to.be.equal(filename);
+      expect(thirdString.reference.line).to.be.equal(16);
     });
 
     it('should extract strings localized using $ngettext from the script', () => {

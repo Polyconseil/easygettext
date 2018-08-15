@@ -255,6 +255,9 @@ exports.VUE_COMPONENT_WITH_SCRIPT_TAG = `
                 },
                 duplicated_greeting_message() {
                     return this.$gettext("Hello there!")
+                },
+                answer_message() {
+                    return this.$gettext("General Kenobi! You are a bold one.")
                 }
             },
             methods: {
@@ -279,6 +282,9 @@ export default {
         },
         duplicated_greeting_message() {
             return this.$gettext("Hello there!")
+        },
+        answer_message() {
+            return this.$gettext("General Kenobi! You are a bold one.")
         }
     },
     methods: {
@@ -331,20 +337,6 @@ exports.SCRIPT_WITH_ES_STAGE3_FEATURES = `
 const asyncModule = () => import('module');
 const message = this.$gettext('Hello world from the future');
 `;
-
-exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';
-exports.SCRIPT_GETTEXT_SEQUENCE = `
-export default {
-  name: 'greetings-sequence',
-  computed: {
-    messages_object() {
-      return {
-	a_string: this.$gettext('Hello there!'),
-	an_array: [this.$gettext('Hello there!'), this.$gettext('Hello there!')]
-      }
-    }
-  }
-}`;
 
 exports.POT_OUTPUT_0 = `msgid ""
 msgstr ""
@@ -608,6 +600,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\\n"
 "Generated-By: easygettext\\n"
 "Project-Id-Version: \\n"
+
+#: GreetingsComponent.vue
+msgid "General Kenobi! You are a bold one."
+msgstr ""
 
 #: GreetingsComponent.vue
 msgid "Hello there!"
