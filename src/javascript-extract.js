@@ -86,7 +86,7 @@ function extractStringsFromJavascript(filename, script) {
         msgctxt: MARKER_NO_CONTEXT,
         toPoItem,
       },
-      entry.data,
+      entry.data
     );
   });
 }
