@@ -255,7 +255,7 @@ exports.Extractor = class Extractor {
     }
   }
 
-  parseVueJavascript(filename, content) {
+  parseJavascript(filename, content) {
     const extractedStringsFromScript = jsExtractor.extractStringsFromJavascript(filename, content);
 
     this.processStrings(extractedStringsFromScript);

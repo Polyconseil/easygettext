@@ -9,7 +9,7 @@ const constants = require('./constants.js');
 const extract = require('./extract.js');
 
 const PROGRAM_NAME = 'easygettext';
-const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'pug', 'vue'];
+const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'js', 'pug', 'vue'];
 
 // Process arguments
 const argv = minimist(process.argv.slice(2));
@@ -65,7 +65,12 @@ files.forEach(function(filename) {
   try {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
     extractor.parse(file, extract.preprocessTemplate(data, ext));
-    extractor.parseVueJavascript(file, extract.preprocessScriptTags(data, ext));
+
+    if (ext !== 'js') {
+      data = extract.preprocessScriptTags(data, ext);
+    }
+
+    extractor.parseJavascript(file, data);
   } catch (e) {
     console.error(`[${PROGRAM_NAME}] could not read: '${filename}`);
     console.trace(e);
