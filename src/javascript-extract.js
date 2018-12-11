@@ -55,12 +55,12 @@ function getGettextEntriesFromScript(script) {
           // 'context string' is at index i+2
           // , is at index i+3
           // 'msgid' is at index i+4
-          const currentToken = allTokens[i + 2 * (argIndex + 1)]
+          const currentToken = allTokens[i + 2 * (argIndex + 1)];
           if (currentToken.type.label === '`') {
-            const line = currentToken.loc.start.line
-            throw new Error(`easygettext currently does not support translated template strings! [line ${line}]`)
-          } else if (currentToken.type.label === 'string') {
-            obj[argName] = allTokens[i + 2 * (argIndex + 1)].value;
+            const line = currentToken.loc.start.line;
+            throw new Error(`easygettext currently does not support translated template strings! [line ${line}]`);
+          } else {
+            obj[argName] = currentToken.value;
             return obj;
           }
         }, {});
