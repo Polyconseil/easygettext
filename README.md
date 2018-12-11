@@ -64,7 +64,7 @@ Simply invoke the tool on the templates you want to extract a POT dictionary tem
 The optional '--ouput' argument enables you to directly output to a file.
 
 ```
-gettext-extract --output dictionary.pot foo.html bar.pug hello.vue
+gettext-extract --output dictionary.pot foo.html bar.pug component.vue sourcefile.js
 ```
 
 It recognizes the following token flavours (currently; feel free to extend it!)
@@ -94,8 +94,8 @@ It recognizes the following token flavours (currently; feel free to extend it!)
 <div placeholder="'Hello World' | translate"></div>
 ```
 
-Also, it's able to parse Jade/Pug and Vue component files, even if those themselves contain Jade or Pug
-templates.
+Also, it's able to parse Jade/Pug languages, Javascript ES7 code, event within Vue component files,
+even if those themselves contain Pug templates and ES7 code.
 
 You can combine any context, comment and plural together. Also, you can use 'i18n' instead
 of 'translate' as master token.

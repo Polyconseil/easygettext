@@ -44,7 +44,7 @@ function getGettextEntriesFromScript(script) {
       let args = DEFAULT_VUE_GETTEXT_FUNCTIONS[gettextFunc];
       if (
         token.value === gettextFunc
-        && token.type.label !== 'string' // disallows strings containing magic values
+        && token.type.label !== 'string' // disallows strings containing magic values: we identify FUNCTIONS
         && allTokens[i + 1].type.label === '('  // cheap check to see if it was actually a function call. It's this or a whole parsing of the location.
       ) {
         const gettextData = args.reduce(function(obj, argName, argIndex) {
@@ -53,10 +53,16 @@ function getGettextEntriesFromScript(script) {
           // $pgettext is at index i
           // ( is at index i+1
           // 'context string' is at index i+2
-          // + is at index i+3
+          // , is at index i+3
           // 'msgid' is at index i+4
-          obj[argName] = allTokens[i + 2 * (argIndex + 1)].value;
-          return obj;
+          const currentToken = allTokens[i + 2 * (argIndex + 1)]
+          if (currentToken.type.label === '`') {
+            const line = currentToken.loc.start.line
+            throw new Error(`easygettext currently does not support translated template strings! [line ${line}]`)
+          } else if (currentToken.type.label === 'string') {
+            obj[argName] = allTokens[i + 2 * (argIndex + 1)].value;
+            return obj;
+          }
         }, {});
 
         // Fill objects that contain both the initial token context in the source, and the gettext data.
