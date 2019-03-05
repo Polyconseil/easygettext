@@ -66,11 +66,18 @@ files.forEach(function(filename) {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
     extractor.parse(file, extract.preprocessTemplate(data, ext));
 
-    if (ext !== 'js') {
-      data = extract.preprocessScriptTags(data, ext);
+    let lang = 'js';
+    if (ext === 'vue') {
+      const script = extract.preprocessVueFile(data);
+      if (script) {
+        data = script.content;
+        lang = script.lang;
+      }
     }
 
-    extractor.parseJavascript(file, data);
+    if (lang === 'js') {
+      extractor.parseJavascript(file, data);
+    }
   } catch (e) {
     console.error(`[${PROGRAM_NAME}] could not read: '${filename}`);
     console.trace(e);

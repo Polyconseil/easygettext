@@ -29,7 +29,7 @@ exports.HTML_FILTER_SPLIT_STRING = `
 `;
 
 exports.HTML_FILTER_ESCAPED_QUOTES = `
-{{ 'Life\\'s a tough teacher.' |translate}} 
+{{ 'Life\\'s a tough teacher.' |translate}}
 {{ "Life's a tough journey." |translate}}
 {{ "Life\\'s a tough road." |translate}}
 {{ "Life's a tough \\"boulevard\\"." |translate}}
@@ -38,7 +38,7 @@ exports.HTML_FILTER_ESCAPED_QUOTES = `
 
 exports.HTML_VARIED_CHALLENGES = `
 <div aria-label="Message Selected Users">
-  <button type="button" 
+  <button type="button"
           ng-class="{'active': vm.messageView === 'preview', disabled: !vm.useHtml}"
           ng-bind="vm.messageView !== 'preview' ? 'Preview' : 'Exit Preview' |translate"></button>
   <div>
@@ -87,10 +87,10 @@ exports.HTML_LINEBREAK_FILTER = `
 <a href="#"
   ng-click="vm.doSomething()"
   class="button">{{ 'Multi-line 0' |translate }}</a>
-  
+
 <a href="#"
   ng-click="vm.doSomething()"
-  class="button">{{ 
+  class="button">{{
  'Multi-line 1' |translate }}</a>
 
 <a href="#"
@@ -105,7 +105,7 @@ exports.HTML_LINEBREAK_FILTER = `
 
 <a href="#"
   ng-click="vm.doSomething()"
-  class="button">{{ 'Multi-line 4' | translate 
+  class="button">{{ 'Multi-line 4' | translate
 }}</a>
 `;
 
@@ -269,6 +269,12 @@ exports.VUE_COMPONENT_WITH_SCRIPT_TAG = `
      </script>
 `;
 
+exports.VUE_COMPONENT_WITHOUT_SCRIPT_TAG = `
+    <template>
+        <h1>Hello</h1>
+    </template>
+`;
+
 exports.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG = `//
 //
 //
@@ -289,6 +295,57 @@ export default {
     },
     methods: {
         async getGreetingMessageAnswer() {
+            return await Promise.resolve('General Kenobi!');
+        }
+    }
+}`;
+
+exports.VUE_COMPONENT_WITH_TS_SCRIPT_TAG = `
+    <template>
+        <h1>{{ greeting_message }}</h1>
+    </template>
+    <script lang="ts">
+        type Message = string;
+
+        export default {
+            name: "greetings",
+            computed: {
+                greeting_message(): Message {
+                    return this.$gettext("Hello there!")
+                },
+                duplicated_greeting_message(): Message {
+                    return this.$gettext("Hello there!")
+                },
+                answer_message(): Message {
+                    return this.$gettext("General Kenobi! You are a bold one.")
+                }
+            },
+            methods: {
+                async getGreetingMessageAnswer(): Promise<Message> {
+                    return await Promise.resolve('General Kenobi!');
+                }
+            }
+        }
+     </script>
+`;
+
+exports.VUE_COMPONENT_EXPECTED_PROCESSED_TS_SCRIPT_TAG = `type Message = string;
+
+export default {
+    name: "greetings",
+    computed: {
+        greeting_message(): Message {
+            return this.$gettext("Hello there!")
+        },
+        duplicated_greeting_message(): Message {
+            return this.$gettext("Hello there!")
+        },
+        answer_message(): Message {
+            return this.$gettext("General Kenobi! You are a bold one.")
+        }
+    },
+    methods: {
+        async getGreetingMessageAnswer(): Promise<Message> {
             return await Promise.resolve('General Kenobi!');
         }
     }

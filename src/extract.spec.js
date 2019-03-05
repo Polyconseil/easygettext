@@ -111,14 +111,23 @@ describe('data preprocessor', () => {
   });
 
   it('should preprocess VueJS script tag correctly', () => {
-    expect(
-      extract.preprocessScriptTags(
-        fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG,
-        'vue'
-      )
-    ).to.equal(
-      fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG
-    );
+    const script = extract.preprocessVueFile(fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG);
+
+    expect(script.content).to.equal(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG);
+    expect(script.lang).to.equal('js');
+  });
+
+  it('should preprocess VueJS no script tag correctly', () => {
+    const script = extract.preprocessVueFile(fixtures.VUE_COMPONENT_WITHOUT_SCRIPT_TAG);
+
+    expect(script).to.null;
+  });
+
+  it('should preprocess VueJS script tag in TypeScript correctly', () => {
+    const script = extract.preprocessVueFile(fixtures.VUE_COMPONENT_WITH_TS_SCRIPT_TAG);
+
+    expect(script.content).to.equal(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_TS_SCRIPT_TAG);
+    expect(script.lang).to.equal('ts');
   });
 
 });
