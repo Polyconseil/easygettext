@@ -7,6 +7,7 @@ const acorn = require('acorn');
 const walk = require('acorn/dist/walk');
 const constants = require('./constants.js');
 const jsExtractor = require('./javascript-extract.js');
+const flowRemoveTypes = require('flow-remove-types');
 
 // Internal regular expression used to escape special characters
 const ESCAPE_REGEX = /[\-\[\]\/{}()*+?.\\^$|]/g;
@@ -259,7 +260,9 @@ exports.Extractor = class Extractor {
   }
 
   parseJavascript(filename, content) {
-    const extractedStringsFromScript = jsExtractor.extractStringsFromJavascript(filename, content);
+    const jsContent = flowRemoveTypes(content).toString();
+
+    const extractedStringsFromScript = jsExtractor.extractStringsFromJavascript(filename, jsContent);
 
     this.processStrings(extractedStringsFromScript);
   }
