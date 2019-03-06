@@ -34,6 +34,7 @@
     "acorn": "^5.5.3",
     "acorn-stage3": "^0.6.0",
     "cheerio": "^1.0.0-rc.2",
+    "flow-remove-types": "^1.2.3",
     "minimist": "^1.2.0",
     "pofile": "^1.0.10",
     "pug": "^2.0.3",
