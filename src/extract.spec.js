@@ -95,6 +95,12 @@ describe('Extractor object', () => {
     extractor.parseJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.SCRIPT_USING_PGETTEXT);
     expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_VUE_SCRIPT_PGETTEXT);
   });
+
+  it('should output a correct POT file with singular strings ($gettext) extracted from javascript with flow', () => {
+    const extractor = new extract.Extractor();
+    extractor.parseJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG);
+    expect(extractor.toString()).to.equal(fixtures.POT_OUTPUT_VUE_SCRIPT_GETTEXT);
+  });
 });
 
 
@@ -130,6 +136,11 @@ describe('data preprocessor', () => {
     expect(script.lang).to.equal('ts');
   });
 
+  it('should preprocess VueJS script tag with Flow', () => {
+    const script = extract.preprocessVueFile(fixtures.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG);
+    expect(script.content).to.equal(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG);
+    expect(script.lang).to.equal('js');
+  });
 });
 
 

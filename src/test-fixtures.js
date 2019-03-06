@@ -351,6 +351,64 @@ export default {
     }
 }`;
 
+exports.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG = `
+    <template>
+        <h1>{{ greeting_message }}</h1>
+    </template>
+    <script>
+        // @flow
+        type Message = string;
+
+        export default {
+            name: "greetings",
+            computed: {
+                greeting_message(): Message {
+                    return this.$gettext("Hello there!")
+                },
+                duplicated_greeting_message(): Message {
+                    return this.$gettext("Hello there!")
+                },
+                answer_message(): Message {
+                    return this.$gettext("General Kenobi! You are a bold one.")
+                }
+            },
+            methods: {
+                async getGreetingMessageAnswer(): Promise<Message> {
+                    return await Promise.resolve('General Kenobi!');
+                }
+            }
+        }
+     </script>
+`;
+
+exports.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG = `//
+//
+//
+//
+
+// @flow
+type Message = string;
+
+export default {
+    name: "greetings",
+    computed: {
+        greeting_message(): Message {
+            return this.$gettext("Hello there!")
+        },
+        duplicated_greeting_message(): Message {
+            return this.$gettext("Hello there!")
+        },
+        answer_message(): Message {
+            return this.$gettext("General Kenobi! You are a bold one.")
+        }
+    },
+    methods: {
+        async getGreetingMessageAnswer(): Promise<Message> {
+            return await Promise.resolve('General Kenobi!');
+        }
+    }
+}`;
+
 exports.SCRIPT_USING_NGETTEXT = `
     export default {
         name: "greetings",
