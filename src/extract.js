@@ -3,8 +3,9 @@ const cheerioUtils = require('cheerio/lib/utils');
 const Pofile = require('pofile');
 const pug = require('pug');
 const vueCompiler = require('@vue/component-compiler-utils');
+const compiler = require('vue-template-compiler');
 const acorn = require('acorn');
-const walk = require('acorn/dist/walk');
+const walk = require('acorn-walk');
 const constants = require('./constants.js');
 const jsExtractor = require('./javascript-extract.js');
 const flowRemoveTypes = require('flow-remove-types');
@@ -51,7 +52,7 @@ exports.TranslationReference = class TranslationReference {
 };
 
 function preprocessVueFile(data) {
-  const vueFile = vueCompiler.parse({ source: data, needMap: false });
+  const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
   if (!vueFile.script) {
     return null;
   }
@@ -70,7 +71,7 @@ function preprocessTemplate(data, type) {
     templateData = pug.render(data, {filename: 'source.html', pretty: true, require: function() {}});
     break;
   case 'vue':
-    const vueFile = vueCompiler.parse({source: data, needMap: false});
+    const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false});
     if (!vueFile.template) return '';  // return an empty string
     templateData = vueFile.template.content;
     if (vueFile.template.lang) {
