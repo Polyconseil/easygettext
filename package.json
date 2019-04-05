@@ -18,9 +18,9 @@
   "author": "Polyconseil",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^4.1.2",
-    "eslint": "^4.19.1",
-    "mocha": "^5.1.1"
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "mocha": "^6.0.2"
   },
   "engines": {
     "node": ">=8"
@@ -30,15 +30,16 @@
     "gettext-extract": "./src/extract-cli.js"
   },
   "dependencies": {
-    "@vue/component-compiler-utils": "^1.2.1",
-    "acorn": "^5.5.3",
-    "acorn-stage3": "^0.6.0",
+    "@vue/component-compiler-utils": "^2.6.0",
+    "acorn": "^6.1.1",
+    "acorn-stage3": "^2.0.0",
+    "acorn-walk": "^6.1.1",
     "cheerio": "^1.0.0-rc.2",
     "flow-remove-types": "^1.2.3",
     "minimist": "^1.2.0",
-    "pofile": "^1.0.10",
+    "pofile": "^1.0.11",
     "pug": "^2.0.3",
-    "vue-template-compiler": "^2.5.16"
+    "vue-template-compiler": "^2.6.10"
   },
   "files": [
     "src"
