@@ -218,16 +218,10 @@ Please note that the script needs to be modified to match your needs and environ
 
 ### Testing
 
-Run the tests using [mocha](https://mochajs.org/):
+Run the tests using [jest](https://jestjs.io/):
 
 ```bash
 npm test
-```
-
-We also have extensive coverage:
-
-```bash
-npm run cover
 ```
 
 ### Testing the CLI

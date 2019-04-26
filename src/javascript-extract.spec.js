@@ -1,5 +1,3 @@
-const { expect } = require('chai');
-
 const fixtures = require('./test-fixtures.js');
 const jsExtractor = require('./javascript-extract.js');
 const { MARKER_NO_CONTEXT } = require('./constants.js');
@@ -14,26 +12,26 @@ describe('Javascript extractor object', () => {
         fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG
       );
 
-      expect(extractedStrings.length).to.be.equal(3);
+      expect(extractedStrings.length).toBe(3);
 
       const firstString = extractedStrings[0];
       const secondString = extractedStrings[1];
       const thirdString = extractedStrings[2];
 
-      expect(firstString.msgid).to.be.equal('Hello there!');
-      expect(firstString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
-      expect(firstString.reference.file).to.be.equal(filename);
-      expect(firstString.reference.line).to.be.equal(10);
+      expect(firstString.msgid).toBe('Hello there!');
+      expect(firstString.msgctxt).toBe(MARKER_NO_CONTEXT);
+      expect(firstString.reference.file).toBe(filename);
+      expect(firstString.reference.line).toBe(10);
 
-      expect(secondString.msgid).to.be.equal('Hello there!');
-      expect(secondString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
-      expect(secondString.reference.file).to.be.equal(filename);
-      expect(secondString.reference.line).to.be.equal(13);
+      expect(secondString.msgid).toBe('Hello there!');
+      expect(secondString.msgctxt).toBe(MARKER_NO_CONTEXT);
+      expect(secondString.reference.file).toBe(filename);
+      expect(secondString.reference.line).toBe(13);
 
-      expect(thirdString.msgid).to.be.equal('General Kenobi! You are a bold one.');
-      expect(thirdString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
-      expect(thirdString.reference.file).to.be.equal(filename);
-      expect(thirdString.reference.line).to.be.equal(16);
+      expect(thirdString.msgid).toBe('General Kenobi! You are a bold one.');
+      expect(thirdString.msgctxt).toBe(MARKER_NO_CONTEXT);
+      expect(thirdString.reference.file).toBe(filename);
+      expect(thirdString.reference.line).toBe(16);
     });
 
     it('should extract strings localized using $ngettext from the script', () => {
@@ -43,14 +41,14 @@ describe('Javascript extractor object', () => {
         fixtures.SCRIPT_USING_NGETTEXT
       );
 
-      expect(extractedStrings.length).to.be.equal(1);
+      expect(extractedStrings.length).toBe(1);
 
       const firstString = extractedStrings[0];
 
-      expect(firstString.msgid).to.be.equal('%{ n } foo');
-      expect(firstString.msgctxt).to.be.equal(MARKER_NO_CONTEXT);
-      expect(firstString.reference.file).to.be.equal(filename);
-      expect(firstString.reference.line).to.be.equal(6);
+      expect(firstString.msgid).toBe('%{ n } foo');
+      expect(firstString.msgctxt).toBe(MARKER_NO_CONTEXT);
+      expect(firstString.reference.file).toBe(filename);
+      expect(firstString.reference.line).toBe(6);
     });
 
     it('should allow gettext calls in array, object initializers', () => {
@@ -59,19 +57,19 @@ describe('Javascript extractor object', () => {
         filename,
         fixtures.SCRIPT_GETTEXT_SEQUENCE
       );
-      expect(extractedStrings.length).to.be.equal(3);
+      expect(extractedStrings.length).toBe(3);
       const firstString = extractedStrings[0];
       const secondString = extractedStrings[1];
       const thirdString = extractedStrings[2];
-      expect(firstString.msgid).to.be.equal('Hello there!');
-      expect(firstString.reference.file).to.be.equal(filename);
-      expect(firstString.reference.line).to.be.equal(7);
-      expect(secondString.msgid).to.be.equal('Hello there!');
-      expect(secondString.reference.file).to.be.equal(filename);
-      expect(secondString.reference.line).to.be.equal(7);
-      expect(thirdString.msgid).to.be.equal('Hello there!');
-      expect(thirdString.reference.file).to.be.equal(filename);
-      expect(thirdString.reference.line).to.be.equal(8);
+      expect(firstString.msgid).toBe('Hello there!');
+      expect(firstString.reference.file).toBe(filename);
+      expect(firstString.reference.line).toBe(7);
+      expect(secondString.msgid).toBe('Hello there!');
+      expect(secondString.reference.file).toBe(filename);
+      expect(secondString.reference.line).toBe(7);
+      expect(thirdString.msgid).toBe('Hello there!');
+      expect(thirdString.reference.file).toBe(filename);
+      expect(thirdString.reference.line).toBe(8);
     });
 
     it('should extract contextual strings localized using $pgettext from the script', () => {
@@ -81,20 +79,20 @@ describe('Javascript extractor object', () => {
         fixtures.SCRIPT_USING_PGETTEXT
       );
 
-      expect(extractedStrings.length).to.be.equal(2);
+      expect(extractedStrings.length).toBe(2);
 
       const firstString = extractedStrings[0];
       const secondString = extractedStrings[1];
 
-      expect(firstString.msgid).to.be.equal('Home');
-      expect(firstString.msgctxt).to.be.equal('menu');
-      expect(firstString.reference.file).to.be.equal(filename);
-      expect(firstString.reference.line).to.be.equal(6);
+      expect(firstString.msgid).toBe('Home');
+      expect(firstString.msgctxt).toBe('menu');
+      expect(firstString.reference.file).toBe(filename);
+      expect(firstString.reference.line).toBe(6);
 
-      expect(secondString.msgid).to.be.equal('Home');
-      expect(secondString.msgctxt).to.be.equal('house');
-      expect(secondString.reference.file).to.be.equal(filename);
-      expect(secondString.reference.line).to.be.equal(9);
+      expect(secondString.msgid).toBe('Home');
+      expect(secondString.msgctxt).toBe('house');
+      expect(secondString.reference.file).toBe(filename);
+      expect(secondString.reference.line).toBe(9);
     });
 
     it('should not try to extract strings when the node is not a function', () => {
@@ -104,8 +102,8 @@ describe('Javascript extractor object', () => {
         fixtures.SCRIPT_CONTAINING_DECOYS
       );
 
-      expect(extractedStrings.length).to.be.equal(1);
-      expect(extractedStrings[0].msgid).to.be.equal('Hello world from the $gettext function');
+      expect(extractedStrings.length).toBe(1);
+      expect(extractedStrings[0].msgid).toBe('Hello world from the $gettext function');
     });
 
     it('should not break parser when using ECMAScript Stage 3 features', () => {
@@ -115,8 +113,8 @@ describe('Javascript extractor object', () => {
         fixtures.SCRIPT_WITH_ES_STAGE3_FEATURES
       );
 
-      expect(extractedStrings.length).to.be.equal(1);
-      expect(extractedStrings[0].msgid).to.be.equal('Hello world from the future');
+      expect(extractedStrings.length).toBe(1);
+      expect(extractedStrings[0].msgid).toBe('Hello world from the future');
     });
   });
 });

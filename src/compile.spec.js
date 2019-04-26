@@ -1,8 +1,6 @@
 const compile = require('./compile.js');
 const fixtures = require('./test-fixtures.js');
 
-const {expect} = require('chai');
-
 function mockPoItem(overrides = {}) {
   return Object.assign({
     msgid: 'Hello world',
@@ -20,19 +18,19 @@ describe('sanitizePoData', () => {
     const obsoleteItem = mockPoItem({msgid: 'bar', obsolete: true});
     const fuzzyItem = mockPoItem({msgid: 'foo', flags: {fuzzy: true}});
     const bogusItem = mockPoItem({msgid: 'baz', msgstr: []});
-    expect(compile.sanitizePoData([normalItem])).to.deep.equal({'Hello world': 'Bonjour Monde'});
-    expect(compile.sanitizePoData([obsoleteItem])).to.deep.equal({});
-    expect(compile.sanitizePoData([fuzzyItem])).to.deep.equal({});
-    expect(compile.sanitizePoData([bogusItem])).to.deep.equal({});
+    expect(compile.sanitizePoData([normalItem])).toEqual({'Hello world': 'Bonjour Monde'});
+    expect(compile.sanitizePoData([obsoleteItem])).toEqual({});
+    expect(compile.sanitizePoData([fuzzyItem])).toEqual({});
+    expect(compile.sanitizePoData([bogusItem])).toEqual({});
     expect(compile.sanitizePoData([normalItem, obsoleteItem, fuzzyItem, bogusItem]))
-      .to.deep.equal({'Hello world': 'Bonjour Monde'});
+      .toEqual({'Hello world': 'Bonjour Monde'});
   });
 
   it('should keep context', () => {
     const normalItem = mockPoItem();
     const contextItem = mockPoItem({msgctxt: 'in Belize', msgstr: ['Hola Amigos']});
     expect(compile.sanitizePoData([normalItem, contextItem]))
-      .to.deep.equal({
+      .toEqual({
         'Hello world': {
           '': 'Bonjour Monde',
           'in Belize': 'Hola Amigos',
@@ -43,6 +41,6 @@ describe('sanitizePoData', () => {
 
 describe('po2json', () => {
   it('should correctly parse PO content', () => {
-    expect(compile.po2json(fixtures.INPUT_PO)).to.deep.equal(fixtures.OUTPUT_DICT);
+    expect(compile.po2json(fixtures.INPUT_PO)).toEqual(fixtures.OUTPUT_DICT);
   });
 });

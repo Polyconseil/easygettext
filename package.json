@@ -11,16 +11,16 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
+    "coverage": "npx jest && codecov",
     "syntax": "eslint src/",
-    "test": "mocha src/**/*.spec.js"
+    "test": "npx jest"
   },
   "keywords": [],
   "author": "Polyconseil",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^4.2.0",
     "eslint": "^5.16.0",
-    "mocha": "^6.0.2"
+    "jest": "^24.7.1"
   },
   "engines": {
     "node": ">=8"
@@ -43,5 +43,9 @@
   },
   "files": [
     "src"
-  ]
+  ],
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
+  }
 }
