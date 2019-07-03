@@ -17,11 +17,11 @@ Also ships with a PO-to-JSON converter.
 ### Installation
 You can install the [easygettext](https://www.npmjs.com/package/easygettext) package by running 
 ```bash
-npm install --dev easygettext
+npm install --save-dev easygettext
 ```
 or 
 ```bash
-yarn add --save-dev easygettext
+yarn add --dev easygettext
 ```
 
 
