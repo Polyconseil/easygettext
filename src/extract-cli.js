@@ -72,6 +72,8 @@ files.forEach(function(filename) {
       if (script) {
         data = script.content;
         lang = script.lang;
+      } else {
+        lang = null;
       }
     }
 
