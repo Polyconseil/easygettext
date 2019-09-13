@@ -436,6 +436,20 @@ exports.SCRIPT_USING_PGETTEXT = `
     }
 `;
 
+exports.SCRIPT_USING_NPGETTEXT = `
+    export default {
+        name: "menuEntry",
+        computed: {
+            getEntryLabel() {
+                return this.$npgettext("menu", "%{ n } Home", "%{ n } Homes", n)
+            },
+            getEntryLabel() {
+                return this.$npgettext("house", "%{ n } Home", "%{ n } Homes", n)
+            },
+        }
+    }`
+;
+
 exports.SCRIPT_CONTAINING_DECOYS = `
 import $gettext from '@helper/gettext';
 
@@ -755,6 +769,28 @@ msgstr ""
 msgctxt "menu"
 msgid "Home"
 msgstr ""
+`;
+
+exports.POT_OUTPUT_VUE_SCRIPT_NPGETTEXT = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: GreetingsComponent.vue
+msgctxt "house"
+msgid "%{ n } Home"
+msgid_plural "%{ n } Homes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: GreetingsComponent.vue
+msgctxt "menu"
+msgid "%{ n } Home"
+msgid_plural "%{ n } Homes"
+msgstr[0] ""
+msgstr[1] ""
 `;
 
 exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';

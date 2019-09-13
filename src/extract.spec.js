@@ -88,6 +88,12 @@ describe('Extractor object', () => {
     expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_SCRIPT_NGETTEXT);
   });
 
+  it('should output a correct POT file with plural contextual strings ($npgettext) extracted from javascript', () => {
+    const extractor = new extract.Extractor();
+    extractor.parseJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.SCRIPT_USING_NPGETTEXT);
+    expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_SCRIPT_NPGETTEXT);
+  });
+
   it('should output a correct POT file with contextualized strings ($pgettext) extracted from javascript', () => {
     const extractor = new extract.Extractor();
     extractor.parseJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.SCRIPT_USING_PGETTEXT);
