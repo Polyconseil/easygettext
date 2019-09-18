@@ -124,7 +124,30 @@ describe('Javascript extractor object', () => {
         fixtures.SCRIPT_WITH_STRING_CONCAT
       );
       expect(extractedStrings.length).toBe(3);
-      expect(extractedStrings[0].msgid).toBe('Hello there! I am a concatenated string, please translate me.');
+      expect(extractedStrings[0].msgid).toBe('Hello there! I am a concatenated string,\n please translate me.');
+    });
+
+    it('should be able to parse correctly template strings without variables', () => {
+      const filename = 'temp_literals.vue';
+      const extractedStrings = jsExtractor.extractStringsFromJavascript(
+        filename,
+        fixtures.SCRIPT_WITH_TEMPLATE_LITERALS
+      );
+      expect(extractedStrings.length).toBe(3);
+      expect(extractedStrings[0].msgid).toBe(
+        'Hello there!\n'
+        + 'I am a multiline string,\n'
+        + 'please translate me.');
+    });
+
+    it('should throw when trying to parse template strings with variables', () => {
+      const filename = 'temp_literals.vue';
+      expect(() => {
+        jsExtractor.extractStringsFromJavascript(
+          filename,
+          fixtures.SCRIPT_WITH_TEMPLATE_LITERALS_WITH_VARIABLES
+        );
+      }).toThrow();
     });
   });
 });

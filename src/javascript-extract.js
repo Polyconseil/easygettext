@@ -68,21 +68,28 @@ function getGettextEntriesFromScript(script) {
           // 'context string' is at index i+2
           // , is at index i+3
           // 'msgid' is at index i+4
-          const currentToken = allTokens[i + 2 * (argIndex + 1)];
+          const currentTokenIndex = i + 2 * (argIndex + 1);
+          const currentToken = allTokens[currentTokenIndex];
           if (currentToken.type.label === '`') {
-            const line = currentToken.loc.start.line;
-            throw new Error(`easygettext currently does not support translated template strings! [line ${line}]`);
-          } else {
+            const nextToken = allTokens[currentTokenIndex + 1];
+            const closingToken = allTokens[currentTokenIndex + 2];
 
-            const nextToken = allTokens[i + 2 * (argIndex + 1) + 1];
-            let valueToTranslate = currentToken.value;
-
-            if (nextToken.value === '+') {
-              valueToTranslate = extractConcat(valueToTranslate, allTokens, i + 2 * (argIndex + 1));
+            if (closingToken.type.label !== '`') {
+              const line = currentToken.loc.start.line;
+              throw new Error(`easygettext currently does not support translated template strings with variables! [line ${line}]`);
             }
-            obj[argName] = valueToTranslate;
+            obj[argName] = nextToken.value.trim();
             return obj;
           }
+
+          const nextToken = allTokens[i + 2 * (argIndex + 1) + 1];
+          let valueToTranslate = currentToken.value;
+
+          if (nextToken.value === '+') {
+            valueToTranslate = extractConcatenatedStrings(valueToTranslate, allTokens, currentTokenIndex);
+          }
+          obj[argName] = valueToTranslate;
+          return obj;
         }, {});
 
         // Fill objects that contain both the initial token context in the source, and the gettext data.

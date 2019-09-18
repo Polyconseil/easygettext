@@ -409,6 +409,51 @@ export default {
     }
 }`;
 
+exports.SCRIPT_WITH_TEMPLATE_LITERALS = `
+export default {
+    name: "greetings",
+    computed: {
+        greeting_message() {
+            return this.$gettext(\`
+Hello there!
+I am a multiline string,
+please translate me.\`)
+        },
+        duplicated_greeting_message() {
+            return this.$gettext(\`
+Hello there!
+I am a multiline string,
+please translate me.\`)
+        },
+        answer_message() {
+            return this.$gettext(\`General Kenobi! You are a bold one.\`)
+        }
+    },
+    methods: {
+        async getGreetingMessageAnswer() {
+            return await Promise.resolve('General Kenobi!');
+        }
+    }
+}
+`;
+
+exports.SCRIPT_WITH_TEMPLATE_LITERALS_WITH_VARIABLES = `
+export default {
+    name: "greetings",
+    computed: {
+        answer_message() {
+            const name = "Kenobi"
+            return this.$gettext(\`General \${name}! You are a bold one.\`)
+        }
+    },
+    methods: {
+        async getGreetingMessageAnswer() {
+            return await Promise.resolve('General Kenobi!');
+        }
+    }
+}
+`;
+
 exports.SCRIPT_WITH_STRING_CONCAT = `
 export default {
     name: "greetings",
