@@ -116,5 +116,15 @@ describe('Javascript extractor object', () => {
       expect(extractedStrings.length).toBe(1);
       expect(extractedStrings[0].msgid).toBe('Hello world from the future');
     });
+
+    it('should be able to parse correctly concatenated strings', () => {
+      const filename = 'temp_literals.vue';
+      const extractedStrings = jsExtractor.extractStringsFromJavascript(
+        filename,
+        fixtures.SCRIPT_WITH_STRING_CONCAT
+      );
+      expect(extractedStrings.length).toBe(3);
+      expect(extractedStrings[0].msgid).toBe('Hello there! I am a concatenated string, please translate me.');
+    });
   });
 });

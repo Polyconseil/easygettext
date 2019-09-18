@@ -22,6 +22,17 @@ function toPoItem(withLineNumbers = false) {
   return poItem;
 }
 
+function extractConcatenatedStrings(value, allTokens, index) {
+  const nextToken = allTokens[index + 1];
+
+  if (nextToken.type.label === ')') {
+    return value;
+  }
+  const nextValue = allTokens[index + 2].value;
+  return value + extractConcatenatedStrings(nextValue, allTokens, index + 2);
+}
+
+
 function getGettextEntriesFromScript(script) {
   const allTokens = [];
 
@@ -31,7 +42,7 @@ function getGettextEntriesFromScript(script) {
     locations: true,
     onToken: allTokens,
     plugins: {
-      stage3: true
+      stage3: true,
     },
   };
 
@@ -39,6 +50,7 @@ function getGettextEntriesFromScript(script) {
 
   let extractedEntries = [];
 
+  // parse all tokens
   for (let i = 0; i < allTokens.length; i = i + 1) {
     let token = allTokens[i];
     for (let gettextFunc in DEFAULT_VUE_GETTEXT_FUNCTIONS) {
@@ -61,7 +73,14 @@ function getGettextEntriesFromScript(script) {
             const line = currentToken.loc.start.line;
             throw new Error(`easygettext currently does not support translated template strings! [line ${line}]`);
           } else {
-            obj[argName] = currentToken.value;
+
+            const nextToken = allTokens[i + 2 * (argIndex + 1) + 1];
+            let valueToTranslate = currentToken.value;
+
+            if (nextToken.value === '+') {
+              valueToTranslate = extractConcat(valueToTranslate, allTokens, i + 2 * (argIndex + 1));
+            }
+            obj[argName] = valueToTranslate;
             return obj;
           }
         }, {});

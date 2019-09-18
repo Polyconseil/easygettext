@@ -409,6 +409,41 @@ export default {
     }
 }`;
 
+exports.SCRIPT_WITH_STRING_CONCAT = `
+export default {
+    name: "greetings",
+    computed: {
+        greeting_message() {
+            return this.$gettext(
+              "Hello there!"
+              + " I am a concatenated string,"
+              + "\\n"
+              + " please translate me."
+            )
+        },
+        duplicated_greeting_message() {
+            return this.$gettext(
+              "Hello there!" +
+              " I am a concatenated string," +
+              "\\n" +
+              " please translate me."
+            )
+        },
+        answer_message() {
+            return this.$gettext(
+              "General Kenobi!"
+              + "You are a bold one."
+            )
+        }
+    },
+    methods: {
+        async getGreetingMessageAnswer() {
+            return await Promise.resolve('General Kenobi!');
+        }
+    }
+}
+`;
+
 exports.SCRIPT_USING_NGETTEXT = `
     export default {
         name: "greetings",
