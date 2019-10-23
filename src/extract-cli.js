@@ -21,6 +21,7 @@ const endDelimiter = argv.endDelimiter === undefined ? constants.DEFAULT_DELIMIT
 // Allow to pass extra attributes, e.g. gettext-extract --attribute v-translate --attribute v-i18n
 const extraAttribute = argv.attribute || false;
 const extraFilter = argv.filter || false;
+const removeHTMLWhitespaces = argv.removeHTMLWhitespaces || false;
 const filterPrefix = argv.filterPrefix || constants.DEFAULT_FILTER_PREFIX;
 
 if (!quietMode && (!files || files.length === 0)) {
@@ -51,6 +52,7 @@ const extractor = new extract.Extractor({
   filterPrefix,
   startDelimiter,
   endDelimiter,
+  removeHTMLWhitespaces,
 });
 
 

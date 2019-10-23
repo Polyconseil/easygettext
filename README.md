@@ -90,6 +90,12 @@ gettext-extract --attribute v-translate --attribute v-i18n --output dictionary.p
 gettext-extract --startDelimiter '[#' --endDelimiter '#]' --output dictionary.pot foo.html bar.jade
 ```
 
+`gettext-extract` can also remove optional HTML whitespaces inside tags to translate (see [PR 68](https://github.com/Polyconseil/easygettext/pull/68) for more information):
+
+```
+gettext-extract --removeHTMLWhitespaces --output dictionary.pot foo.html
+```
+
 
 ##### Javascript/ES7 token extraction
 

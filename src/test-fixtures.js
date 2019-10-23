@@ -166,6 +166,13 @@ ${exports.HTML_COMPLEX_NESTING}
 -->
 `;
 
+exports.HTML_OPTIONAL_WHITESPACES = `
+<strong translate>It's software you install
+           on your server!
+
+  </strong>
+`;
+
 exports.HTML4_TAG0 = '<translate>Duck</translate>';
 exports.HTML4_TAG1 = '<i18n>Dice</i18n>';
 exports.HTML4_TAG2 = '<get-text>Rabbit</get-text>';
