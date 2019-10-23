@@ -364,6 +364,16 @@ describe('Raw translation data', () => {
     expect(data[3].text).toEqual('Votes <i class=\'fa fa-star\'></i>');
   });
 
+  it('should remove optional HTML whitespaces', () => {
+    const extractorWithBindOnce = new extract.Extractor({
+      removeHTMLWhitespaces: true
+    });
+    const data = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_OPTIONAL_WHITESPACES);
+
+    expect(data.length).toEqual(1);
+    expect(data[0].text).toEqual(`It's software you install on your server!`);
+  })
+
   it('should extract filters that are broken across multiple lines', () => {
     const extractorInterpolate = new extract.Extractor({
       startDelimiter: '{{',

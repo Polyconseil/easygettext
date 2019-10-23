@@ -170,6 +170,7 @@ exports.Extractor = class Extractor {
       filters: constants.DEFAULT_FILTERS,
       filterPrefix: constants.DEFAULT_FILTER_PREFIX,
       lineNumbers: false,
+      removeHTMLWhitespaces: false,
     }, options);
 
     /* Translation items, indexed as:
@@ -436,7 +437,8 @@ exports.Extractor = class Extractor {
     const node = $(el);
 
     if (this._hasTranslationToken(node)) {
-      const text = node.html().trim();
+      const text = this._getNodeHTML(node)
+
       if (text.length !== 0) {
         return [new exports.NodeTranslationInfo(node, text, reference, this.options.attributes)];
       }
@@ -460,6 +462,26 @@ exports.Extractor = class Extractor {
             `${exception.message.split(/ \(.*\)/)} when trying to parse \`${item.text}\` ${reference.toString(true)}`);
         }
       }, []);
+  }
+
+  _getNodeHTML(node) {
+    let html = node.html();
+
+    if (this.options.removeHTMLWhitespaces === true) {
+      html = html
+        // From https://medium.com/@patrickbrosset/when-does-white-space-matter-in-html-b90e8a7cdd33
+        // All spaces and tabs immediately before and after a line break are ignored
+        .replace(/\s+\n/g, '\n')
+        .replace(/\n\s+/g, '\n')
+        // All tab characters are handled as space characters
+        .replace(/\t/g, ' ')
+        // Line breaks are converted to spaces:
+        .replace(/\n/g, ' ')
+        // Any space immediately following another space (even across two separate inline elements) is ignored
+        .replace(/ +/g, ' ');
+    }
+
+    return html.trim();
   }
 
   _traverseTree(nodes, sequence) {
