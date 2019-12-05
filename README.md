@@ -103,6 +103,18 @@ gettext-extract somefile.js
 
 const myVar = $gettext("My fantastic msgid")
 
+const myConcatVar = $gettext(
+  "My"
+  + "fantastic"
+  + "msgid"
+)
+
+const myTempVar = $gettext(
+  `My
+  fantastic
+  msgid`
+)
+
 const myContextualizedVar = $pgettext("some context", "Some other string")
 
 const myPluralVar = $ngettext(...)
@@ -112,7 +124,7 @@ We recognize the ``$gettext``, ``$pgettext`` and ``$ngettext`` tokens as the one
 
 Those tokens are frozen for now, but feel free to make a pull request and add support for variable ones :)
 
-We currently can't extract template strings though.
+We currently can't extract **template strings with variables** though.
 
 
 ##### Extract from Vue components
