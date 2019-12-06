@@ -20,7 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^5.16.0",
-    "jest": "^24.7.1"
+    "jest": "^24.9.0"
   },
   "engines": {
     "node": ">=8"
@@ -31,14 +31,14 @@
   },
   "dependencies": {
     "@vue/component-compiler-utils": "^2.6.0",
-    "acorn": "^6.1.1",
+    "acorn": "^6.4.0",
     "acorn-stage3": "^2.0.0",
-    "acorn-walk": "^6.1.1",
-    "cheerio": "^1.0.0-rc.2",
+    "acorn-walk": "^6.2.0",
+    "cheerio": "^1.0.0-rc.3",
     "flow-remove-types": "^1.2.3",
     "minimist": "^1.2.0",
-    "pofile": "^1.0.11",
-    "pug": "^2.0.3",
+    "pofile": "^1.1.0",
+    "pug": "^2.0.4",
     "vue-template-compiler": "^2.6.10"
   },
   "files": [
