@@ -30,7 +30,7 @@ yarn add --dev easygettext
 ##### HTML token extraction
 
 Simply invoke the tool on the templates you want to extract a POT dictionary template from.
-The optional '--ouput' argument enables you to directly output to a file.
+The optional '--output' argument enables you to directly output to a file.
 
 ```
 gettext-extract --output dictionary.pot foo.html bar.pug component.vue sourcefile.js
