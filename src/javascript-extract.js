@@ -1,6 +1,7 @@
 const {Parser} = require('acorn');
 const stage3 = require('acorn-stage3');
 const Pofile = require('pofile');
+const babel = require('@babel/core');
 
 const {MARKER_NO_CONTEXT, DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
 
@@ -33,20 +34,42 @@ function extractConcatenatedStrings(value, allTokens, index) {
 }
 
 
-function getGettextEntriesFromScript(script) {
+function getGettextEntriesFromScript(script, parser = 'auto') {
+
   const allTokens = [];
 
-  const ACORN_OPTIONS = {
-    ecmaVersion: 10,
-    sourceType: 'module',
-    locations: true,
-    onToken: allTokens,
-    plugins: {
-      stage3: true,
-    },
-  };
+  switch (parser) {
+  case 'auto':
+    try {
+      return getGettextEntriesFromScript(script, 'acorn');
+    } catch (e) {
+      return getGettextEntriesFromScript(script, 'babel');
+    }
+    break;
+  case 'acorn':
+    const ACORN_OPTIONS = {
+      ecmaVersion: 10,
+      sourceType: 'module',
+      locations: true,
+      onToken: allTokens,
+      plugins: {
+        stage3: true,
+      },
+    };
 
-  Parser.extend(stage3).parse(script, ACORN_OPTIONS);
+    Parser.extend(stage3).parse(script, ACORN_OPTIONS);
+    break;
+    case 'babel':
+    const babelResult = babel.parseSync(script, {
+      sourceType: 'module',
+      parserOpts: {
+        tokens: true,
+      }
+    });
+    allTokens.push(...babelResult.tokens);
+    break;
+  }
+
 
   let extractedEntries = [];
 
@@ -104,8 +127,8 @@ function getGettextEntriesFromScript(script) {
   return extractedEntries;
 }
 
-function extractStringsFromJavascript(filename, script) {
-  const gettextEntries =  getGettextEntriesFromScript(script);
+function extractStringsFromJavascript(filename, script, parser = 'auto') {
+  const gettextEntries =  getGettextEntriesFromScript(script, parser);
 
   return gettextEntries.map((entry) => {
     return Object.assign(

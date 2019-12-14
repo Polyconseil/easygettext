@@ -30,6 +30,7 @@
     "gettext-extract": "./src/extract-cli.js"
   },
   "dependencies": {
+    "@babel/core": "^7.7.5",
     "@vue/component-compiler-utils": "^2.6.0",
     "acorn": "^6.4.0",
     "acorn-stage3": "^2.0.0",
