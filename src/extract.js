@@ -325,10 +325,10 @@ exports.Extractor = class Extractor {
     }
   }
 
-  parseJavascript(filename, content) {
+  parseJavascript(filename, content, parser='auto') {
     const jsContent = flowRemoveTypes(content).toString();
 
-    const extractedStringsFromScript = jsExtractor.extractStringsFromJavascript(filename, jsContent);
+    const extractedStringsFromScript = jsExtractor.extractStringsFromJavascript(filename, jsContent, parser);
 
     this.processStrings(extractedStringsFromScript);
   }
