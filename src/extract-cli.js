@@ -24,9 +24,10 @@ const extraAttribute = argv.attribute || false;
 const extraFilter = argv.filter || false;
 const removeHTMLWhitespaces = argv.removeHTMLWhitespaces || false;
 const filterPrefix = argv.filterPrefix || constants.DEFAULT_FILTER_PREFIX;
+const jsParser = argv.parser || 'auto';
 
 if (!quietMode && (!files || files.length === 0)) {
-  console.log('Usage:\n\tgettext-extract [--attribute EXTRA-ATTRIBUTE] [--filterPrefix FILTER-PREFIX] [--output OUTFILE] <FILES>');
+  console.log('Usage:\n\tgettext-extract [--attribute EXTRA-ATTRIBUTE] [--filterPrefix FILTER-PREFIX] [--output OUTFILE] [--parser auto|acorn|babel] <FILES>');
   process.exit(1);
 }
 
@@ -65,12 +66,27 @@ files.forEach(function(filename) {
     console.log(`[${PROGRAM_NAME}] will not extract: '${filename}' (invalid extension)`);
     return;
   }
-  console.log(`[${PROGRAM_NAME}] extracting: '${filename}`);
+  console.log(`[${PROGRAM_NAME}] extracting: '${filename}'`);
   try {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
-    extractor.extract(file, ext, data);
+    extractor.parse(file, extract.preprocessTemplate(data, ext));
+
+    let lang = 'js';
+    if (ext === 'vue') {
+      const script = extract.preprocessScript(data, ext);
+      if (script) {
+        data = script.content;
+        lang = script.lang;
+      } else {
+        lang = null;
+      }
+    }
+
+    if (lang === 'js') {
+      extractor.parseJavascript(file, data, jsParser);
+    }
   } catch (e) {
-    console.error(`[${PROGRAM_NAME}] could not read: '${filename}`);
+    console.error(`[${PROGRAM_NAME}] could not read: '${filename}' using parser ${jsParser}`);
     console.trace(e);
     process.exit(1);
   }

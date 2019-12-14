@@ -31,6 +31,7 @@
     "gettext-extract": "./src/extract-cli.js"
   },
   "dependencies": {
+    "@babel/core": "^7.11.5",
     "@vue/component-compiler-utils": "^2.6.0",
     "acorn": "^6.4.1",
     "acorn-stage3": "^2.0.0",
