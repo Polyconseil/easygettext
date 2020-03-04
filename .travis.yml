@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "8.0.0"
+  - 12
 script: "npm test"
 
 cache:
@@ -8,9 +8,7 @@ cache:
   - $HOME/.npm
 
 before_install:
-- npm i -g npm@latest
-- npm i -g npx
-- npm install -g codecov
+- npm ci
 
 after_success:
-  - codecov
+  - npx codecov
