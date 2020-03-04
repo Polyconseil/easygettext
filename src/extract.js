@@ -51,15 +51,18 @@ exports.TranslationReference = class TranslationReference {
   }
 };
 
-function preprocessVueFile(data) {
-  const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
-  if (!vueFile.script) {
-    return null;
+function preprocessJavascript(data, type) {
+  let scriptData = '';
+  switch (type) {
+  case 'vue':
+    const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
+    if (!vueFile.script) return '';
+    scriptData = vueFile.script.content.trim();
+    break;
+  default:
+    break;
   }
-  return {
-    content: vueFile.script.content.trim(),
-    lang: vueFile.script.lang || 'js',
-  };
+  return scriptData;
 }
 
 function preprocessTemplate(data, type) {
@@ -85,7 +88,7 @@ function preprocessTemplate(data, type) {
 }
 
 exports.preprocessTemplate   = preprocessTemplate;
-exports.preprocessVueFile = preprocessVueFile;
+exports.preprocessJavascript = preprocessJavascript;
 
 exports.NodeTranslationInfo = class NodeTranslationInfo {
   constructor(node, text, reference, attributes) {
