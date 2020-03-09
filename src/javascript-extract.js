@@ -1,28 +1,21 @@
 const {Parser} = require('acorn');
 const stage3 = require('acorn-stage3');
-const Pofile = require('pofile');
+const {getTextEntries} = require('./extract-utils.js');
 
-const {MARKER_NO_CONTEXT, DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
+const {DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
 
-function lineNumToString(withLineNumbers = false) {
-  return (withLineNumbers && this.line)
-    ? `${ this.file }:${ this.line }`
-    : this.file;
+function extractConcatenatedStrings(value, allTokens, index) {
+  const nextToken = allTokens[index + 1];
+
+  if (nextToken.type.label === ')') {
+    return value;
+  }
+  const nextValue = allTokens[index + 2].value;
+  return value + extractConcatenatedStrings(nextValue, allTokens, index + 2);
 }
 
-function toPoItem(withLineNumbers = false) {
-  let poItem = new Pofile.Item();
 
-  poItem.msgid = this.msgid;
-  poItem.msgid_plural = this.plural;
-  poItem.references = [ this.reference.toString(withLineNumbers) ];
-  poItem.msgctxt = this.msgctxt === MARKER_NO_CONTEXT ? null : this.msgctxt;
-  poItem.msgstr = [];
-
-  return poItem;
-}
-
-function getGettextEntriesFromScript(script) {
+function getGettextEntriesFromJavaScript(script) {
   const allTokens = [];
 
   const ACORN_OPTIONS = {
@@ -31,7 +24,7 @@ function getGettextEntriesFromScript(script) {
     locations: true,
     onToken: allTokens,
     plugins: {
-      stage3: true
+      stage3: true,
     },
   };
 
@@ -39,6 +32,7 @@ function getGettextEntriesFromScript(script) {
 
   let extractedEntries = [];
 
+  // parse all tokens
   for (let i = 0; i < allTokens.length; i = i + 1) {
     let token = allTokens[i];
     for (let gettextFunc in DEFAULT_VUE_GETTEXT_FUNCTIONS) {
@@ -56,14 +50,28 @@ function getGettextEntriesFromScript(script) {
           // 'context string' is at index i+2
           // , is at index i+3
           // 'msgid' is at index i+4
-          const currentToken = allTokens[i + 2 * (argIndex + 1)];
+          const currentTokenIndex = i + 2 * (argIndex + 1);
+          const currentToken = allTokens[currentTokenIndex];
           if (currentToken.type.label === '`') {
-            const line = currentToken.loc.start.line;
-            throw new Error(`easygettext currently does not support translated template strings! [line ${line}]`);
-          } else {
-            obj[argName] = currentToken.value;
+            const nextToken = allTokens[currentTokenIndex + 1];
+            const closingToken = allTokens[currentTokenIndex + 2];
+
+            if (closingToken.type.label !== '`') {
+              const line = currentToken.loc.start.line;
+              throw new Error(`easygettext currently does not support translated template strings with variables! [line ${line}]`);
+            }
+            obj[argName] = nextToken.value.trim();
             return obj;
           }
+
+          const nextToken = allTokens[i + 2 * (argIndex + 1) + 1];
+          let valueToTranslate = currentToken.value;
+
+          if (nextToken.value === '+') {
+            valueToTranslate = extractConcatenatedStrings(valueToTranslate, allTokens, currentTokenIndex);
+          }
+          obj[argName] = valueToTranslate;
+          return obj;
         }, {});
 
         // Fill objects that contain both the initial token context in the source, and the gettext data.
@@ -79,23 +87,7 @@ function getGettextEntriesFromScript(script) {
 }
 
 function extractStringsFromJavascript(filename, script) {
-  const gettextEntries =  getGettextEntriesFromScript(script);
-
-  return gettextEntries.map((entry) => {
-    return Object.assign(
-      {},
-      {
-        reference: {
-          file: filename,
-          line: entry.token.loc.start.line,
-          toString: lineNumToString,
-        },
-        msgctxt: MARKER_NO_CONTEXT,
-        toPoItem,
-      },
-      entry.data
-    );
-  });
+  return getTextEntries(filename, getGettextEntriesFromJavaScript(script));
 }
 
 module.exports = {

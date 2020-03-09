@@ -9,7 +9,8 @@ const constants = require('./constants.js');
 const extract = require('./extract.js');
 
 const PROGRAM_NAME = 'easygettext';
-const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'js', 'pug', 'vue'];
+const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'js', 'pug', 'vue', 'ts'];
+const ALLOWED_EXTENSIONS_EXCEPTIONS = ['.d.ts'];
 
 // Process arguments
 const argv = minimist(process.argv.slice(2));
@@ -21,6 +22,7 @@ const endDelimiter = argv.endDelimiter === undefined ? constants.DEFAULT_DELIMIT
 // Allow to pass extra attributes, e.g. gettext-extract --attribute v-translate --attribute v-i18n
 const extraAttribute = argv.attribute || false;
 const extraFilter = argv.filter || false;
+const removeHTMLWhitespaces = argv.removeHTMLWhitespaces || false;
 const filterPrefix = argv.filterPrefix || constants.DEFAULT_FILTER_PREFIX;
 
 if (!quietMode && (!files || files.length === 0)) {
@@ -51,13 +53,15 @@ const extractor = new extract.Extractor({
   filterPrefix,
   startDelimiter,
   endDelimiter,
+  removeHTMLWhitespaces,
 });
 
 
 files.forEach(function(filename) {
   let file = filename;
   const ext = file.split('.').pop();
-  if (ALLOWED_EXTENSIONS.indexOf(ext) === -1) {
+  if (ALLOWED_EXTENSIONS.indexOf(ext) === -1
+    || ALLOWED_EXTENSIONS_EXCEPTIONS.filter(extException => file.endsWith(extException)).length) {
     console.log(`[${PROGRAM_NAME}] will not extract: '${filename}' (invalid extension)`);
     return;
   }
@@ -65,18 +69,12 @@ files.forEach(function(filename) {
   try {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
     extractor.parse(file, extract.preprocessTemplate(data, ext));
+    const script = extract.preprocessScript(data, ext);
 
-    let lang = 'js';
-    if (ext === 'vue') {
-      const script = extract.preprocessVueFile(data);
-      if (script) {
-        data = script.content;
-        lang = script.lang;
-      }
-    }
-
-    if (lang === 'js') {
-      extractor.parseJavascript(file, data);
+    if ((script && script.lang === 'ts') || ext === 'ts') {
+      extractor.parseTypeScript(file, script.content);
+    } else {
+      extractor.parseJavascript(file, script.content);
     }
   } catch (e) {
     console.error(`[${PROGRAM_NAME}] could not read: '${filename}`);

@@ -88,6 +88,12 @@ describe('Extractor object', () => {
     expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_SCRIPT_NGETTEXT);
   });
 
+  it('should output a correct POT file with plural contextual strings ($npgettext) extracted from javascript', () => {
+    const extractor = new extract.Extractor();
+    extractor.parseJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.SCRIPT_USING_NPGETTEXT);
+    expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_SCRIPT_NPGETTEXT);
+  });
+
   it('should output a correct POT file with contextualized strings ($pgettext) extracted from javascript', () => {
     const extractor = new extract.Extractor();
     extractor.parseJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.SCRIPT_USING_PGETTEXT);
@@ -115,29 +121,23 @@ describe('data preprocessor', () => {
   });
 
   it('should preprocess VueJS script tag correctly', () => {
-    const script = extract.preprocessVueFile(fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG);
-
+    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG, 'vue');
     expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG);
-    expect(script.lang).toEqual('js');
   });
 
   it('should preprocess VueJS no script tag correctly', () => {
-    const script = extract.preprocessVueFile(fixtures.VUE_COMPONENT_WITHOUT_SCRIPT_TAG);
-
-    expect(script).toBe(null);
+    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITHOUT_SCRIPT_TAG, 'vue');
+    expect(script.content).toBe('');
   });
 
   it('should preprocess VueJS script tag in TypeScript correctly', () => {
-    const script = extract.preprocessVueFile(fixtures.VUE_COMPONENT_WITH_TS_SCRIPT_TAG);
-
+    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_TS_SCRIPT_TAG, 'vue');
     expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_TS_SCRIPT_TAG);
-    expect(script.lang).toEqual('ts');
   });
 
   it('should preprocess VueJS script tag with Flow', () => {
-    const script = extract.preprocessVueFile(fixtures.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG);
+    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG, 'vue');
     expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG);
-    expect(script.lang).toEqual('js');
   });
 });
 
@@ -357,6 +357,16 @@ describe('Raw translation data', () => {
     expect(data[2].text).toEqual('Number of votes');
     expect(data[3].text).toEqual('Votes <i class=\'fa fa-star\'></i>');
   });
+
+  it('should remove optional HTML whitespaces', () => {
+    const extractorWithBindOnce = new extract.Extractor({
+      removeHTMLWhitespaces: true
+    });
+    const data = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_OPTIONAL_WHITESPACES);
+
+    expect(data.length).toEqual(1);
+    expect(data[0].text).toEqual(`It's software you install on your server!`);
+  })
 
   it('should extract filters that are broken across multiple lines', () => {
     const extractorInterpolate = new extract.Extractor({

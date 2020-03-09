@@ -8,6 +8,7 @@ const acorn = require('acorn');
 const walk = require('acorn-walk');
 const constants = require('./constants.js');
 const jsExtractor = require('./javascript-extract.js');
+const tsExtractor = require('./typescript-extract.js');
 const flowRemoveTypes = require('flow-remove-types');
 
 // Internal regular expression used to escape special characters
@@ -51,15 +52,21 @@ exports.TranslationReference = class TranslationReference {
   }
 };
 
-function preprocessVueFile(data) {
-  const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
-  if (!vueFile.script) {
-    return null;
+function preprocessScript(data, type) {
+  let scriptData = '';
+  let scriptLang = undefined;
+  switch (type) {
+  case 'vue':
+    const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
+    if (!vueFile.script) break;
+    scriptData = vueFile.script.content.trim();
+    scriptLang = vueFile.script.lang;
+    break;
+  default:
+    scriptData = data || '';
+    break;
   }
-  return {
-    content: vueFile.script.content.trim(),
-    lang: vueFile.script.lang || 'js',
-  };
+  return {content: scriptData, lang: scriptLang};
 }
 
 function preprocessTemplate(data, type) {
@@ -85,7 +92,7 @@ function preprocessTemplate(data, type) {
 }
 
 exports.preprocessTemplate   = preprocessTemplate;
-exports.preprocessVueFile = preprocessVueFile;
+exports.preprocessScript = preprocessScript;
 
 exports.NodeTranslationInfo = class NodeTranslationInfo {
   constructor(node, text, reference, attributes) {
@@ -170,6 +177,7 @@ exports.Extractor = class Extractor {
       filters: constants.DEFAULT_FILTERS,
       filterPrefix: constants.DEFAULT_FILTER_PREFIX,
       lineNumbers: false,
+      removeHTMLWhitespaces: false,
     }, options);
 
     /* Translation items, indexed as:
@@ -264,6 +272,14 @@ exports.Extractor = class Extractor {
     const jsContent = flowRemoveTypes(content).toString();
 
     const extractedStringsFromScript = jsExtractor.extractStringsFromJavascript(filename, jsContent);
+
+    this.processStrings(extractedStringsFromScript);
+  }
+
+  parseTypeScript(filename, content) {
+    const tsContent = flowRemoveTypes(content).toString();
+
+    const extractedStringsFromScript = tsExtractor.extractStringsFromTypeScript(filename, tsContent);
 
     this.processStrings(extractedStringsFromScript);
   }
@@ -436,7 +452,8 @@ exports.Extractor = class Extractor {
     const node = $(el);
 
     if (this._hasTranslationToken(node)) {
-      const text = node.html().trim();
+      const text = this._getNodeHTML(node)
+
       if (text.length !== 0) {
         return [new exports.NodeTranslationInfo(node, text, reference, this.options.attributes)];
       }
@@ -460,6 +477,26 @@ exports.Extractor = class Extractor {
             `${exception.message.split(/ \(.*\)/)} when trying to parse \`${item.text}\` ${reference.toString(true)}`);
         }
       }, []);
+  }
+
+  _getNodeHTML(node) {
+    let html = node.html();
+
+    if (this.options.removeHTMLWhitespaces === true) {
+      html = html
+        // From https://medium.com/@patrickbrosset/when-does-white-space-matter-in-html-b90e8a7cdd33
+        // All spaces and tabs immediately before and after a line break are ignored
+        .replace(/\s+\n/g, '\n')
+        .replace(/\n\s+/g, '\n')
+        // All tab characters are handled as space characters
+        .replace(/\t/g, ' ')
+        // Line breaks are converted to spaces:
+        .replace(/\n/g, ' ')
+        // Any space immediately following another space (even across two separate inline elements) is ignored
+        .replace(/ +/g, ' ');
+    }
+
+    return html.trim();
   }
 
   _traverseTree(nodes, sequence) {

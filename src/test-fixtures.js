@@ -166,6 +166,13 @@ ${exports.HTML_COMPLEX_NESTING}
 -->
 `;
 
+exports.HTML_OPTIONAL_WHITESPACES = `
+<strong translate>It's software you install
+           on your server!
+
+  </strong>
+`;
+
 exports.HTML4_TAG0 = '<translate>Duck</translate>';
 exports.HTML4_TAG1 = '<i18n>Dice</i18n>';
 exports.HTML4_TAG2 = '<get-text>Rabbit</get-text>';
@@ -409,11 +416,104 @@ export default {
     }
 }`;
 
+exports.SCRIPT_WITH_TEMPLATE_LITERALS = `
+export default {
+    name: "greetings",
+    computed: {
+        greeting_message() {
+            return this.$gettext(\`
+Hello there!
+I am a multiline string,
+please translate me.\`)
+        },
+        duplicated_greeting_message() {
+            return this.$gettext(\`
+Hello there!
+I am a multiline string,
+please translate me.\`)
+        },
+        answer_message() {
+            return this.$gettext(\`General Kenobi! You are a bold one.\`)
+        }
+    },
+    methods: {
+        async getGreetingMessageAnswer() {
+            return await Promise.resolve('General Kenobi!');
+        }
+    }
+}
+`;
+
+exports.SCRIPT_WITH_TEMPLATE_LITERALS_WITH_VARIABLES = `
+export default {
+    name: "greetings",
+    computed: {
+        answer_message() {
+            const name = "Kenobi"
+            return this.$gettext(\`General \${name}! You are a bold one.\`)
+        }
+    },
+    methods: {
+        async getGreetingMessageAnswer() {
+            return await Promise.resolve('General Kenobi!');
+        }
+    }
+}
+`;
+
+exports.SCRIPT_WITH_STRING_CONCAT = `
+export default {
+    name: "greetings",
+    computed: {
+        greeting_message() {
+            return this.$gettext(
+              "Hello there!"
+              + " I am a concatenated string,"
+              + "\\n"
+              + " please translate me."
+            )
+        },
+        duplicated_greeting_message() {
+            return this.$gettext(
+              "Hello there!" +
+              " I am a concatenated string," +
+              "\\n" +
+              " please translate me."
+            )
+        },
+        answer_message() {
+            return this.$gettext(
+              "General Kenobi!"
+              + "You are a bold one."
+            )
+        }
+    },
+    methods: {
+        async getGreetingMessageAnswer() {
+            return await Promise.resolve('General Kenobi!');
+        }
+    }
+}
+`;
+
 exports.SCRIPT_USING_NGETTEXT = `
     export default {
         name: "greetings",
         methods: {
             alertPlural (n) {
+              let translated = this.$ngettext('%{ n } foo', '%{ n } foos', n)
+              let interpolated = this.$gettextInterpolate(translated, {n: n})
+              return window.alert(interpolated)
+            },
+        }
+    }
+`;
+
+exports.SCRIPT_USING_NGETTEXT_TS = `
+    export default {
+        name: "greetings",
+        methods: {
+            alertPlural (n: number): void {
               let translated = this.$ngettext('%{ n } foo', '%{ n } foos', n)
               let interpolated = this.$gettextInterpolate(translated, {n: n})
               return window.alert(interpolated)
@@ -435,6 +535,34 @@ exports.SCRIPT_USING_PGETTEXT = `
         }
     }
 `;
+
+exports.SCRIPT_USING_PGETTEXT_TS = `
+    export default {
+        name: "menuEntry",
+        computed: {
+            getEntryLabel(): string {
+                return this.$pgettext("menu", "Home")
+            },
+            getEntryLabel(): string {
+                return this.$pgettext("house", "Home")
+            },
+        }
+    }
+`;
+
+exports.SCRIPT_USING_NPGETTEXT = `
+    export default {
+        name: "menuEntry",
+        computed: {
+            getEntryLabel() {
+                return this.$npgettext("menu", "%{ n } Home", "%{ n } Homes", n)
+            },
+            getEntryLabel() {
+                return this.$npgettext("house", "%{ n } Home", "%{ n } Homes", n)
+            },
+        }
+    }`
+;
 
 exports.SCRIPT_CONTAINING_DECOYS = `
 import $gettext from '@helper/gettext';
@@ -757,12 +885,46 @@ msgid "Home"
 msgstr ""
 `;
 
+exports.POT_OUTPUT_VUE_SCRIPT_NPGETTEXT = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: GreetingsComponent.vue
+msgctxt "house"
+msgid "%{ n } Home"
+msgid_plural "%{ n } Homes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: GreetingsComponent.vue
+msgctxt "menu"
+msgid "%{ n } Home"
+msgid_plural "%{ n } Homes"
+msgstr[0] ""
+msgstr[1] ""
+`;
+
 exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';
 exports.SCRIPT_GETTEXT_SEQUENCE = `
 export default {
   name: 'greetings-sequence',
   computed: {
     messages_object() {
+      return {
+        an_array: [this.$gettext('Hello there!'), this.$gettext('Hello there!')],
+        a_string: this.$gettext('Hello there!'),
+      }
+    }
+  }
+}`;
+exports.SCRIPT_GETTEXT_SEQUENCE_TS = `
+export default {
+  name: 'greetings-sequence',
+  computed: {
+    messages_object(): MessageObject {
       return {
         an_array: [this.$gettext('Hello there!'), this.$gettext('Hello there!')],
         a_string: this.$gettext('Hello there!'),
