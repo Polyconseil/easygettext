@@ -9,6 +9,7 @@ Radically simple gettext tokens extraction tool for:
 - Jade/Pug
 - Javascript/ES7+
 - Vue
+- TypeScript (see [Known Issues](#known-issues))
 
 files.
 
@@ -314,6 +315,10 @@ cE
 ce
 ``` 
 Which will be correctly looked up and translated during runtime, at least by [angular-gettext](https://angular-gettext.rocketeer.be/). 
+
+### Known Issues
+
+TypeScript support is currently limited in that line numbers are not tracked and won't show in generated .po files. This can lead to issues with more complex translations and should be kept in mind.
 
 ### Credits
 

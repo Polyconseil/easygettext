@@ -1,26 +1,8 @@
 const {Parser} = require('acorn');
 const stage3 = require('acorn-stage3');
-const Pofile = require('pofile');
+const {getTextEntries} = require('./extract-utils.js');
 
-const {MARKER_NO_CONTEXT, DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
-
-function lineNumToString(withLineNumbers = false) {
-  return (withLineNumbers && this.line)
-    ? `${ this.file }:${ this.line }`
-    : this.file;
-}
-
-function toPoItem(withLineNumbers = false) {
-  let poItem = new Pofile.Item();
-
-  poItem.msgid = this.msgid;
-  poItem.msgid_plural = this.plural;
-  poItem.references = [ this.reference.toString(withLineNumbers) ];
-  poItem.msgctxt = this.msgctxt === MARKER_NO_CONTEXT ? null : this.msgctxt;
-  poItem.msgstr = [];
-
-  return poItem;
-}
+const {DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
 
 function extractConcatenatedStrings(value, allTokens, index) {
   const nextToken = allTokens[index + 1];
@@ -33,7 +15,7 @@ function extractConcatenatedStrings(value, allTokens, index) {
 }
 
 
-function getGettextEntriesFromScript(script) {
+function getGettextEntriesFromJavaScript(script) {
   const allTokens = [];
 
   const ACORN_OPTIONS = {
@@ -105,23 +87,7 @@ function getGettextEntriesFromScript(script) {
 }
 
 function extractStringsFromJavascript(filename, script) {
-  const gettextEntries =  getGettextEntriesFromScript(script);
-
-  return gettextEntries.map((entry) => {
-    return Object.assign(
-      {},
-      {
-        reference: {
-          file: filename,
-          line: entry.token.loc.start.line,
-          toString: lineNumToString,
-        },
-        msgctxt: MARKER_NO_CONTEXT,
-        toPoItem,
-      },
-      entry.data
-    );
-  });
+  return getTextEntries(filename, getGettextEntriesFromJavaScript(script));
 }
 
 module.exports = {
