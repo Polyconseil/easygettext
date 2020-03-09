@@ -121,26 +121,23 @@ describe('data preprocessor', () => {
   });
 
   it('should preprocess VueJS script tag correctly', () => {
-    const script = extract.preprocessJavascript(fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG, 'vue');
-
-    expect(script).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG);
+    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG, 'vue');
+    expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG);
   });
 
   it('should preprocess VueJS no script tag correctly', () => {
-    const script = extract.preprocessJavascript(fixtures.VUE_COMPONENT_WITHOUT_SCRIPT_TAG, 'vue');
-
-    expect(script).toBe('');
+    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITHOUT_SCRIPT_TAG, 'vue');
+    expect(script.content).toBe('');
   });
 
   it('should preprocess VueJS script tag in TypeScript correctly', () => {
-    const script = extract.preprocessJavascript(fixtures.VUE_COMPONENT_WITH_TS_SCRIPT_TAG, 'vue');
-
-    expect(script).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_TS_SCRIPT_TAG);
+    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_TS_SCRIPT_TAG, 'vue');
+    expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_TS_SCRIPT_TAG);
   });
 
   it('should preprocess VueJS script tag with Flow', () => {
-    const script = extract.preprocessJavascript(fixtures.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG, 'vue');
-    expect(script).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG);
+    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG, 'vue');
+    expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG);
   });
 });
 

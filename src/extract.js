@@ -8,6 +8,7 @@ const acorn = require('acorn');
 const walk = require('acorn-walk');
 const constants = require('./constants.js');
 const jsExtractor = require('./javascript-extract.js');
+const tsExtractor = require('./typescript-extract.js');
 const flowRemoveTypes = require('flow-remove-types');
 
 // Internal regular expression used to escape special characters
@@ -51,18 +52,21 @@ exports.TranslationReference = class TranslationReference {
   }
 };
 
-function preprocessJavascript(data, type) {
+function preprocessScript(data, type) {
   let scriptData = '';
+  let scriptLang = undefined;
   switch (type) {
   case 'vue':
     const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
-    if (!vueFile.script) return '';
+    if (!vueFile.script) break;
     scriptData = vueFile.script.content.trim();
+    scriptLang = vueFile.script.lang;
     break;
   default:
+    scriptData = data || '';
     break;
   }
-  return scriptData;
+  return {content: scriptData, lang: scriptLang};
 }
 
 function preprocessTemplate(data, type) {
@@ -88,7 +92,7 @@ function preprocessTemplate(data, type) {
 }
 
 exports.preprocessTemplate   = preprocessTemplate;
-exports.preprocessJavascript = preprocessJavascript;
+exports.preprocessScript = preprocessScript;
 
 exports.NodeTranslationInfo = class NodeTranslationInfo {
   constructor(node, text, reference, attributes) {
@@ -268,6 +272,14 @@ exports.Extractor = class Extractor {
     const jsContent = flowRemoveTypes(content).toString();
 
     const extractedStringsFromScript = jsExtractor.extractStringsFromJavascript(filename, jsContent);
+
+    this.processStrings(extractedStringsFromScript);
+  }
+
+  parseTypeScript(filename, content) {
+    const tsContent = flowRemoveTypes(content).toString();
+
+    const extractedStringsFromScript = tsExtractor.extractStringsFromTypeScript(filename, tsContent);
 
     this.processStrings(extractedStringsFromScript);
   }

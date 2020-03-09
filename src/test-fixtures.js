@@ -509,6 +509,19 @@ exports.SCRIPT_USING_NGETTEXT = `
     }
 `;
 
+exports.SCRIPT_USING_NGETTEXT_TS = `
+    export default {
+        name: "greetings",
+        methods: {
+            alertPlural (n: number): void {
+              let translated = this.$ngettext('%{ n } foo', '%{ n } foos', n)
+              let interpolated = this.$gettextInterpolate(translated, {n: n})
+              return window.alert(interpolated)
+            },
+        }
+    }
+`;
+
 exports.SCRIPT_USING_PGETTEXT = `
     export default {
         name: "menuEntry",
@@ -517,6 +530,20 @@ exports.SCRIPT_USING_PGETTEXT = `
                 return this.$pgettext("menu", "Home")
             },
             getEntryLabel() {
+                return this.$pgettext("house", "Home")
+            },
+        }
+    }
+`;
+
+exports.SCRIPT_USING_PGETTEXT_TS = `
+    export default {
+        name: "menuEntry",
+        computed: {
+            getEntryLabel(): string {
+                return this.$pgettext("menu", "Home")
+            },
+            getEntryLabel(): string {
                 return this.$pgettext("house", "Home")
             },
         }
@@ -886,6 +913,18 @@ export default {
   name: 'greetings-sequence',
   computed: {
     messages_object() {
+      return {
+        an_array: [this.$gettext('Hello there!'), this.$gettext('Hello there!')],
+        a_string: this.$gettext('Hello there!'),
+      }
+    }
+  }
+}`;
+exports.SCRIPT_GETTEXT_SEQUENCE_TS = `
+export default {
+  name: 'greetings-sequence',
+  computed: {
+    messages_object(): MessageObject {
       return {
         an_array: [this.$gettext('Hello there!'), this.$gettext('Hello there!')],
         a_string: this.$gettext('Hello there!'),
