@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@vue/component-compiler-utils": "^2.6.0",
-    "acorn": "^6.4.0",
+    "acorn": "^6.4.1",
     "acorn-stage3": "^2.0.0",
     "acorn-walk": "^6.2.0",
     "buntis": "0.2.1",
