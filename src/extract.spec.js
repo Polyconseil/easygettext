@@ -105,6 +105,12 @@ describe('Extractor object', () => {
     extractor.parseJavascript(fixtures.VUE_COMPONENT_FILENAME, fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG);
     expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_SCRIPT_GETTEXT);
   });
+
+  it('should output a correct POT file for vue component with $gettext used in template', ()=> {
+    const extractor = new extract.Extractor({attributes: ['v-translate']});
+    extractor.extract(fixtures.VUE_COMPONENT_FILENAME, 'vue', fixtures.VUE_COMPONENT_WITH_GETTEXT_IN_TEMPLATE);
+    expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_COMPONENT_WITH_GETTEXT_IN_TEMPLATE);
+  });
 });
 
 
@@ -121,22 +127,22 @@ describe('data preprocessor', () => {
   });
 
   it('should preprocess VueJS script tag correctly', () => {
-    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG, 'vue');
+    const [script] = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG, 'vue');
     expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG);
   });
 
   it('should preprocess VueJS no script tag correctly', () => {
-    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITHOUT_SCRIPT_TAG, 'vue');
+    const [script] = extract.preprocessScript(fixtures.VUE_COMPONENT_WITHOUT_SCRIPT_TAG, 'vue');
     expect(script.content).toBe('');
   });
 
   it('should preprocess VueJS script tag in TypeScript correctly', () => {
-    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_TS_SCRIPT_TAG, 'vue');
+    const [script] = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_TS_SCRIPT_TAG, 'vue');
     expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_TS_SCRIPT_TAG);
   });
 
   it('should preprocess VueJS script tag with Flow', () => {
-    const script = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG, 'vue');
+    const [script] = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG, 'vue');
     expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG);
   });
 });

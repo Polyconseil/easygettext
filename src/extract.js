@@ -54,23 +54,29 @@ exports.TranslationReference = class TranslationReference {
 
 function preprocessScript(data, type) {
   let scriptData = '';
+  let templateData = '';
   let scriptLang = undefined;
   switch (type) {
   case 'vue':
     const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
-    if (!vueFile.script) break;
-    scriptData = vueFile.script.content.trim();
-    scriptLang = vueFile.script.lang;
+    if(vueFile.script) {
+      scriptData = vueFile.script.content.trim();
+      scriptLang = vueFile.script.lang;
+    }
+    if(vueFile.template) {
+      templateData = vueFile.template.content;
+      templateData = vueCompiler.compileTemplate({compiler, source: templateData}).code;
+    }
     break;
   default:
     scriptData = data || '';
     break;
   }
-  return {content: scriptData, lang: scriptLang};
+  return [{content: scriptData, lang: scriptLang}, {content: templateData, lang: 'js'}];
 }
 
 function preprocessTemplate(data, type) {
-  let templateData = data;
+  let templateData = data || '';
   switch (type) {
   case 'jade':
   case 'pug':
@@ -232,6 +238,17 @@ exports.Extractor = class Extractor {
       new RegExp(`^(?:\\s|\\n)*(?:${tokens.start})${coreExpression}(?:${tokens.end})?`),
       new RegExp(`${coreExpression}`),
     ];
+  }
+
+  extract(filename, ext, content) {
+    this.parse(filename, preprocessTemplate(content, ext));
+    preprocessScript(content, ext).forEach(
+      ({content, lang})=> (
+        (lang === 'ts' || (!lang  && ext === 'ts'))
+          ?  this.parseTypeScript(filename, content)
+          :  this.parseJavascript(filename, content)
+      )
+    );
   }
 
   parse(filename, content) {
