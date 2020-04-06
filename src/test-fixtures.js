@@ -282,6 +282,43 @@ exports.VUE_COMPONENT_WITHOUT_SCRIPT_TAG = `
     </template>
 `;
 
+exports.VUE_COMPONENT_WITH_GETTEXT_IN_TEMPLATE = `
+    <template>
+        <article>
+        <a :title="$gettext('Link title')" v-translate>Link body</a>
+        {{ comment }}
+        </article>
+    </template>
+    <script>
+    export default {
+      computed: {
+        comment() {
+          return this.$gettext('Link comment');
+        }
+      }
+    }
+    </script>
+`;
+exports.POT_OUTPUT_VUE_COMPONENT_WITH_GETTEXT_IN_TEMPLATE = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: GreetingsComponent.vue
+msgid "Link body"
+msgstr ""
+
+#: GreetingsComponent.vue
+msgid "Link comment"
+msgstr ""
+
+#: GreetingsComponent.vue
+msgid "Link title"
+msgstr ""
+`
+
 exports.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG = `//
 //
 //

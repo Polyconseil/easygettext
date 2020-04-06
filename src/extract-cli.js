@@ -68,14 +68,7 @@ files.forEach(function(filename) {
   console.log(`[${PROGRAM_NAME}] extracting: '${filename}`);
   try {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
-    extractor.parse(file, extract.preprocessTemplate(data, ext));
-    const script = extract.preprocessScript(data, ext);
-
-    if ((script && script.lang === 'ts') || ext === 'ts') {
-      extractor.parseTypeScript(file, script.content);
-    } else {
-      extractor.parseJavascript(file, script.content);
-    }
+    extractor.extract(file, ext, data);
   } catch (e) {
     console.error(`[${PROGRAM_NAME}] could not read: '${filename}`);
     console.trace(e);
