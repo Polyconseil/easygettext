@@ -39,7 +39,7 @@
     "cheerio": "^1.0.0-rc.3",
     "estree-walker": "^2.0.1",
     "flow-remove-types": "^1.2.3",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.5",
     "pofile": "^1.1.0",
     "pug": "^2.0.4",
     "vue-template-compiler": "^2.6.10"
