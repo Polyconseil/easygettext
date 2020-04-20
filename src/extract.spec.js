@@ -126,6 +126,14 @@ describe('data preprocessor', () => {
     expect(extract.preprocessTemplate("<template lang='jade'>h1 hello</template>", 'vue')).toEqual('<h1>hello</h1>');
   });
 
+  it('should preprocess VueJS with multiple templates correctly', () => {
+    expect(extract.preprocessTemplate(
+      '<template web><h1>hello</h1></template><template native><Page class="page"><Label text="World"/></Page></template>', 'vue'
+    )).toEqual(
+      ['<h1>hello</h1>', '<Page class="page"><Label text="World"/></Page>']
+    );
+  });
+
   it('should preprocess VueJS script tag correctly', () => {
     const [script] = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_SCRIPT_TAG, 'vue');
     expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG);
