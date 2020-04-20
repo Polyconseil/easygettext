@@ -81,20 +81,34 @@ function preprocessTemplate(data, type) {
   case 'jade':
   case 'pug':
     // Add empty require function to the context to avoid errors with webpack require inside pug
-    templateData = pug.render(data, {filename: 'source.html', pretty: true, require: function() {}});
+    templateData = pug.render(data, {filename: 'source.html', pretty: true, require: function() {}}).trim();
     break;
   case 'vue':
-    const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false});
-    if (!vueFile.template) return '';  // return an empty string
-    templateData = vueFile.template.content;
-    if (vueFile.template.lang) {
-      return preprocessTemplate(templateData, vueFile.template.lang);
+    const $ = cheerio.load(templateData, {
+      xmlMode: true,
+      decodeEntities: false,
+      withStartIndices: true,
+    });
+
+    templateData = $('template').map(function() {
+      const t = $.html($(this));
+      const vueFile = vueCompiler.parse({ compiler, source: t, needMap: false});
+
+      if (vueFile.template.lang) {
+        return preprocessTemplate(($(this)).html(), vueFile.template.lang);
+      }
+      return vueFile.template.content.trim();
+    }).toArray();
+
+    // if there is just one template, use it as a string
+    if (templateData.length === 1) {
+      templateData = templateData[0];
     }
     break;
   default:
     break;
   }
-  return templateData.trim();
+  return templateData;
 }
 
 exports.preprocessTemplate   = preprocessTemplate;
@@ -535,13 +549,21 @@ exports.Extractor = class Extractor {
   }
 
   _extractTranslationData(filename, content) {
-    const $ = cheerio.load(content, {
-      xmlMode: true,
-      decodeEntities: false,
-      withStartIndices: true,
+    if (!Array.isArray(content)) {
+      content = [content];
+    }
+
+    const strings = content.map(c => {
+      const $ = cheerio.load(c, {
+        xmlMode: true,
+        decodeEntities: false,
+        withStartIndices: true,
+      });
+
+      return this._extractTranslationDataFromNodes($.root()[0].children, $, filename, c);
     });
 
-    return this._extractTranslationDataFromNodes($.root()[0].children, $, filename, content);
+    return [].concat.apply([], strings);
   }
 
   _hasTranslationToken(node) {
