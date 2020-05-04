@@ -10,6 +10,7 @@ Radically simple gettext tokens extraction tool for:
 - Javascript/ES7+
 - Vue
 - TypeScript (see [Known Issues](#known-issues))
+- Nativescript Vue with [native and web shared code](https://www.nativescript.org/vue)
 
 files.
 
