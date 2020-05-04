@@ -91,13 +91,12 @@ function preprocessTemplate(data, type) {
     });
 
     templateData = $('template').map(function() {
-      const t = $.html($(this));
-      const vueFile = vueCompiler.parse({ compiler, source: t, needMap: false});
+      let lang = $(this).attr('lang');
 
-      if (vueFile.template.lang) {
-        return preprocessTemplate(($(this)).html(), vueFile.template.lang);
+      if (lang) {
+        return preprocessTemplate($(this).html(), lang);
       }
-      return vueFile.template.content.trim();
+      return $(this).html().trim();
     }).toArray();
 
     // if there is just one template, use it as a string
