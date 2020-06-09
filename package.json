@@ -1,11 +1,11 @@
 {
-  "name": "easygettext",
+  "name": "@pitcher/easygettext",
   "version": "2.10.0",
   "description": "Simple tools to extract gettext strings",
   "main": "src/extract-cli.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/polyconseil/easygettext"
+    "url": "https://github.com/PitcherAG/easygettext"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

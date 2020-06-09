@@ -210,7 +210,7 @@ exports.Extractor = class Extractor {
         ? '\\s*' : `\\s*(?:${this.options.filterPrefix})?\\s*`,
 
       body: endDelimiter === '' ? `(${bodyCore})` : `(${bodyCore}?(?!${end}))`,
-      filters: this.options.attributes.join('|'),
+      filters: this.options.attributes.join('?(\(.*\))|'),
     };
   }
 
