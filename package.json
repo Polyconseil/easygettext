@@ -5,7 +5,7 @@
   "main": "src/extract-cli.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/polyconseil/easygettext"
+    "url": "https://github.com/PitcherAG/easygettext"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
