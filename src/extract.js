@@ -54,6 +54,9 @@ exports.TranslationReference = class TranslationReference {
 function preprocessJavascript(data, type) {
   let scriptData = '';
   switch (type) {
+  case 'js':
+    scriptData = data;
+    break;
   case 'vue':
     const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
     if (!vueFile.script) return '';
