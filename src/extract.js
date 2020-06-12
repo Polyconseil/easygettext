@@ -64,7 +64,7 @@ function preprocessScript(data, type) {
     const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
     if(vueFile.script) {
       scriptData = vueFile.script.content.trim();
-      scriptLang = vueFile.script.lang;
+      scriptLang = vueFile.script.lang || 'js';
     }
     if(vueFile.template) {
       templateData = vueFile.template.content;
