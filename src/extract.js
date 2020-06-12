@@ -259,11 +259,13 @@ exports.Extractor = class Extractor {
   extract(filename, ext, content) {
     this.parse(filename, preprocessTemplate(content, ext));
     preprocessScript(content, ext).forEach(
-      ({content, lang})=> (
-        (lang === 'ts' || (!lang  && ext === 'ts'))
-          ?  this.parseTypeScript(filename, content)
-          :  this.parseJavascript(filename, content)
-      )
+      ({content, lang}) => {
+        if (lang) {
+          (lang === 'ts' || (!lang  && ext === 'ts'))
+            ?  this.parseTypeScript(filename, content)
+            :  this.parseJavascript(filename, content)
+        }
+      }
     );
   }
 
