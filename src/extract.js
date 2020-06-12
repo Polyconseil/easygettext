@@ -53,29 +53,41 @@ exports.TranslationReference = class TranslationReference {
 };
 
 function preprocessScript(data, type) {
-  let scriptData = '';
-  let templateData = '';
-  let scriptLang = undefined;
-  switch (type) {
-  case 'js':
-    scriptData = data;
-    break;
-  case 'vue':
-    const vueFile = vueCompiler.parse({ compiler, source: data, needMap: false });
-    if(vueFile.script) {
-      scriptData = vueFile.script.content.trim();
-      scriptLang = vueFile.script.lang || 'js';
+  const contents = [];
+
+  if (type === 'vue') {
+    const vueFile = vueCompiler.parse({
+      compiler,
+      source: data,
+      needMap: false
+    });
+
+    if (vueFile.script) {
+      contents.push({
+        content: vueFile.script.content.trim(),
+        lang: vueFile.script.lang || 'js'
+      })
     }
+
     if(vueFile.template) {
-      templateData = vueFile.template.content;
-      templateData = vueCompiler.compileTemplate({compiler, source: templateData}).code;
+      const vueTemplate = vueCompiler.compileTemplate({
+        compiler,
+        source: vueFile.template.content
+      });
+
+      contents.push({
+        content: vueTemplate.code,
+        lang: 'js'
+      })
     }
-    break;
-  default:
-    scriptData = data || '';
-    break;
+  } else {
+    contents.push({
+      content: data || '',
+      lang: type
+    })
   }
-  return [{content: scriptData, lang: scriptLang}, {content: templateData, lang: 'js'}];
+
+  return contents;
 }
 
 function preprocessTemplate(data, type) {

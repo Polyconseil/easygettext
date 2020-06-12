@@ -141,7 +141,14 @@ describe('data preprocessor', () => {
 
   it('should preprocess VueJS no script tag correctly', () => {
     const [script] = extract.preprocessScript(fixtures.VUE_COMPONENT_WITHOUT_SCRIPT_TAG, 'vue');
-    expect(script.content).toBe('');
+    expect(script.content).toBe('var render = function() {\n' +
+      '  var _vm = this\n' +
+      '  var _h = _vm.$createElement\n' +
+      '  var _c = _vm._self._c || _h\n' +
+      '  return _c("h1", [_vm._v("Hello")])\n' +
+      '}\n' +
+      'var staticRenderFns = []\n' +
+      'render._withStripped = true\n');
   });
 
   it('should preprocess VueJS script tag in TypeScript correctly', () => {
