@@ -1,8 +1,8 @@
 .*.swp
+.idea
 coverage
-node_modules
-jspm_packages
-coverage
-npm-debug.log
-
 dist
+jspm_packages
+node_modules
+npm-debug.log
+tests
