@@ -90,7 +90,7 @@ function preprocessScript(data, type) {
   return contents;
 }
 
-function preprocessTemplate(data, type) {
+function preprocessTemplate(data, type = 'html') {
   let templateData = null;
 
   if (data) {
@@ -122,6 +122,8 @@ function preprocessTemplate(data, type) {
       if (templateData.length === 1) {
         templateData = templateData[0];
       }
+    } else if (type === 'html') {
+      return data
     }
   }
 
