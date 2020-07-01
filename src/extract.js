@@ -123,7 +123,7 @@ function preprocessTemplate(data, type = 'html') {
         templateData = templateData[0];
       }
     } else if (type === 'html') {
-      return data
+      templateData = data;
     }
   }
 
