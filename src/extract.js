@@ -91,37 +91,40 @@ function preprocessScript(data, type) {
 }
 
 function preprocessTemplate(data, type) {
-  let templateData = data || '';
-  switch (type) {
-  case 'jade':
-  case 'pug':
-    // Add empty require function to the context to avoid errors with webpack require inside pug
-    templateData = pug.render(data, {filename: 'source.html', pretty: true, require: function() {}}).trim();
-    break;
-  case 'vue':
-    const $ = cheerio.load(templateData, {
-      xmlMode: true,
-      decodeEntities: false,
-      withStartIndices: true,
-    });
+  let templateData = null;
 
-    templateData = $('template').map(function() {
-      let lang = $(this).attr('lang');
+  if (data) {
+    if (type === 'jade' || type === 'pug') {
+      templateData = pug.render(data, {
+        filename: 'source.html',
+        pretty: true,
+        require: () => {
+        },
+      }).trim();
+    } else if (type === 'vue') {
+      const $ = cheerio.load(templateData, {
+        xmlMode: true,
+        decodeEntities: false,
+        withStartIndices: true,
+      });
 
-      if (lang) {
-        return preprocessTemplate($(this).html(), lang);
+      templateData = $('template').map(function() {
+        let lang = $(this).attr('lang');
+
+        if (lang) {
+          return preprocessTemplate($(this).html(), lang);
+        }
+
+        return $(this).html().trim();
+      }).toArray();
+
+      // if there is just one template, use it as a string
+      if (templateData.length === 1) {
+        templateData = templateData[0];
       }
-      return $(this).html().trim();
-    }).toArray();
-
-    // if there is just one template, use it as a string
-    if (templateData.length === 1) {
-      templateData = templateData[0];
     }
-    break;
-  default:
-    break;
   }
+
   return templateData;
 }
 
@@ -269,15 +272,20 @@ exports.Extractor = class Extractor {
   }
 
   extract(filename, ext, content) {
-    this.parse(filename, preprocessTemplate(content, ext));
+    const templateData = preprocessTemplate(content, ext);
+
+    if (templateData) {
+      this.parse(filename, preprocessTemplate(content, ext));
+    }
+
     preprocessScript(content, ext).forEach(
       ({content, lang}) => {
         if (lang === 'js') {
-          this.parseJavascript(filename, content)
+          this.parseJavascript(filename, content);
         } else if (lang === 'ts') {
-          this.parseTypeScript(filename, content)
+          this.parseTypeScript(filename, content);
         }
-      }
+      },
     );
   }
 
