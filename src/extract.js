@@ -102,7 +102,7 @@ function preprocessTemplate(data, type) {
         },
       }).trim();
     } else if (type === 'vue') {
-      const $ = cheerio.load(templateData, {
+      const $ = cheerio.load(data, {
         xmlMode: true,
         decodeEntities: false,
         withStartIndices: true,
