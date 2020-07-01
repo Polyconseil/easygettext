@@ -1,5 +1,4 @@
 .*.swp
-.idea
 coverage
 dist
 jspm_packages
