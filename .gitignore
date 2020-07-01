@@ -1,6 +1,5 @@
 .*.swp
 coverage
-dist
 jspm_packages
 node_modules
 npm-debug.log
