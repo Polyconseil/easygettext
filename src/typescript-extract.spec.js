@@ -57,10 +57,11 @@ describe('TypeScript extractor object', () => {
         filename,
         fixtures.SCRIPT_GETTEXT_SEQUENCE_TS
       );
-      expect(extractedStrings.length).toBe(3);
+      expect(extractedStrings.length).toBe(4);
       const firstString = extractedStrings[0];
       const secondString = extractedStrings[1];
       const thirdString = extractedStrings[2];
+      const fourthString = extractedStrings[3];
       expect(firstString.msgid).toBe('Hello there!');
       expect(firstString.reference.file).toBe(filename);
       // expect(firstString.reference.line).toBe(7);
@@ -70,6 +71,8 @@ describe('TypeScript extractor object', () => {
       expect(thirdString.msgid).toBe('Hello there!');
       expect(thirdString.reference.file).toBe(filename);
       // expect(thirdString.reference.line).toBe(8);
+      expect(fourthString.msgid).toBe('Hello there!');
+      expect(fourthString.reference.file).toBe(filename);
     });
 
     it('should extract contextual strings localized using $pgettext from the script', () => {

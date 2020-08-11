@@ -42,7 +42,7 @@ function getTranslationObject(node, gettextFunctionName, filename) {
 
 function getGettextEntriesFromTypeScript(script, filename) {
   let translationEntries = [];
-  walk(parseTSScript(script, {loc: true}), {
+  walk(parseTSScript(script, {loc: true, next: true}), {
     enter: function(node) {
       if (node.type && node.type === 'CallExpression' && node.callee) {
         if (DEFAULT_VUE_GETTEXT_FUNCTIONS_KEYS.includes(node.callee.name)) {
