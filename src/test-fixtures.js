@@ -317,7 +317,7 @@ msgstr ""
 #: GreetingsComponent.vue
 msgid "Link title"
 msgstr ""
-`
+`;
 
 exports.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG = `//
 //
@@ -965,6 +965,11 @@ export default {
       return {
         an_array: [this.$gettext('Hello there!'), this.$gettext('Hello there!')],
         a_string: this.$gettext('Hello there!'),
+      }
+    },
+    object_using_next_typescript_features(): MessageObject {
+      return {
+        a_string: this?.$gettext('Hello there!'),
       }
     }
   }
