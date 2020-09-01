@@ -19,6 +19,7 @@
   "author": "Polyconseil",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^26.0.12",
     "codecov": "^3.6.5",
     "eslint": "^5.16.0",
     "jest": "^24.9.0"

@@ -1,4 +1,5 @@
 const extract = require('./extract.js');
+const jsExtractor = require('./javascript-extract.js');
 const constants = require('./constants.js');
 const fixtures = require('./test-fixtures.js');
 
@@ -141,14 +142,14 @@ describe('data preprocessor', () => {
 
   it('should preprocess VueJS no script tag correctly', () => {
     const [script] = extract.preprocessScript(fixtures.VUE_COMPONENT_WITHOUT_SCRIPT_TAG, 'vue');
-    expect(script.content).toBe('var render = function() {\n' +
-      '  var _vm = this\n' +
-      '  var _h = _vm.$createElement\n' +
-      '  var _c = _vm._self._c || _h\n' +
-      '  return _c("h1", [_vm._v("Hello")])\n' +
-      '}\n' +
-      'var staticRenderFns = []\n' +
-      'render._withStripped = true\n');
+    expect(script.content).toBe('var render = function() {\n'
+      + '  var _vm = this\n'
+      + '  var _h = _vm.$createElement\n'
+      + '  var _c = _vm._self._c || _h\n'
+      + '  return _c("h1", [_vm._v("Hello")])\n'
+      + '}\n'
+      + 'var staticRenderFns = []\n'
+      + 'render._withStripped = true\n');
   });
 
   it('should preprocess VueJS script tag in TypeScript correctly', () => {
@@ -381,13 +382,13 @@ describe('Raw translation data', () => {
 
   it('should remove optional HTML whitespaces', () => {
     const extractorWithBindOnce = new extract.Extractor({
-      removeHTMLWhitespaces: true
+      removeHTMLWhitespaces: true,
     });
     const data = extractorWithBindOnce._extractTranslationData(fixtures.FILENAME_0, fixtures.HTML_OPTIONAL_WHITESPACES);
 
     expect(data.length).toEqual(1);
-    expect(data[0].text).toEqual(`It's software you install on your server!`);
-  })
+    expect(data[0].text).toEqual('It\'s software you install on your server!');
+  });
 
   it('should extract filters that are broken across multiple lines', () => {
     const extractorInterpolate = new extract.Extractor({
