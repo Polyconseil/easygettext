@@ -1,7 +1,7 @@
 const {Parser} = require('acorn');
 const stage3 = require('acorn-stage3');
 const babel = require('@babel/core');
-const {getTextEntries} = require('./extract-utils.js');
+const {getTextEntries, PROGRAM_NAME} = require('./extract-utils.js');
 
 const {DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
 
@@ -15,43 +15,8 @@ function extractConcatenatedStrings(value, allTokens, index) {
   return value + extractConcatenatedStrings(nextValue, allTokens, index + 2);
 }
 
-
-function getGettextEntriesFromJavaScript(script, parser = 'auto') {
-  const allTokens = [];
-
-  switch (parser) {
-  case 'acorn':
-    const ACORN_OPTIONS = {
-      ecmaVersion: 10,
-      sourceType: 'module',
-      locations: true,
-      onToken: allTokens,
-      plugins: {
-        stage3: true,
-      },
-    };
-
-    Parser.extend(stage3).parse(script, ACORN_OPTIONS);
-    break;
-  case 'babel':
-    const babelResult = babel.parseSync(script, {
-      sourceType: 'module',
-      parserOpts: {
-        tokens: true,
-      },
-    });
-    allTokens.push(...babelResult.tokens);
-    break;
-  case 'auto':
-  default:
-    try {
-      return getGettextEntriesFromJavaScript(script, 'acorn');
-    } catch (e) {
-      return getGettextEntriesFromJavaScript(script, 'babel');
-    }
-  }
-
-
+function getGettextEntriesFromJavaScript(argTokens = []) {
+  let allTokens = argTokens;
   let extractedEntries = [];
 
   // parse all tokens
@@ -80,7 +45,7 @@ function getGettextEntriesFromJavaScript(script, parser = 'auto') {
 
             if (closingToken.type.label !== '`') {
               const line = currentToken.loc.start.line;
-              throw new Error(`easygettext currently does not support translated template strings with variables! [line ${line}]`);
+              throw new Error(`${PROGRAM_NAME} currently does not support translated template strings with variables! [line ${line}]`);
             }
             obj[argName] = nextToken.value.trim();
             return obj;
@@ -108,8 +73,59 @@ function getGettextEntriesFromJavaScript(script, parser = 'auto') {
   return extractedEntries;
 }
 
+function parseJSGettextWithAcorn(script) {
+  let allTokens = [];
+
+  const ACORN_OPTIONS = {
+    ecmaVersion: 10,
+    sourceType: 'module',
+    locations: true,
+    onToken: allTokens,
+    plugins: {
+      stage3: true,
+    },
+  };
+
+  Parser.extend(stage3).parse(script, ACORN_OPTIONS);
+
+  return allTokens;
+}
+
+function parseJSGettextWithBabel(script) {
+  let allTokens = [];
+
+  const babelResult = babel.parseSync(script, {
+    sourceType: 'module',
+    parserOpts: {
+      tokens: true,
+    },
+  });
+  allTokens.push(...babelResult.tokens);
+
+  return allTokens;
+}
+
 function extractStringsFromJavascript(filename, script, parser = 'auto') {
-  return getTextEntries(filename, getGettextEntriesFromJavaScript(script, parser));
+  let parsedJSGettext;
+
+  switch (parser) {
+  case 'acorn':
+    parsedJSGettext = parseJSGettextWithAcorn(script);
+    break;
+  case 'babel':
+    parsedJSGettext = parseJSGettextWithBabel(script);
+    break;
+
+  default:
+    try {
+      parsedJSGettext = parseJSGettextWithAcorn(script);
+    } catch (e) {
+      console.log(`[${PROGRAM_NAME}] will switch extracting using acorn as parser and use babel instead`); // eslint-disable-line no-console
+      parsedJSGettext = parseJSGettextWithBabel(script);
+    }
+  }
+
+  return getTextEntries(filename, getGettextEntriesFromJavaScript(parsedJSGettext));
 }
 
 module.exports = {
