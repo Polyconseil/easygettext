@@ -151,4 +151,41 @@ describe('Javascript extractor object', () => {
       }).toThrow();
     });
   });
+
+  describe('Multiple parser support', () => {
+    it('should extract strings using the parser acorn', () => {
+      const filename = fixtures.VUE_COMPONENT_FILENAME;
+      const extractedStrings = jsExtractor.extractStringsFromJavascript(
+        filename,
+        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG,
+        'acorn'
+      );
+
+      expect(extractedStrings.length).toBe(3);
+      expect(extractedStrings[0].msgid).toBe('Hello there!');
+    });
+
+    it('should extract strings using the parser babel', () => {
+      const filename = fixtures.VUE_COMPONENT_FILENAME;
+      const extractedStrings = jsExtractor.extractStringsFromJavascript(
+        filename,
+        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG,
+        'babel'
+      );
+
+      expect(extractedStrings.length).toBe(3);
+      expect(extractedStrings[0].msgid).toBe('Hello there!');
+    });
+
+    it('should extract strings using the parser acorn as default parser if nothing specified', () => {
+      const filename = fixtures.VUE_COMPONENT_FILENAME;
+      const extractedStrings = jsExtractor.extractStringsFromJavascript(
+        filename,
+        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG,
+      );
+
+      expect(extractedStrings.length).toBe(3);
+      expect(extractedStrings[0].msgid).toBe('Hello there!');
+    });
+  });
 });
