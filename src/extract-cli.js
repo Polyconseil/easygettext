@@ -7,8 +7,8 @@ const minimist = require('minimist');
 
 const constants = require('./constants.js');
 const extract = require('./extract.js');
+const {PROGRAM_NAME} = require('./extract-utils.js');
 
-const PROGRAM_NAME = 'easygettext';
 const ALLOWED_EXTENSIONS = ['html', 'htm', 'jade', 'js', 'pug', 'vue', 'ts'];
 const ALLOWED_EXTENSIONS_EXCEPTIONS = ['.d.ts'];
 

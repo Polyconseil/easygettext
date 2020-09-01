@@ -145,7 +145,8 @@ describe('Javascript extractor object', () => {
       expect(() => {
         jsExtractor.extractStringsFromJavascript(
           filename,
-          fixtures.SCRIPT_WITH_TEMPLATE_LITERALS_WITH_VARIABLES
+          fixtures.SCRIPT_WITH_TEMPLATE_LITERALS_WITH_VARIABLES,
+          'acorn'
         );
       }).toThrow();
     });

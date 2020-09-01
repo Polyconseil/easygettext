@@ -1,5 +1,6 @@
 const Pofile = require('pofile');
 const {MARKER_NO_CONTEXT} = require('./constants.js');
+const PROGRAM_NAME = 'easygettext';
 
 function lineNumToString(withLineNumbers = false) {
   return (withLineNumbers && this.line)
@@ -38,5 +39,6 @@ function getTextEntries(filename, textEntries) {
 }
 
 module.exports = {
+  PROGRAM_NAME,
   getTextEntries,
 };
