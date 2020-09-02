@@ -1,3 +1,5 @@
+exports.PROGRAM_NAME = 'easygettext';
+
 exports.DEFAULT_ATTRIBUTES = [
   'get-text',
   'i18n',

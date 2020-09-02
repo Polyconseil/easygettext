@@ -1,7 +1,8 @@
 const {Parser} = require('acorn');
 const stage3 = require('acorn-stage3');
 const babel = require('@babel/core');
-const {getTextEntries, PROGRAM_NAME} = require('./extract-utils.js');
+const {getTextEntries} = require('./extract-utils.js');
+const {PROGRAM_NAME} = require('./constants.js');
 
 const {DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
 
