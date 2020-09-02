@@ -29,13 +29,18 @@ yarn add --dev easygettext
 
 ### Usage & Examples
 
-##### HTML token extraction
+#### HTML token extraction
 
 Simply invoke the tool on the templates you want to extract a POT dictionary template from.
 The optional '--output' argument enables you to directly output to a file.
 
 ```
 gettext-extract --output dictionary.pot foo.html bar.pug component.vue sourcefile.js
+```
+
+**CLI usage:**
+```
+gettext-extract [--attribute EXTRA-ATTRIBUTE] [--filterPrefix FILTER-PREFIX] [--output OUTFILE] [--parser auto|acorn|babel] <FILES>
 ```
 
 It recognizes the following token flavours (currently; feel free to extend it!)
@@ -98,8 +103,21 @@ gettext-extract --startDelimiter '[#' --endDelimiter '#]' --output dictionary.po
 gettext-extract --removeHTMLWhitespaces --output dictionary.pot foo.html
 ```
 
+#### Supports parsing with acorn and babel
 
-##### Javascript/ES7 token extraction
+If you want to use optional-chaining, nullish-coalesce or any babel plugin, you might want to set the parameter `--parser babel`.
+
+```
+gettext-extract --parser babel --output dictionary.pot foo.html
+```
+
+It can be set to:
+`--parser` `auto|acorn|babel`
+
+More info at [PR 72](https://github.com/Polyconseil/easygettext/pull/72)
+
+
+#### Javascript/ES7 token extraction
 
 The usage stays the same but with a Javascript file !
 
@@ -135,7 +153,7 @@ Those tokens are frozen for now, but feel free to make a pull request and add su
 We currently can't extract **template strings with variables** though.
 
 
-##### Extract from Vue components
+#### Extract from Vue components
 
 You can also extract the strings marked as translatable inside the ``<script>`` and ``<template>`` sections of Vue.js components:
 
@@ -171,7 +189,7 @@ With a component that looks like this:
 The Javascript & HTML (or Pug) extraction within a Vue component works with the same rules as stated upper in this document.
 
 
-##### Extractiing from multiple files
+#### Extracting from multiple files
 `gettext-extract` needs the exact file paths to work. If you want to extract gettext from all files in a folder, you can use the UNIX find command. Here is an example as a npm script:
 
 ```jsonc
@@ -185,7 +203,7 @@ The Javascript & HTML (or Pug) extraction within a Vue component works with the 
 ```
 
 
-##### gettext-compile
+#### gettext-compile
 
 Outputs or writes to an output file, the sanitized JSON version of a PO file.
 
@@ -267,13 +285,7 @@ npm test
 Run:
 
 ```bash
-npm run prepublish
-```
-
-Then run `extract-cli.js`:
-
-```bash
-./dist/extract-cli.js --attribute v-translate --attribute v-i18n ~/output.html
+./src/extract-cli.js --attribute v-translate --attribute v-i18n ~/output.html
 ```
 
 
@@ -301,7 +313,7 @@ tool to extract our JavaScript translation tokens.
 Nevertheless, the way [angular-gettext](https://angular-gettext.rocketeer.be/) does it (with tokens, directly in HTML) is elegant, is used by many other
 libraries and will also be the way to do it in Angular2.
 
-Also, by utilizing [acorn](https://github.com/ternjs/acorn), this tool will parse and compile typical JavaScript expressions used in translate-filter expressions.  For example, exposed to a (AngularJS-based) fragment like 
+Also, by utilizing either [acorn](https://github.com/ternjs/acorn) or [babel](https://github.com/babel/babel), this tool will parse and compile typical JavaScript expressions used in translate-filter expressions. For example, exposed to a (AngularJS-based) fragment like
 ```html
 <span ng-bind="isNight ? 'Moon' + 'shine' : 'Day' + 'light' |translate"></span>
 <span ng-bind="isC ? 'C' + (isD ? 'D' : 'd') : 'c' + (isE ? 'E' : 'e') |i18n "></span>
