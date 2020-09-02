@@ -86,7 +86,7 @@ files.forEach(function(filename) {
       extractor.parseJavascript(file, data, jsParser);
     }
   } catch (e) {
-    console.error(`[${PROGRAM_NAME}] could not read: '${filename}' using parser ${jsParser}`);
+    console.error(`[${PROGRAM_NAME}] could not read: '${filename}' using ${jsParser === 'auto' ? 'acorn' : jsParser} as parser`);
     console.trace(e);
     process.exit(1);
   }
