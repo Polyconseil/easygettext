@@ -319,30 +319,25 @@ msgid "Link title"
 msgstr ""
 `;
 
-exports.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG = `//
-//
-//
-//
-
-export default {
-    name: "greetings",
-    computed: {
-        greeting_message() {
-            return this.$gettext("Hello there!")
-        },
-        duplicated_greeting_message() {
-            return this.$gettext("Hello there!")
-        },
-        answer_message() {
-            return this.$gettext("General Kenobi! You are a bold one.")
-        }
-    },
-    methods: {
-        async getGreetingMessageAnswer() {
-            return await Promise.resolve('General Kenobi!');
-        }
-    }
-}`;
+exports.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG = `export default {
+            name: "greetings",
+            computed: {
+                greeting_message() {
+                    return this.$gettext("Hello there!")
+                },
+                duplicated_greeting_message() {
+                    return this.$gettext("Hello there!")
+                },
+                answer_message() {
+                    return this.$gettext("General Kenobi! You are a bold one.")
+                }
+            },
+            methods: {
+                async getGreetingMessageAnswer() {
+                    return await Promise.resolve('General Kenobi!');
+                }
+            }
+        }`;
 
 exports.VUE_COMPONENT_WITH_TS_SCRIPT_TAG = `
     <template>
@@ -375,25 +370,25 @@ exports.VUE_COMPONENT_WITH_TS_SCRIPT_TAG = `
 
 exports.VUE_COMPONENT_EXPECTED_PROCESSED_TS_SCRIPT_TAG = `type Message = string;
 
-export default {
-    name: "greetings",
-    computed: {
-        greeting_message(): Message {
-            return this.$gettext("Hello there!")
-        },
-        duplicated_greeting_message(): Message {
-            return this.$gettext("Hello there!")
-        },
-        answer_message(): Message {
-            return this.$gettext("General Kenobi! You are a bold one.")
-        }
-    },
-    methods: {
-        async getGreetingMessageAnswer(): Promise<Message> {
-            return await Promise.resolve('General Kenobi!');
-        }
-    }
-}`;
+        export default {
+            name: "greetings",
+            computed: {
+                greeting_message(): Message {
+                    return this.$gettext("Hello there!")
+                },
+                duplicated_greeting_message(): Message {
+                    return this.$gettext("Hello there!")
+                },
+                answer_message(): Message {
+                    return this.$gettext("General Kenobi! You are a bold one.")
+                }
+            },
+            methods: {
+                async getGreetingMessageAnswer(): Promise<Message> {
+                    return await Promise.resolve('General Kenobi!');
+                }
+            }
+        }`;
 
 exports.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG = `
     <template>
@@ -425,33 +420,28 @@ exports.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG = `
      </script>
 `;
 
-exports.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG = `//
-//
-//
-//
+exports.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG = `// @flow
+        type Message = string;
 
-// @flow
-type Message = string;
-
-export default {
-    name: "greetings",
-    computed: {
-        greeting_message(): Message {
-            return this.$gettext("Hello there!")
-        },
-        duplicated_greeting_message(): Message {
-            return this.$gettext("Hello there!")
-        },
-        answer_message(): Message {
-            return this.$gettext("General Kenobi! You are a bold one.")
-        }
-    },
-    methods: {
-        async getGreetingMessageAnswer(): Promise<Message> {
-            return await Promise.resolve('General Kenobi!');
-        }
-    }
-}`;
+        export default {
+            name: "greetings",
+            computed: {
+                greeting_message(): Message {
+                    return this.$gettext("Hello there!")
+                },
+                duplicated_greeting_message(): Message {
+                    return this.$gettext("Hello there!")
+                },
+                answer_message(): Message {
+                    return this.$gettext("General Kenobi! You are a bold one.")
+                }
+            },
+            methods: {
+                async getGreetingMessageAnswer(): Promise<Message> {
+                    return await Promise.resolve('General Kenobi!');
+                }
+            }
+        }`;
 
 exports.SCRIPT_WITH_TEMPLATE_LITERALS = `
 export default {

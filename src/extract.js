@@ -2,8 +2,7 @@ const cheerio = require('cheerio');
 const cheerioUtils = require('cheerio/lib/utils');
 const Pofile = require('pofile');
 const pug = require('pug');
-const vueCompiler = require('@vue/component-compiler-utils');
-const compiler = require('vue-template-compiler');
+const {parse, compileTemplate} = require('@vue/compiler-sfc');
 const acorn = require('acorn');
 const walk = require('acorn-walk');
 const constants = require('./constants.js');
@@ -56,11 +55,7 @@ function preprocessScript(data, type) {
   const contents = [];
 
   if (type === 'vue') {
-    const vueFile = vueCompiler.parse({
-      compiler,
-      source: data,
-      needMap: false
-    });
+    const vueFile = parse(data).descriptor;
 
     if (vueFile.script) {
       contents.push({
@@ -69,11 +64,8 @@ function preprocessScript(data, type) {
       })
     }
 
-    if(vueFile.template) {
-      const vueTemplate = vueCompiler.compileTemplate({
-        compiler,
-        source: vueFile.template.content
-      });
+    if (vueFile.template) {
+      const vueTemplate = compileTemplate({source: vueFile.template.content});
 
       contents.push({
         content: vueTemplate.code,
@@ -273,21 +265,21 @@ exports.Extractor = class Extractor {
     ];
   }
 
-  extract(filename, ext, content) {
-    const templateData = preprocessTemplate(content, ext);
+  extract(filename, ext, filecontent) {
+    const templateData = preprocessTemplate(filecontent, ext);
 
     if (templateData) {
-      this.parse(filename, preprocessTemplate(content, ext));
+      this.parse(filename, preprocessTemplate(filecontent, ext));
     }
 
-    preprocessScript(content, ext).forEach(
+    preprocessScript(filecontent, ext).forEach(
       ({content, lang}) => {
         if (lang === 'js') {
           this.parseJavascript(filename, content);
         } else if (lang === 'ts') {
           this.parseTypeScript(filename, content);
         }
-      },
+      }
     );
   }
 
@@ -574,7 +566,8 @@ exports.Extractor = class Extractor {
       .filter((x) => x !== undefined);
   }
 
-  _extractTranslationData(filename, content) {
+  _extractTranslationData(filename, filecontent) {
+    let content = filecontent;
     if (!Array.isArray(content)) {
       content = [content];
     }
