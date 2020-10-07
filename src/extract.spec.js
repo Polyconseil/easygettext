@@ -111,6 +111,12 @@ describe('Extractor object', () => {
     extractor.extract(fixtures.VUE_COMPONENT_FILENAME, 'vue', fixtures.VUE_COMPONENT_WITH_GETTEXT_IN_TEMPLATE);
     expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_COMPONENT_WITH_GETTEXT_IN_TEMPLATE);
   });
+
+  it('should output a correct POT file for vue component extracted from javascript', ()=> {
+    const extractor = new extract.Extractor({attributes: ['v-translate']});
+    extractor.extract('component.js', 'js', fixtures.VUE_COMPONENT_FROM_JAVASCRIPT);
+    expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_COMPONENT_FROM_JAVASCRIPT);
+  });
 });
 
 

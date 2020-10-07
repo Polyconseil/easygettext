@@ -83,7 +83,7 @@ function preprocessScript(data, type) {
 }
 
 function preprocessTemplate(data, type = 'html') {
-  let templateData = null;
+  let templateData = data || '';
 
   if (data) {
     if (type === 'jade' || type === 'pug') {
