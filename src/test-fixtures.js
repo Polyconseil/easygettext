@@ -299,6 +299,7 @@ exports.VUE_COMPONENT_WITH_GETTEXT_IN_TEMPLATE = `
     }
     </script>
 `;
+
 exports.POT_OUTPUT_VUE_COMPONENT_WITH_GETTEXT_IN_TEMPLATE = `msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
@@ -933,6 +934,32 @@ msgid_plural "%{ n } Homes"
 msgstr[0] ""
 msgstr[1] ""
 `;
+
+
+
+exports.VUE_COMPONENT_FROM_JAVASCRIPT = `
+import Vue from 'vue'
+
+const TestComponent2 = Vue.component('TestComponent2', {
+  template: \`
+    <h1 v-translate>Test String 2</h1>
+  \`
+})
+
+export default TestComponent2
+`;
+
+exports.POT_OUTPUT_VUE_COMPONENT_FROM_JAVASCRIPT = `msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Generated-By: easygettext\\n"
+"Project-Id-Version: \\n"
+
+#: component.js
+msgid "Test String 2"
+msgstr ""
+`
 
 exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';
 exports.SCRIPT_GETTEXT_SEQUENCE = `
