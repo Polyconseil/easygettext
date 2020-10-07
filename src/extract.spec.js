@@ -1,5 +1,4 @@
 const extract = require('./extract.js');
-const jsExtractor = require('./javascript-extract.js');
 const constants = require('./constants.js');
 const fixtures = require('./test-fixtures.js');
 
