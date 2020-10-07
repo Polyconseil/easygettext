@@ -181,7 +181,7 @@ describe('Javascript extractor object', () => {
       const filename = fixtures.VUE_COMPONENT_FILENAME;
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG,
+        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG
       );
 
       expect(extractedStrings.length).toBe(3);

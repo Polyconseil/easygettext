@@ -60,8 +60,8 @@ function preprocessScript(data, type) {
     if (vueFile.script) {
       contents.push({
         content: vueFile.script.content.trim(),
-        lang: vueFile.script.lang || 'js'
-      })
+        lang: vueFile.script.lang || 'js',
+      });
     }
 
     if (vueFile.template) {
@@ -69,14 +69,14 @@ function preprocessScript(data, type) {
 
       contents.push({
         content: vueTemplate.code,
-        lang: 'js'
-      })
+        lang: 'js',
+      });
     }
   } else {
     contents.push({
       content: data || '',
-      lang: type
-    })
+      lang: type,
+    });
   }
 
   return contents;
@@ -265,19 +265,19 @@ exports.Extractor = class Extractor {
     ];
   }
 
-  extract(filename, ext, filecontent) {
-    const templateData = preprocessTemplate(filecontent, ext);
+  extract(filename, ext, content) {
+    const templateData = preprocessTemplate(content, ext);
 
     if (templateData) {
-      this.parse(filename, preprocessTemplate(filecontent, ext));
+      this.parse(filename, preprocessTemplate(content, ext));
     }
 
-    preprocessScript(filecontent, ext).forEach(
-      ({content, lang}) => {
+    preprocessScript(content, ext).forEach(
+      ({content: fileContent, lang}) => {
         if (lang === 'js') {
-          this.parseJavascript(filename, content);
+          this.parseJavascript(filename, fileContent);
         } else if (lang === 'ts') {
-          this.parseTypeScript(filename, content);
+          this.parseTypeScript(filename, fileContent);
         }
       }
     );
@@ -480,6 +480,7 @@ exports.Extractor = class Extractor {
   }
 
   _getAllMatches(text, matches, re) {
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const match = re.exec(text);
       if (match === null) {
@@ -501,7 +502,7 @@ exports.Extractor = class Extractor {
     const node = $(el);
 
     if (this._hasTranslationToken(node)) {
-      const text = this._getNodeHTML(node)
+      const text = this._getNodeHTML(node);
 
       if (text.length !== 0) {
         return [new exports.NodeTranslationInfo(node, text, reference, this.options.attributes)];
@@ -566,8 +567,8 @@ exports.Extractor = class Extractor {
       .filter((x) => x !== undefined);
   }
 
-  _extractTranslationData(filename, filecontent) {
-    let content = filecontent;
+  _extractTranslationData(filename, fileContent) {
+    let content = fileContent;
     if (!Array.isArray(content)) {
       content = [content];
     }
