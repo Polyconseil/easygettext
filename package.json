@@ -19,10 +19,10 @@
   "author": "Polyconseil",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^26.0.12",
-    "codecov": "^3.6.5",
-    "eslint": "^5.16.0",
-    "jest": "^24.9.0"
+    "@types/jest": "^26.0.14",
+    "codecov": "^3.8.0",
+    "eslint": "^7.10.0",
+    "jest": "^26.5.2"
   },
   "engines": {
     "node": ">=8"
@@ -32,18 +32,18 @@
     "gettext-extract": "./src/extract-cli.js"
   },
   "dependencies": {
-    "@babel/core": "^7.11.5",
+    "@babel/core": "^7.11.6",
     "@vue/compiler-sfc": "^3.0.0",
-    "acorn": "^6.4.1",
-    "acorn-stage3": "^2.0.0",
-    "acorn-walk": "^6.2.0",
+    "acorn": "^6.4.2",
+    "acorn-stage3": "^4.0.0",
+    "acorn-walk": "^8.0.0",
     "buntis": "0.2.1",
     "cheerio": "^1.0.0-rc.3",
     "estree-walker": "^2.0.1",
-    "flow-remove-types": "^1.2.3",
+    "flow-remove-types": "^2.135.0",
     "minimist": "^1.2.5",
     "pofile": "^1.1.0",
-    "pug": "^2.0.4"
+    "pug": "^3.0.0"
   },
   "files": [
     "src"
