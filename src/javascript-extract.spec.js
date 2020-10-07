@@ -21,17 +21,17 @@ describe('Javascript extractor object', () => {
       expect(firstString.msgid).toBe('Hello there!');
       expect(firstString.msgctxt).toBe(MARKER_NO_CONTEXT);
       expect(firstString.reference.file).toBe(filename);
-      expect(firstString.reference.line).toBe(10);
+      expect(firstString.reference.line).toBe(5);
 
       expect(secondString.msgid).toBe('Hello there!');
       expect(secondString.msgctxt).toBe(MARKER_NO_CONTEXT);
       expect(secondString.reference.file).toBe(filename);
-      expect(secondString.reference.line).toBe(13);
+      expect(secondString.reference.line).toBe(8);
 
       expect(thirdString.msgid).toBe('General Kenobi! You are a bold one.');
       expect(thirdString.msgctxt).toBe(MARKER_NO_CONTEXT);
       expect(thirdString.reference.file).toBe(filename);
-      expect(thirdString.reference.line).toBe(16);
+      expect(thirdString.reference.line).toBe(11);
     });
 
     it('should extract strings localized using $ngettext from the script', () => {

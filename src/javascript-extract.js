@@ -24,12 +24,15 @@ function getGettextEntriesFromJavaScript(argTokens = []) {
   for (let i = 0; i < allTokens.length; i = i + 1) {
     let token = allTokens[i];
     for (let gettextFunc in DEFAULT_VUE_GETTEXT_FUNCTIONS) {
+      if (!DEFAULT_VUE_GETTEXT_FUNCTIONS.hasOwnProperty(gettextFunc)) {
+        continue;
+      }
+      let args = DEFAULT_VUE_GETTEXT_FUNCTIONS[gettextFunc];
       if (
         token.value === gettextFunc
         && token.type.label !== 'string' // disallows strings containing magic values: we identify FUNCTIONS
         && allTokens[i + 1].type.label === '('  // cheap check to see if it was actually a function call. It's this or a whole parsing of the location.
       ) {
-        const args = DEFAULT_VUE_GETTEXT_FUNCTIONS[gettextFunc];
         const gettextData = args.reduce(function(obj, argName, argIndex) {
           // Gets the arguments to $gettext, $pgettext, etc. from the tokens.
           // In $pgettext('context string', msgid') :
