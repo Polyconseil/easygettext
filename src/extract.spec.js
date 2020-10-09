@@ -112,6 +112,12 @@ describe('Extractor object', () => {
     expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_COMPONENT_WITH_GETTEXT_IN_TEMPLATE);
   });
 
+  it('should output a correct POT file for vue component with $gettext used in template and data', () => {
+    const extractor = new extract.Extractor({attributes: ['v-translate']});
+    extractor.extract(fixtures.VUE_COMPONENT_FILENAME, 'vue', fixtures.VUE_COMPONENT_WITH_GETTEXT_IN_TEXT_AND_DATA);
+    expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_COMPONENT_WITH_GETTEXT_IN_TEXT_AND_DATA);
+  })
+
   it('should output a correct POT file for vue component extracted from javascript', ()=> {
     const extractor = new extract.Extractor({attributes: ['v-translate']});
     extractor.extract('component.js', 'js', fixtures.VUE_COMPONENT_FROM_JAVASCRIPT);

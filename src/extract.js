@@ -265,7 +265,7 @@ exports.Extractor = class Extractor {
     ];
   }
 
-  extract(filename, ext, content) {
+  extract(filename, ext, content, jsParser = 'auto') {
     const templateData = preprocessTemplate(content, ext);
 
     if (templateData) {
@@ -275,7 +275,7 @@ exports.Extractor = class Extractor {
     preprocessScript(content, ext).forEach(
       ({content: fileContent, lang}) => {
         if (lang === 'js') {
-          this.parseJavascript(filename, fileContent);
+          this.parseJavascript(filename, fileContent, jsParser);
         } else if (lang === 'ts') {
           this.parseTypeScript(filename, fileContent);
         }
