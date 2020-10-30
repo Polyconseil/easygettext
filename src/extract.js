@@ -1,8 +1,6 @@
 const cheerio = require('cheerio');
 const cheerioUtils = require('cheerio/lib/utils');
 const Pofile = require('pofile');
-const pug = require('pug');
-const {parse, compileTemplate} = require('@vue/compiler-sfc');
 const acorn = require('acorn');
 const walk = require('acorn-walk');
 const constants = require('./constants.js');
@@ -55,6 +53,7 @@ function preprocessScript(data, type) {
   const contents = [];
 
   if (type === 'vue') {
+    const {parse, compileTemplate} = require('@vue/compiler-sfc');
     const vueFile = parse(data).descriptor;
 
     if (vueFile.script) {
@@ -87,6 +86,7 @@ function preprocessTemplate(data, type = 'html') {
 
   if (data) {
     if (type === 'jade' || type === 'pug') {
+      const pug = require('pug');
       templateData = pug.render(data, {
         filename: 'source.html',
         pretty: true,
