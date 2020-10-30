@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@babel/core": "^7.11.6",
-    "@vue/compiler-sfc": "^3.0.0",
     "acorn": "^6.4.2",
     "acorn-stage3": "^4.0.0",
     "acorn-walk": "^8.0.0",
@@ -42,7 +41,10 @@
     "estree-walker": "^2.0.1",
     "flow-remove-types": "^2.135.0",
     "minimist": "^1.2.5",
-    "pofile": "^1.1.0",
+    "pofile": "^1.1.0"
+  },
+  "optionalDependencies": {
+    "@vue/compiler-sfc": "^3.0.0",
     "pug": "^3.0.0"
   },
   "files": [
