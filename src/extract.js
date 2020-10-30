@@ -279,7 +279,7 @@ exports.Extractor = class Extractor {
         } else if (lang === 'ts') {
           this.parseTypeScript(filename, fileContent);
         }
-      }
+      },
     );
   }
 

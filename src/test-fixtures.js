@@ -355,7 +355,7 @@ msgstr ""
 #: GreetingsComponent.vue
 msgid "Test String 3"
 msgstr ""
-`
+`;
 
 exports.CLI_OUTPUT_VUE_COMPONENT_WITH_GETTEXT_IN_TEXT_AND_DATA = `[easygettext] extracting: '{path}'
 msgid ""
@@ -373,7 +373,7 @@ msgstr ""
 msgid "Test String 3"
 msgstr ""
 
-`
+`;
 
 exports.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG = `export default {
             name: "greetings",
@@ -991,7 +991,6 @@ msgstr[1] ""
 `;
 
 
-
 exports.VUE_COMPONENT_FROM_JAVASCRIPT = `
 import Vue from 'vue'
 
@@ -1014,7 +1013,7 @@ msgstr ""
 #: component.js
 msgid "Test String 2"
 msgstr ""
-`
+`;
 
 exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';
 exports.SCRIPT_GETTEXT_SEQUENCE = `

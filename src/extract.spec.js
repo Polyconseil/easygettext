@@ -116,7 +116,7 @@ describe('Extractor object', () => {
     const extractor = new extract.Extractor({attributes: ['v-translate']});
     extractor.extract(fixtures.VUE_COMPONENT_FILENAME, 'vue', fixtures.VUE_COMPONENT_WITH_GETTEXT_IN_TEXT_AND_DATA);
     expect(extractor.toString()).toEqual(fixtures.POT_OUTPUT_VUE_COMPONENT_WITH_GETTEXT_IN_TEXT_AND_DATA);
-  })
+  });
 
   it('should output a correct POT file for vue component extracted from javascript', ()=> {
     const extractor = new extract.Extractor({attributes: ['v-translate']});
@@ -140,9 +140,9 @@ describe('data preprocessor', () => {
 
   it('should preprocess VueJS with multiple templates correctly', () => {
     expect(extract.preprocessTemplate(
-      '<template web><h1>hello</h1></template><template native><Page class="page"><Label text="World"/></Page></template>', 'vue'
+      '<template web><h1>hello</h1></template><template native><Page class="page"><Label text="World"/></Page></template>', 'vue',
     )).toEqual(
-      ['<h1>hello</h1>', '<Page class="page"><Label text="World"/></Page>']
+      ['<h1>hello</h1>', '<Page class="page"><Label text="World"/></Page>'],
     );
   });
 
