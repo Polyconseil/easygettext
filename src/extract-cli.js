@@ -69,7 +69,7 @@ files.forEach(function(filename) {
   console.log(`[${PROGRAM_NAME}] extracting: '${filename}'`);
   try {
     let data = fs.readFileSync(file, {encoding: 'utf-8'}).toString();
-    extractor.extract(file, ext, data, jsParser)
+    extractor.extract(file, ext, data, jsParser);
   } catch (e) {
     console.error(`[${PROGRAM_NAME}] could not read: '${filename}' using ${jsParser === 'auto' ? 'acorn' : jsParser} as parser`);
     console.trace(e);

@@ -9,7 +9,7 @@ describe('Javascript extractor object', () => {
       const filename = fixtures.VUE_COMPONENT_FILENAME;
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG
+        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG,
       );
 
       expect(extractedStrings.length).toBe(3);
@@ -38,7 +38,7 @@ describe('Javascript extractor object', () => {
       const filename = '$ngettext.vue';
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.SCRIPT_USING_NGETTEXT
+        fixtures.SCRIPT_USING_NGETTEXT,
       );
 
       expect(extractedStrings.length).toBe(1);
@@ -55,7 +55,7 @@ describe('Javascript extractor object', () => {
       const filename = fixtures.SCRIPT_GETTEXT_SEQUENCE_FILENAME;
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.SCRIPT_GETTEXT_SEQUENCE
+        fixtures.SCRIPT_GETTEXT_SEQUENCE,
       );
       expect(extractedStrings.length).toBe(3);
       const firstString = extractedStrings[0];
@@ -76,7 +76,7 @@ describe('Javascript extractor object', () => {
       const filename = '$ngettext.vue';
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.SCRIPT_USING_PGETTEXT
+        fixtures.SCRIPT_USING_PGETTEXT,
       );
 
       expect(extractedStrings.length).toBe(2);
@@ -99,7 +99,7 @@ describe('Javascript extractor object', () => {
       const filename = 'traps.vue';
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.SCRIPT_CONTAINING_DECOYS
+        fixtures.SCRIPT_CONTAINING_DECOYS,
       );
 
       expect(extractedStrings.length).toBe(1);
@@ -110,7 +110,7 @@ describe('Javascript extractor object', () => {
       const filename = 'stage3.vue';
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.SCRIPT_WITH_ES_STAGE3_FEATURES
+        fixtures.SCRIPT_WITH_ES_STAGE3_FEATURES,
       );
 
       expect(extractedStrings.length).toBe(1);
@@ -121,7 +121,7 @@ describe('Javascript extractor object', () => {
       const filename = 'temp_literals.vue';
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.SCRIPT_WITH_STRING_CONCAT
+        fixtures.SCRIPT_WITH_STRING_CONCAT,
       );
       expect(extractedStrings.length).toBe(3);
       expect(extractedStrings[0].msgid).toBe('Hello there! I am a concatenated string,\n please translate me.');
@@ -131,7 +131,7 @@ describe('Javascript extractor object', () => {
       const filename = 'temp_literals.vue';
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.SCRIPT_WITH_TEMPLATE_LITERALS
+        fixtures.SCRIPT_WITH_TEMPLATE_LITERALS,
       );
       expect(extractedStrings.length).toBe(3);
       expect(extractedStrings[0].msgid).toBe(
@@ -146,7 +146,7 @@ describe('Javascript extractor object', () => {
         jsExtractor.extractStringsFromJavascript(
           filename,
           fixtures.SCRIPT_WITH_TEMPLATE_LITERALS_WITH_VARIABLES,
-          'acorn'
+          'acorn',
         );
       }).toThrow();
     });
@@ -158,7 +158,7 @@ describe('Javascript extractor object', () => {
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
         fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG,
-        'acorn'
+        'acorn',
       );
 
       expect(extractedStrings.length).toBe(3);
@@ -170,7 +170,7 @@ describe('Javascript extractor object', () => {
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
         fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG,
-        'babel'
+        'babel',
       );
 
       expect(extractedStrings.length).toBe(3);
@@ -181,7 +181,7 @@ describe('Javascript extractor object', () => {
       const filename = fixtures.VUE_COMPONENT_FILENAME;
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
-        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG
+        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_SCRIPT_TAG,
       );
 
       expect(extractedStrings.length).toBe(3);

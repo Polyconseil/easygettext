@@ -9,7 +9,7 @@ describe('TypeScript extractor object', () => {
       const filename = fixtures.VUE_COMPONENT_FILENAME;
       const extractedStrings = tsExtractor.extractStringsFromTypeScript(
         filename,
-        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_TS_SCRIPT_TAG
+        fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_TS_SCRIPT_TAG,
       );
 
       expect(extractedStrings.length).toBe(3);
@@ -38,7 +38,7 @@ describe('TypeScript extractor object', () => {
       const filename = '$ngettext.vue';
       const extractedStrings = tsExtractor.extractStringsFromTypeScript(
         filename,
-        fixtures.SCRIPT_USING_NGETTEXT_TS
+        fixtures.SCRIPT_USING_NGETTEXT_TS,
       );
 
       expect(extractedStrings.length).toBe(1);
@@ -55,7 +55,7 @@ describe('TypeScript extractor object', () => {
       const filename = fixtures.SCRIPT_GETTEXT_SEQUENCE_FILENAME;
       const extractedStrings = tsExtractor.extractStringsFromTypeScript(
         filename,
-        fixtures.SCRIPT_GETTEXT_SEQUENCE_TS
+        fixtures.SCRIPT_GETTEXT_SEQUENCE_TS,
       );
       expect(extractedStrings.length).toBe(4);
       const firstString = extractedStrings[0];
@@ -79,7 +79,7 @@ describe('TypeScript extractor object', () => {
       const filename = '$ngettext.vue';
       const extractedStrings = tsExtractor.extractStringsFromTypeScript(
         filename,
-        fixtures.SCRIPT_USING_PGETTEXT_TS
+        fixtures.SCRIPT_USING_PGETTEXT_TS,
       );
 
       expect(extractedStrings.length).toBe(2);
@@ -102,7 +102,7 @@ describe('TypeScript extractor object', () => {
       const filename = 'traps.vue';
       const extractedStrings = tsExtractor.extractStringsFromTypeScript(
         filename,
-        fixtures.SCRIPT_CONTAINING_DECOYS
+        fixtures.SCRIPT_CONTAINING_DECOYS,
       );
 
       expect(extractedStrings.length).toBe(1);
@@ -113,7 +113,7 @@ describe('TypeScript extractor object', () => {
       const filename = 'stage3.vue';
       const extractedStrings = tsExtractor.extractStringsFromTypeScript(
         filename,
-        fixtures.SCRIPT_WITH_ES_STAGE3_FEATURES
+        fixtures.SCRIPT_WITH_ES_STAGE3_FEATURES,
       );
 
       expect(extractedStrings.length).toBe(1);
@@ -124,7 +124,7 @@ describe('TypeScript extractor object', () => {
       const filename = 'temp_literals.vue';
       const extractedStrings = tsExtractor.extractStringsFromTypeScript(
         filename,
-        fixtures.SCRIPT_WITH_STRING_CONCAT
+        fixtures.SCRIPT_WITH_STRING_CONCAT,
       );
       expect(extractedStrings.length).toBe(3);
       expect(extractedStrings[0].msgid).toBe('Hello there! I am a concatenated string,\n please translate me.');
@@ -134,7 +134,7 @@ describe('TypeScript extractor object', () => {
       const filename = 'temp_literals.vue';
       const extractedStrings = tsExtractor.extractStringsFromTypeScript(
         filename,
-        fixtures.SCRIPT_WITH_TEMPLATE_LITERALS
+        fixtures.SCRIPT_WITH_TEMPLATE_LITERALS,
       );
       expect(extractedStrings.length).toBe(3);
       expect(extractedStrings[0].msgid).toBe(
@@ -148,7 +148,7 @@ describe('TypeScript extractor object', () => {
       expect(() => {
         tsExtractor.extractStringsFromTypeScript(
           filename,
-          fixtures.SCRIPT_WITH_TEMPLATE_LITERALS_WITH_VARIABLES
+          fixtures.SCRIPT_WITH_TEMPLATE_LITERALS_WITH_VARIABLES,
         );
       }).toThrow();
     });

@@ -32,7 +32,7 @@ function getTextEntries(filename, textEntries) {
         msgctxt: MARKER_NO_CONTEXT,
         toPoItem,
       },
-      entry.data
+      entry.data,
     );
   });
 }
