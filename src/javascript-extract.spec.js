@@ -111,6 +111,7 @@ describe('Javascript extractor object', () => {
       const extractedStrings = jsExtractor.extractStringsFromJavascript(
         filename,
         fixtures.SCRIPT_WITH_ES_STAGE3_FEATURES,
+        'acorn',
       );
 
       expect(extractedStrings.length).toBe(1);

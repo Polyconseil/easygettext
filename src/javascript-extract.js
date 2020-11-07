@@ -78,7 +78,7 @@ function parseJSGettextWithAcorn(script) {
   let allTokens = [];
 
   const ACORN_OPTIONS = {
-    ecmaVersion: 10,
+    ecmaVersion: 11,
     sourceType: 'module',
     locations: true,
     onToken: allTokens,
