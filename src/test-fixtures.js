@@ -2,6 +2,8 @@ exports.FILENAME_0             = 'foo.htm';
 exports.FILENAME_1             = 'bar.htm';
 exports.FILENAME_2             = 'baz.vue';
 exports.VUE_COMPONENT_FILENAME = 'GreetingsComponent.vue';
+exports.PUG_FILENAME           = 'index.pug';
+exports.PUG_INCLUDED_FILENAME  = 'common/footer.pug';
 
 
 exports.HTML0_CTX0 = `
@@ -1014,6 +1016,19 @@ msgstr ""
 msgid "Test String 2"
 msgstr ""
 `;
+
+exports.PUG_WITH_INCLUDE = `
+h1 hello
+include common/footer
+`;
+exports.PUG_COMMON_FOOTER = `
+footer
+  p Copyright E CORP
+`;
+exports.PUG_EXPECTED_PROCESSED_PUG_WITH_INCLUDE = `<h1>hello</h1>
+<footer>
+  <p>Copyright E CORP</p>
+</footer>`;
 
 exports.SCRIPT_GETTEXT_SEQUENCE_FILENAME = 'gettext_sequence.vue';
 exports.SCRIPT_GETTEXT_SEQUENCE = `

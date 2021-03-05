@@ -81,14 +81,14 @@ function preprocessScript(data, type) {
   return contents;
 }
 
-function preprocessTemplate(data, type = 'html') {
+function preprocessTemplate(data, type = 'html', filename = null) {
   let templateData = data || '';
 
   if (data) {
     if (type === 'jade' || type === 'pug') {
       const pug = require('pug');
       templateData = pug.render(data, {
-        filename: 'source.html',
+        filename: filename,
         pretty: true,
         require: () => {
         },
@@ -104,7 +104,7 @@ function preprocessTemplate(data, type = 'html') {
         let lang = $(this).attr('lang');
 
         if (lang) {
-          return preprocessTemplate($(this).html(), lang);
+          return preprocessTemplate($(this).html(), lang, filename);
         }
 
         return $(this).html().trim();
@@ -266,10 +266,10 @@ exports.Extractor = class Extractor {
   }
 
   extract(filename, ext, content, jsParser = 'auto') {
-    const templateData = preprocessTemplate(content, ext);
+    const templateData = preprocessTemplate(content, ext, filename);
 
     if (templateData) {
-      this.parse(filename, preprocessTemplate(content, ext));
+      this.parse(filename, templateData);
     }
 
     preprocessScript(content, ext).forEach(

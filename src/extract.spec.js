@@ -1,6 +1,9 @@
 const extract = require('./extract.js');
 const constants = require('./constants.js');
 const fixtures = require('./test-fixtures.js');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 
 
 describe('Extractor object', () => {
@@ -168,6 +171,16 @@ export function render(_ctx, _cache) {
   it('should preprocess VueJS script tag with Flow', () => {
     const [script] = extract.preprocessScript(fixtures.VUE_COMPONENT_WITH_FLOW_SCRIPT_TAG, 'vue');
     expect(script.content).toEqual(fixtures.VUE_COMPONENT_EXPECTED_PROCESSED_FLOW_SCRIPT_TAG);
+  });
+  it('should preprocess pug including another pug file correctly', () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'easygettext-test-pug'));
+    const pugFileName = path.join(tmpDir, fixtures.PUG_FILENAME);
+    const pugIncludedFileName = path.join(tmpDir, fixtures.PUG_INCLUDED_FILENAME);
+    fs.mkdirSync(path.dirname(pugIncludedFileName));
+    fs.writeFileSync(pugIncludedFileName, fixtures.PUG_COMMON_FOOTER);
+
+    const preprocessed = extract.preprocessTemplate(fixtures.PUG_WITH_INCLUDE, 'pug', pugFileName);
+    expect(preprocessed).toEqual(fixtures.PUG_EXPECTED_PROCESSED_PUG_WITH_INCLUDE);
   });
 });
 
