@@ -4,9 +4,6 @@ exports.DEFAULT_ATTRIBUTES = [
   'get-text',
   'i18n',
   'translate',
-  'label',
-  'sublabel',
-  'label-short',
 ];
 
 exports.DEFAULT_FILTERS = [
