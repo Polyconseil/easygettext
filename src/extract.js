@@ -114,7 +114,7 @@ function preprocessTemplate(data, type = 'html') {
       if (templateData.length === 1) {
         templateData = templateData[0];
       }
-    } else if (type === 'html') {
+    } else if (type === 'html' || type === 'xml') {
       templateData = data;
     }
   }
@@ -502,6 +502,18 @@ exports.Extractor = class Extractor {
     const node = $(el);
 
     if (this._hasTranslationToken(node)) {
+      if (filename.endsWith('.xml')) {
+        const textArray = [];
+        this.options.attributes.map((keyword) => {
+          if (node.attr(keyword) !== undefined) {
+            textArray.push(node.attr(keyword));
+          }
+        });
+        const newArray = textArray.map((element) => {
+          return new exports.NodeTranslationInfo(node, element, reference, this.options.attributes);
+        });
+        return newArray;
+      }
       const text = this._getNodeHTML(node);
 
       if (text.length !== 0) {
