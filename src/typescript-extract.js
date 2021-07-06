@@ -1,5 +1,5 @@
 const {walk} = require('estree-walker');
-const {parseTSScript} = require('buntis');
+const {parse} = require('@typescript-eslint/typescript-estree');
 const extractUtils = require('./extract-utils.js');
 
 const {DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
@@ -41,8 +41,9 @@ function getTranslationObject(node, gettextFunctionName, filename) {
 }
 
 function getGettextEntriesFromTypeScript(script, filename) {
-  let translationEntries = [];
-  walk(parseTSScript(script, {loc: true, next: true}), {
+  const translationEntries = [];
+  const ast = parse(script, { loc: true, range: true });
+  walk(ast, {
     enter: function(node) {
       if (node.type && node.type === 'CallExpression' && node.callee) {
         if (DEFAULT_VUE_GETTEXT_FUNCTIONS_KEYS.includes(node.callee.name)) {
