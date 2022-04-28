@@ -37,7 +37,7 @@ function getTranslationObject(node, gettextFunctionName, filename) {
   for (let i = 0; i < gettextFunctionArgs.length; i += 1) {
     translationEntry[gettextFunctionArgs[i]] = getTranslationString(node.arguments[i], filename);
   }
-  return {data: translationEntry, token: {loc: {start: {line: 0}}}};
+  return {data: translationEntry, token: {loc: {start: {line: node.loc.start.line}}}};
 }
 
 function getGettextEntriesFromTypeScript(script, filename) {
