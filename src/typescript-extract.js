@@ -1,5 +1,5 @@
 const {walk} = require('estree-walker');
-const {parseTSScript} = require('buntis');
+const {parse} = require('@typescript-eslint/typescript-estree');
 const extractUtils = require('./extract-utils.js');
 
 const {DEFAULT_VUE_GETTEXT_FUNCTIONS} = require('./constants.js');
@@ -37,20 +37,29 @@ function getTranslationObject(node, gettextFunctionName, filename) {
   for (let i = 0; i < gettextFunctionArgs.length; i += 1) {
     translationEntry[gettextFunctionArgs[i]] = getTranslationString(node.arguments[i], filename);
   }
-  return {data: translationEntry, token: {loc: {start: {line: 0}}}};
+  if (translationEntry.msgid === '') {
+    return null
+  }
+  return {data: translationEntry, token: {loc: {start: {line: node.loc.start.line}}}};
 }
 
 function getGettextEntriesFromTypeScript(script, filename) {
   let translationEntries = [];
-  walk(parseTSScript(script, {loc: true, next: true}), {
+  const pushTranslationObject = (translationObject) => {
+    if (translationObject !== null) {
+      translationEntries.push(translationObject);
+    }
+  }
+
+  walk(parse(script, {loc: true}), {
     enter: function(node) {
       if (node.type && node.type === 'CallExpression' && node.callee) {
         if (DEFAULT_VUE_GETTEXT_FUNCTIONS_KEYS.includes(node.callee.name)) {
-          translationEntries.push(getTranslationObject(node, node.callee.name, filename));
+          pushTranslationObject(getTranslationObject(node, node.callee.name, filename))
         } else {
           let gettextFunctionName = getGettextFunctionName(node.callee);
           if (DEFAULT_VUE_GETTEXT_FUNCTIONS_KEYS.includes(gettextFunctionName)) {
-            translationEntries.push(getTranslationObject(node, gettextFunctionName, filename));
+            pushTranslationObject(getTranslationObject(node, gettextFunctionName, filename));
           }
         }
       }

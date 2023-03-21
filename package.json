@@ -22,7 +22,8 @@
     "@types/jest": "^26.0.14",
     "codecov": "^3.8.0",
     "eslint": "^7.10.0",
-    "jest": "^26.5.2"
+    "jest": "^26.5.2",
+    "typescript": "^4.6.3"
   },
   "engines": {
     "node": ">=8"
@@ -33,10 +34,10 @@
   },
   "dependencies": {
     "@babel/core": "^7.11.6",
+    "@typescript-eslint/typescript-estree": "^5.21.0",
     "acorn": "^7.4.0",
     "acorn-stage3": "^4.0.0",
     "acorn-walk": "^8.0.0",
-    "buntis": "0.2.1",
     "cheerio": "^1.0.0-rc.3",
     "estree-walker": "^2.0.1",
     "flow-remove-types": "^2.135.0",
