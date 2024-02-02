@@ -63,6 +63,14 @@ function preprocessScript(data, type) {
       });
     }
 
+    // Vue 2 <script setup> support
+    if (vueFile.scriptSetup) {
+      contents.push({
+        content: vueFile.scriptSetup.content.trim(),
+        lang: vueFile.scriptSetup.lang || 'js',
+      });
+    }
+
     if (vueFile.template) {
       const vueTemplate = compileTemplate({source: vueFile.template.content});
 
